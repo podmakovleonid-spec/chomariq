@@ -3,22 +3,28 @@
 <head>
 <!-- Każde użycie tej strony jest płatne! Jedno użycie - 100 zł gotówką dla Leonid Podmakov. Własność Leonida Podmakova; Generator Wymiany Naczep w Karlsruhe - Sebastian Szymański. -->
     <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>ChomarIQ</title>
     <style>
-        /* Системный шрифт и размер страницы */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 2560px;
-            height: 1440px;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            overflow: hidden;
-            /* Градиентный фон с анимацией */
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            overflow-y: auto
-        }
+:root{
+  --page-max: 1200px;
+  --space: 20px;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* фон остается */
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  overflow-x: hidden;      /* не даём горизонтальный скролл */
+  overflow-y: auto;        /* вертикальный скролл разрешен */
+  -webkit-text-size-adjust: 100%;
+}
         @keyframes gradient {
             0%   { background-position: 0%   50%; }
             50%  { background-position: 100% 50%; }
@@ -26,11 +32,18 @@
         }
 
         /* Навигация вкладок */
-        .tabs {
-            display: flex; justify-content: center;
-            list-style: none; margin: 0; padding: 0;
-            background-color: rgba(51,51,51,0.6);
-        }
+.tabs {
+  display: flex;
+  flex-wrap: wrap;                 /* переносятся на новую строку при узком экране */
+  justify-content: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  background-color: rgba(51,51,51,0.6);
+  overflow-x: auto;                /* горизонтальная прокрутка на очень узких экранах */
+  -webkit-overflow-scrolling: touch;
+}
         .tabs li {
             color: #fff;
             padding: 15px 30px;
@@ -50,14 +63,27 @@
             overflow-x: auto;
         }
 
-            .tab-content#tab3 iframe {
-                display: block;
-                width: 100%; /* увеличено в 1.5 раза по ширине */
-                height: 1000px; /* увеличено в 1.5 раза по высоте */
-                border: none;
-                border-radius: 10px;
-                margin: 0;
-            }
+.tab-content#tab3 iframe {
+  display: block;
+  width: 100%;
+  height: min(70vh, 900px);  /* динамическая высота под экран */
+  border: none;
+  border-radius: 10px;
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px auto;
+  background-color: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  overflow: hidden;
+  display: block;          /* превращаем в блок для скролла */
+  overflow-x: auto;        /* горизонтальная прокрутка при узком экране */
+  -webkit-overflow-scrolling: touch;
+  min-width: 640px;        /* чтобы колонки не схлопывались в кашу */
+}
 
 .tabs li.active {
   /* сохраняем ваш градиент, но скругляем тоже */
@@ -70,15 +96,16 @@
 }
 
         /* Glassmorphism контейнеры */
-        .container {
-            max-width: 1200px;
-            margin: 20px auto 0;
-            padding: 20px;
-            background-color: rgba(255,255,255,0.2);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
+.container {
+  max-width: var(--page-max);
+  width: min(95vw, var(--page-max));
+  margin: 20px auto 0;
+  padding: 20px;
+  background-color: rgba(255,255,255,0.2);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -258,12 +285,62 @@
         padding: 10px;
         }
 
+/* ========== Адаптив ========== */
+
+/* Планшеты */
+@media (max-width: 1024px) {
+  :root { --page-max: 1000px; }
+  .btn { padding: 12px 18px; }
+}
+
+/* Телефоны */
+@media (max-width: 768px) {
+  .container { padding: 16px; }
+  h1, h2 { font-size: 1.35rem; }
+
+  .form-group {
+    flex-direction: column;      /* метка сверху, поле снизу */
+    align-items: stretch;
+    gap: 6px;
+  }
+  .form-group label { width: 100%; }
+
+  .btn {
+    width: 100%;                 /* кнопки на всю ширину */
+  }
+
+  /* селекты маршрута — немного шире для пальца */
+  .countrySel {
+    width: 110px;
+    margin-bottom: 6px;
+  }
+
+  /* textarea повыше на телефоне */
+  #wynik2textarea, #wynik3textarea {
+    height: 200px;
+  }
+
+  /* iframe ещё компактнее */
+  .tab-content#tab3 iframe {
+    height: 60vh;
+  }
+}
+
+/* Очень узкие телефоны */
+@media (max-width: 420px) {
+  .tabs li { padding: 10px 14px; font-size: 0.95rem; }
+  .countrySel { width: 96px; }
+}
+
 /* Узкие селекты для поля "Trasa" */
 .countrySel {
   width: 90px;      /* 3–4 раза уже обычных */
   min-width: 80px;
   margin-right: 6px;
 }
+
+* { touch-action: manipulation; }
+textarea, input, select, button { font-size: 16px; } /* без зума на iOS */
 
 #aetrSummary strong { text-decoration: none; }
 #aetrSummary .warn  { background: rgba(255,165,0,.2); padding:2px 4px; border-radius:6px; }
@@ -1891,3 +1968,4 @@ function parseDateOnly(s){
 </script>
 </body>
 </html>
+
