@@ -76,14 +76,12 @@ html, body {
             overflow-x: auto;
         }
 
-.tab-content#tab3 iframe {
-  display: block;
+#tab3 #map {
   width: 100%;
-  height: min(70vh, 900px);  /* динамическая высота под экран */
-  border: none;
+  height: min(70vh, 900px);
   border-radius: 10px;
-  margin: 0;
 }
+@media (max-width: 768px) { #tab3 #map { height: 60vh; } }
 
 table {
   border-collapse: collapse;
@@ -2033,6 +2031,7 @@ async function buildRoute() {
 </script>
 </body>
 </html>
+
 
 
 
