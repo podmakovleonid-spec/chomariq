@@ -1099,6 +1099,7 @@ const bodyEncoded = encodeURIComponent(body);
         <li data-tab="tab4" onclick="openTab('tab4')">Generator Karlsruhe+Worms</li>
         <li data-tab="tab5" onclick="openTab('tab5')">Portiernia</li>
         <li data-tab="tab6" onclick="openTab('tab6')">AETR: Pauses & Kompensacje</li>
+		<li data-tab="tab7" onclick="openTab('tab7')">STATUSY</li>
     </ul>
 
 <!-- Модальное окно выбора водителя
@@ -2018,8 +2019,224 @@ async function buildRoute() {
   }
 }
 </script>
+<!-- ВКЛАДКА 7 -->
+<div class="container tab-content" id="tab7">
+  <div class="author">© 2025 Leonid Podmakov</div>
+  <h1>STATUSY</h1>
+<!-- Powiadomienia o STATUSACH -->
+<div id="notifBlock" style="margin:14px 0; padding:12px; border:1px solid #d0d0d0; background:rgba(255,255,255,0.7); border-radius:10px;">
+  <div style="font-weight:600; margin-bottom:6px;">Powiadomienia o STATUSACH (07:00–15:00, co godzinę)</div>
+  <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+    <button id="enableNotifsBtn" style="padding:8px 12px; border-radius:10px; border:1px solid #999; cursor:pointer;">
+      Włącz powiadomienia
+    </button>
+    <span id="notifStatus" style="opacity:0.8;">Kliknij, aby zezwolić przeglądarce na wyświetlanie przypomnień.</span>
+  </div>
+</div>
+  <table id="statusyTable">
+    <thead>
+      <tr>
+        <th>Symbol</th><th>NIP</th><th>Dni</th><th>Obciążenie</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+<script>
+const STATUSY_DATA = [
+  ["A + H GMBH","DE256056979","10","€ 25,00"],
+  ["A.PEIFFER GMBH","DE138209949","3","€ 1,00"],
+  ["ALFRED SCHUON GMBH","DE144367669","10","€ 20,00"],
+  ["ANTHENTIC LOGISTIK GMBH","ATU57446213","10","€ 30,00"],
+  ["BERT 42 SURY LE COMTAL","FR46419337381","1","€ 1,00"],
+  ["BOLK","NL007874601B01","1","€ 1,00"],
+  ["BROMMELHAUS","DE123788408","14","€ 35,00"],
+  ["BTK RAUBLING","DE811156427","1","€ 10,00"],
+  ["BURLOTTI SPEDIZIONI S.P. A.","IT00728740986","10","€ 1,00"],
+  ["BYLOAD GMBH","DE333908094","10","€ 50,00"],
+  ["C. HERZ GMBH","DE208045728","1","€ 25,00"],
+  ["DACHSER SE .","DE815512007","1","€ 50,00"],
+  ["DHL FREIGHT","DE811152493","1","€ 10,00"],
+  ["DHL FREIGHT DENMARK A/S","DK41041293","5","€ 10,00"],
+  ["DNA LOGISTIC","PL9731061682","2","€ 25,00"],
+  ["DSV LOGISTICS SA","CH105935358","1","€ 50,00"],
+  ["DSV ROAD PL","PL1130017933","1","€ 50,00"],
+  ["DSV STUTTGART","DE146126836","14","€ 50,00"],
+  ["DSV.NEUSS","DE187899889","1","€ 60,00"],
+  ["ECG","DE814329403","5","€ 30,00"],
+  ["EXIM TRANSPORT GMBH","ATU57831127","1","€ 25,00"],
+  ["FINSTERWALDER","DE813809302","1","€ 25,00"],
+  ["FLEX TRANS LEIPZIG GMBH","DE320560853","1","€ 25,00"],
+  ["H.I.T. J. HEUHSEN GMBH & CO.","DE215616768","7","€ 25,00"],
+  ["HEGELMANN EXPRESS","DE232903785","2","€ 25,00"],
+  ["HEINLOTH TRANSPORT GMBH","DE132898245","5","€ 25,00"],
+  ["HEINRICH DORING SPEDITION GMBH","DE116579341","1","€ 25,00"],
+  ["HERGARTEN NEUSS","DE123055774","7","€ 25,00"],
+  ["HEUEL","DE812402312","1","€ 25,00"],
+  ["INTERCARGO","ATU64386934","1","€ 35,00"],
+  ["INTER-SPED","DE813889752","7","€ 35,00"],
+  ["J.S.LOGISTIK GMBH","DE193247934","1","€ 30,00"],
+  ["KMC SPEDITION OG,","ATU74726424","7","€ 50,00"],
+  ["KUHNE+NAGEL (AG&CO.KG )","DE812773878","14","€ 35,00"],
+  ["LIBEN LOGISTICS SP Z O. O.","PL5242970963","3","€ 50,00"],
+  ["LIT","DE117406156","14","€ 25,00"],
+  ["LOGFLEX","DE252201567","10","€ 15,00"],
+  ["LOGISTIK KONTOR GMBH THÜRINGEN","DE814961489","10","€ 25,00"],
+  ["M&W","PL6060063651","1","€ 15,00"],
+  ["NOSTA LADBERGEN","DE117649841","1","€ 25,00"],
+  ["NUNNER AT","ATU69779117","2","€ 25,00"],
+  ["OBERMANN LOGISTIK GMBH","DE813445733","5","€ 25,00"],
+  ["ONE SOLUTION LOGISTICS GMBH","DE265283945","1","€ 5,00"],
+  ["OSKAR VOGEL GMBH","DE126336576","14","€ 50,00"],
+  ["PEAK LOGISTICS GRAZ GMBH","ATU79644949","5","€ 25,00"],
+  ["PM PEAK","ATU78725015","5","€ 25,00"],
+  ["QUEHENBERGER LOGISTICS DE GMBH","DE164537792","5","€ 25,00"],
+  ["QUEHENBERGER LOGISTICS GMBH","ATU65513278","5","€ 25,00"],
+  ["QUEHENBERGER STRASSWALCHEN","ATU64998015","14","€ 25,00"],
+  ["REINING TRANSPORT B.V.","NL853468862B01","7","€ 25,00"],
+  ["RHEINKRAFT","DE811155045","7","€ 25,00"],
+  ["ROSSIK","ATU73457314","5","€ 30,00"],
+  ["SCHENKER BAMBERG","DE811228366","1","€ 25,00"],
+  ["SIEGMANN (DEUTSCHLAND) GMBH.","DE118710879","7","€ 50,00"],
+  ["SPEDINATION GMBH / LANG","ATU75905969","1","€ 25,00"],
+  ["SPEDIVENTA TRANSPORT & LOGISTI","DE815152554","1","€ 25,00"],
+  ["TMB LOGISTIK","DE255386947","14","€ 30,00"],
+  ["TML SPEDITION GMBH","DE275859102","1","€ 35,00"],
+  ["VENTOTRANS GMBH","ATU66105519","10","€ 30,00"],
+  ["WECK + POLLER","DE141415291","14","€ 25,00"],
+  ["WEIDLER GMBH","DE149599313","5","€ 50,00"],
+  ["WOLFMULLER SPEDITION","DE814484885","1","€ 30,00"]
+];
+
+function renderStatusy() {
+  const tbody = document.querySelector('#statusyTable tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  STATUSY_DATA.forEach(([a,b,c,d]) => {
+    const tr = document.createElement('tr');
+    [a,b,c,d].forEach(v => { const td=document.createElement('td'); td.textContent=v; tr.appendChild(td); });
+    tbody.appendChild(tr);
+  });
+}
+document.addEventListener('DOMContentLoaded', renderStatusy);
+</script>
+<script>
+// ======= Powiadomienia STATUSY (07:00–15:00 co pełną godzinę) =======
+const STATUSY_NOTIF_TITLE = 'STATUSY — przypomnienie';
+const STATUSY_NOTIF_BODY  = 'Proszę sprawdzić, czy statusy zostały uzupełnione we wszystkich zleceniach, w których jest to wymagane.';
+const STATUSY_HOURS = [7,8,9,10,11,12,13,14,15]; // lokalny czas urządzenia
+
+async function statusyEnsurePermission() {
+  if (!('Notification' in window)) return 'unsupported';
+  if (Notification.permission === 'granted') return 'granted';
+  if (Notification.permission === 'denied') return 'denied';
+  try { return await Notification.requestPermission(); }
+  catch { return Notification.permission; }
+}
+
+async function statusyRegisterSW() {
+  if (!('serviceWorker' in navigator)) return null;
+  try {
+    // ВАЖНО: sw.js должен лежать в корне сайта (GitHub Pages — в корне репо)
+    return await navigator.serviceWorker.register('./sw.js', { scope: './' })
+  } catch (e) {
+    console.warn('Service Worker registration failed:', e);
+    return null;
+  }
+}
+
+function statusyAtTopOfHour() {
+  const now = new Date();
+  const next = new Date(now);
+  next.setMinutes(0,0,0);
+  if (now.getMinutes() !== 0 || now.getSeconds() !== 0) {
+    next.setHours(now.getHours() + 1);
+  }
+  return next;
+}
+
+function statusyScheduleWindow(swReg) {
+  const now = new Date();
+  // Запланировать на все будущие полные часы в окне 07–15
+  STATUSY_HOURS.forEach(h => {
+    const t = new Date();
+    t.setHours(h, 0, 0, 0);
+    if (t > now) {
+      setTimeout(() => statusyFire(swReg), t.getTime() - now.getTime());
+    }
+  });
+
+  // Пере-планировка на следующий день (за 10 сек до начала окна)
+  const nextDay = new Date(now);
+  nextDay.setDate(now.getDate() + 1);
+  nextDay.setHours(6, 59, 50, 0);
+  setTimeout(() => statusyScheduleWindow(swReg), nextDay.getTime() - now.getTime());
+
+  // Если уже внутри окна — поставить ближайший целый час
+  if (STATUSY_HOURS.includes(now.getHours())) {
+    const nxt = statusyAtTopOfHour();
+    if (STATUSY_HOURS.includes(nxt.getHours())) {
+      setTimeout(() => statusyFire(swReg), nxt.getTime() - now.getTime());
+    }
+  }
+}
+
+function statusyFire(swReg) {
+  const h = new Date().getHours();
+  if (!STATUSY_HOURS.includes(h)) return; // вне окна — не шлём
+
+  const opts = {
+    body: STATUSY_NOTIF_BODY,
+    tag: 'statusy-hourly',
+    renotify: true,
+    requireInteraction: false
+  };
+
+  // Попытка через ServiceWorker (надёжнее для фоновой вкладки)
+  if (swReg && swReg.showNotification) {
+    swReg.showNotification(STATUSY_NOTIF_TITLE, opts);
+    return;
+  }
+
+  // Прямое уведомление (пока вкладка открыта)
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(STATUSY_NOTIF_TITLE, opts);
+    return;
+  }
+
+  // Фолбэк — показать текстовый баннер в интерфейсе
+  const s = document.getElementById('notifStatus');
+  if (s) s.textContent = '🔔 ' + STATUSY_NOTIF_TITLE + ': ' + STATUSY_NOTIF_BODY;
+}
+
+async function statusyInitNotifications() {
+  const status = document.getElementById('notifStatus');
+  const perm = await statusyEnsurePermission();
+
+  if (perm === 'unsupported') { if (status) status.textContent = 'Przeglądarka nie obsługuje powiadomień.'; return; }
+  if (perm === 'denied')     { if (status) status.textContent = 'Dostęp zablokowany — zezwól w ustawieniach przeglądarki.'; return; }
+
+  if (status) status.textContent = 'Powiadomienia włączone (07:00–15:00, co godzinę).';
+  const reg = await statusyRegisterSW();
+  statusyScheduleWindow(reg);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('enableNotifsBtn');
+  if (btn) btn.addEventListener('click', statusyInitNotifications);
+
+  // Если уже выдано разрешение — запускаем автоматически
+  if ('Notification' in window && Notification.permission === 'granted') {
+    const s = document.getElementById('notifStatus');
+    if (s) s.textContent = 'Powiadomienia włączone (07:00–15:00, co godzinę).';
+    statusyRegisterSW().then(reg => statusyScheduleWindow(reg));
+  }
+});
+// ================================================================
+</script>
 </body>
 </html>
+
 
 
 
