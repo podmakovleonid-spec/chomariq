@@ -1977,12 +1977,11 @@ function parseDateOnly(s){
     });
   });
 })();
-	<script>
-// ===== 1) Инициализация карты =====
+<script>
 let map, routeLine, startMarker, endMarker;
 
 function initMap() {
-  map = L.map('map').setView([51.107, 17.038], 7); // центр Wrocław
+  map = L.map('map').setView([51.107, 17.038], 7); // Wrocław start view
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap'
@@ -1990,7 +1989,6 @@ function initMap() {
 }
 initMap();
 
-// ===== 2) Геокодирование через Nominatim =====
 async function geocodeAddress(address) {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
   const res = await fetch(url, { headers: { 'Accept-Language': 'pl' }});
@@ -1999,7 +1997,6 @@ async function geocodeAddress(address) {
   return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
 }
 
-// ===== 3) Построение маршрута через OSRM =====
 async function routeOSRM(start, end) {
   const url = `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`;
   const res = await fetch(url);
@@ -2008,25 +2005,22 @@ async function routeOSRM(start, end) {
   return data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
 }
 
-// ===== 4) Основная функция для кнопки =====
 async function buildRoute() {
   try {
     const from = document.getElementById('routeFrom').value.trim();
     const to   = document.getElementById('routeTo').value.trim();
-    if (!from || !to) { alert('Podaj oba adresy: skąd i dokąd.'); return; }
+    if (!from || !to) { alert('Podaj oba adresy'); return; }
 
     const [A, B] = await Promise.all([ geocodeAddress(from), geocodeAddress(to) ]);
     const coords = await routeOSRM(A, B);
 
-    // Маркеры
     if (startMarker) map.removeLayer(startMarker);
     if (endMarker)   map.removeLayer(endMarker);
     startMarker = L.marker(A).addTo(map).bindPopup('Start');
     endMarker   = L.marker(B).addTo(map).bindPopup('Koniec');
 
-    // Линия маршрута
     if (routeLine) map.removeLayer(routeLine);
-    routeLine = L.polyline(coords, { weight: 5 }).addTo(map);
+    routeLine = L.polyline(coords, { weight: 5, color: 'blue' }).addTo(map);
     map.fitBounds(routeLine.getBounds(), { padding: [30, 30] });
   } catch (e) {
     console.error(e);
@@ -2036,6 +2030,7 @@ async function buildRoute() {
 </script>
 </body>
 </html>
+
 
 
 
