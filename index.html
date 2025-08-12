@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<!-- Każde użycie tej strony jest płatne! Jedno użycie - 100 zł gotówką dla Leonid Podmakov. Własność Leonida Podmakova; Generator Wymiany Naczep w Karlsruhe - Sebastian Szymański. -->
+    <meta charset="UTF-8">
+    <title>ChomarIQ</title>
+    <style>
+        /* Системный шрифт и размер страницы */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 2560px;
+            height: 1440px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow: hidden;
+            /* Градиентный фон с анимацией */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            overflow-y: auto
+        }
+        @keyframes gradient {
+            0%   { background-position: 0%   50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0%   50%; }
+        }
+
+        /* Навигация вкладок */
+        .tabs {
+            display: flex; justify-content: center;
+            list-style: none; margin: 0; padding: 0;
+            background-color: rgba(51,51,51,0.6);
+        }
+        .tabs li {
+            color: #fff;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+  	    border-radius: 50px;    /* слишко много? Можно меньше, например 20px */
+ 	    margin: 5px;            /* чтобы разделить “пилюли” между собой */
+ 	    background-color: transparent; /* базовый фон прозрачный */
+        }
+.tabs li:hover {
+  background-color: rgba(68,68,68,0.8);
+}
+
+        /* Стили Iframe */
+        .tab-content#tab3 {
+            overflow-x: auto;
+        }
+
+            .tab-content#tab3 iframe {
+                display: block;
+                width: 100%; /* увеличено в 1.5 раза по ширине */
+                height: 1000px; /* увеличено в 1.5 раза по высоте */
+                border: none;
+                border-radius: 10px;
+                margin: 0;
+            }
+
+.tabs li.active {
+  /* сохраняем ваш градиент, но скругляем тоже */
+  background: linear-gradient(to right,#4e54c8,#8f94fb);
+  border-radius: 50px;
+}
+
+.white-text {
+  color: #fff;
+}
+
+        /* Glassmorphism контейнеры */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto 0;
+            padding: 20px;
+            background-color: rgba(255,255,255,0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Заголовки */
+        h1, h2 {
+            text-align: center;
+            color: #fff;
+            margin-top: 0;
+            font-weight: 600;
+        }
+
+        /* Формы */
+        .form-group {
+            margin-bottom: 15px;
+            display: flex; align-items: center;
+        }
+        .form-group label {
+            width: 200px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            background-color: #ffffff;
+            color: #000
+        }
+        .form-group select {
+            background-color: rgba(255, 255, 255, 0.8) !important;
+            color: #333 !important;
+        }
+        .form-group select option {
+            background-color: #fff !important;
+            color: #333 !important;
+        }
+        .form-group input:not([readonly]) {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        /* Результирующие текстовые области */
+        #wynik2textarea, #wynik3textarea {
+            width: 100%;
+            height: 250px;
+            resize: vertical;
+            background-color: #ffffff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 12px 24px;
+            margin: 10px 5px;
+            font-size: 16px;
+            color: #fff;
+            background-color: rgba(0,123,255,0.8);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            background-color: rgba(0,86,179,0.8);
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed; z-index:999;
+            left:0; top:0;
+            width:100%; height:100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: rgba(255,255,255,0.9);
+            margin:100px auto; padding:20px;
+            width:600px;
+            max-height:80vh;
+            overflow-y:auto;
+            border-radius:12px;
+        }
+        .modal-content h2 {
+            margin-top:0;
+            color: #333;
+        }
+        .close {
+            float:right;
+            font-size:28px;
+            font-weight:bold;
+            cursor:pointer;
+        }
+        .close:hover { color:#000; }
+        .driver-list-item, .carrier-list-item {
+            margin:5px 0;
+            padding:8px;
+            border-radius:8px;
+            cursor:pointer;
+            transition: background-color 0.2s;
+            background-color: rgba(255,255,255,0.1);
+            color: #333;
+        }
+        .driver-list-item:hover, .carrier-list-item:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        /* Таблицы */
+        table {
+            border-collapse:collapse;
+            width:100%;
+            margin:20px auto;
+            background-color: rgba(255,255,255,0.8);
+            border-radius:12px;
+            overflow:hidden;
+        }
+        th, td {
+            padding:12px;
+            text-align:left;
+            color:#333;
+        }
+        th { background-color:#f0f0f0; font-weight:500; }
+
+        /* Flatpickr стили */
+        .flatpickr-calendar {
+            background-color: rgba(255,255,255,0.2);
+            backdrop-filter: blur(20px);
+            border-radius:20px;
+            box-shadow:0 8px 32px rgba(0,0,0,0.2);
+            color:#fff;
+        }
+        .flatpickr-months {
+            background:linear-gradient(to right,#4e54c8,#8f94fb);
+            border-radius:20px 20px 0 0;
+        }
+        .flatpickr-current-month { color:#fff; font-weight:600; }
+        .flatpickr-prev-month svg, .flatpickr-next-month svg { fill:#fff; }
+        .flatpickr-weekdaycontainer { color:rgba(255,255,255,0.7); }
+        .flatpickr-day {
+            color:#fff;
+            border-radius:50%;
+            width:2.2rem; height:2.2rem; line-height:2.2rem;
+        }
+        .flatpickr-day.today { border:1px solid #fff; }
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange {
+            background:#007BFF; color:#fff;
+        }
+        .flatpickr-day:hover {
+            background:rgba(0,123,255,0.3);
+        }
+        .flatpickr-time {
+            background:rgba(255,255,255,0.1);
+            border-top:1px solid rgba(255,255,255,0.2);
+        }
+        .flatpickr-time input {
+            color:#fff;
+            width:2.5rem;
+            text-align:center;
+        }
+	.author {
+  	font-weight: bold;
+	color: #ffffff;
+	}
+
+        .form-group select {
+        border-radius: 8px;
+        padding: 10px;
+        }
+
+/* Узкие селекты для поля "Trasa" */
+.countrySel {
+  width: 90px;      /* 3–4 раза уже обычных */
+  min-width: 80px;
+  margin-right: 6px;
+}
+
+#aetrSummary strong { text-decoration: none; }
+#aetrSummary .warn  { background: rgba(255,165,0,.2); padding:2px 4px; border-radius:6px; }
+#aetrSummary .bad   { background: rgba(255,0,0,.2);   padding:2px 4px; border-radius:6px; }
+#aetrSummary .ok    { background: rgba(0,128,0,.2);   padding:2px 4px; border-radius:6px; }
+
+
+        /* CSS for Tab 4 (Sebastian) */
+        #tab4 textarea, #tab4 input, #tab4 #output { width: 100%; font-family: monospace; font-size: 14px; padding: 10px; box-sizing: border-box; margin-bottom: 10px; }
+        #tab4 #output { border: 1px solid #ccc; min-height: 300px; white-space: pre-wrap; background-color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: background-color 0.3s, border-color 0.3s; cursor: pointer; }
+        #tab4 .btn { margin-right: 10px; }
+        #tab4 label { font-weight: bold; }
+	#tab4 > label { color: #fff; }
+        #tab4 .success { background-color: #e6ffed; border-color: #6fcf97; }
+        #tab4 .error { background-color: #ffe6e6; border-color: #e57373; }
+        #tab4 #copyMessage { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #6fcf97; color: white; padding: 10px 20px; border-radius: 5px; font-size: 14px; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease; z-index: 1000; }
+        #tab4 #copyMessage.show { opacity: 1; visibility: visible; }
+    </style>
+
+    <script>
+        /* Функция для генерации случайного градиента фона */
+        function generateRandomGradient() { /* оставлено для совместимости */ }
+        function openTab(tabId) {
+            document.querySelectorAll('.tabs li').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        }
+
+        /* Переключение вкладок */
+        function openTab(tabId) {
+            document.querySelectorAll('.tabs li').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function searchAddress(event) {
+            event.preventDefault();
+            const address = document.getElementById('address').value;
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const result = data[0];
+                    if (!result) {
+                        document.getElementById('geoResult').innerText = 'Nie znaleziono.';
+                        return;
+                    }
+                    document.getElementById('geoResult').innerHTML = `
+                        <strong>Współrzędne:</strong> ${result.lat}, ${result.lon}<br>
+                        <strong>Pełny adres:</strong> ${result.display_name}
+                    `;
+                })
+                .catch(() => document.getElementById('geoResult').innerText = 'Błąd przy geokodowaniu.');
+        }
+
+        // Initialize default tab
+        window.onload = () => openTab('tab1');
+
+        /* ------------------------------
+           Модальное окно для выбора водителя
+        ------------------------------ */
+        let driverModal;
+        let driverListContainer;
+let driverPassportMap = {
+    "Inny kierowca": "",
+    "Abraztsou Aliaksandr": "PP0293331",
+    "Aharkov Roman": "FM855171",
+    "Akulich Mikalai": "AB3197325",
+    "Alampiyeu Dzmitry": "PD0162421",
+    "Alefirov Vitalii": "EP216618",
+    "Babrouski Uladzimir": "PD0047884",
+    "Balcerzak Paweł": "AXZ640916",
+    "Balkou Aleh": "HB3778748",
+    "Bartkevich Aliaksandr": "KB2496687",
+    "Bartoch Piotr": "DCR456445",
+    "Bezkishchenko Anton": "FF508319",
+    "Bezyk Oleksandr": "FV914576",
+    "Boltunov Denis": "KB2162095",
+    "Borawski Andrzej": "",
+    "BOROWCZYK JAROSLAW": "",
+    "Brzeziński Paweł": "DEI367335",
+    "Bujarski Roland": "CFN096652",
+    "Cherep Mykhailo": "FU701927",
+    "Chukhrii Oleksii": "FF646499",
+    "Cięciała Damian": "CAH392193",
+    "Czeluśniak Henryk": "CBD905639",
+    "Danchak Andriy": "FK624088",
+    "Davydenko Artem": "FB501935",
+    "Demianenko Ihor": "FT122855",
+    "Demianets Petro": "FY073739",
+    "Deshevyi Sergii": "FN065471",
+    "Diakun Yurii": "FP097678",
+    "Dudzich Viktar": "KH3025643",
+    "DYNAK MAREK": "",
+    "Eismont Vasyl": "FJ481023",
+    "Fedorak Bogdan": "FN805217",
+    "Fedorenko Oleg": "EH046235",
+    "Fedosieiev Andrii": "GB628728",
+    "Filatov Andrii": "FK970335",
+    "Fridman Yurii": "FU473098",
+    "Gach Edward": "DGU 177347",
+    "Gach Kamil": "AZA 557226",
+    "Gadzina Zbigniew": "DET401988",
+    "Gaybulloev Azizjon": "FA1358467",
+    "Gnatiuk Sergii": "FK061880",
+    "Gocloń Krzysztof": "DGV964614",
+    "Grabowski Andrzej": "AZR451167",
+    "Grechushkin Oleksandr": "FP898694",
+    "Gulevatyi Oleksandr": "FN197663",
+    "Gwardyś Paweł": "",
+    "Halahan Kostiantyn": "FA017549",
+    "Haranenko Oleksandr": "FN339170",
+    "Harkavenko Ihor": "FE225422",
+    "Havryliuk Viacheslav": "FJ495700",
+    "Hlynskyi Andrii": "ES044582",
+    "Hlynskyi Ihor": "EP027283",
+    "Honcharenko Dmytro": "FV870441",
+    "Hvozdz Uladzimir": "MC3169840",
+    "Isayeu Yury": "MC3246818",
+    "Ismailov Anatolii": "FH138448",
+    "Ivashchenko Roman": "FZ906819",
+    "Ivashkovskyi Vitalii": "FJ369964",
+    "JAKUBOWSKI MARIUSZ": "",
+    "Jezierski Piotr": "DBC128456",
+    "Kalkov Mykola": "FT667989",
+    "Kameniev Andrii": "EH902675",
+    "Kanaryeyev Oleh": "FJ706490",
+    "Kardash Serhiy": "FJ951428",
+    "Karlov Serhii": "FB751333",
+    "Karpishyn Roman": "FV383467",
+    "Kasianov Yurii": "GA634299",
+    "Kawa Paweł": "",
+    "Kazakou Siarhei": "PD0139394",
+    "Kazakou Yury": "KB2469894",
+    "Khurdailo Andriy": "FN664669",
+    "Khyzhniak Yaroslav": "FJ760196",
+    "Kichuk Vitalii": "FE011733",
+    "Kilasonia Giorgi": "21AB33009",
+    "Kiselov Sergii": "FB881879",
+    "Klychko Yurii": "FF630928",
+    "Kmieciński Łukasz": "CEJ070367",
+    "Knysh Oleksandr": "FH319288",
+    "Kobryn Andrii": "EA197955",
+    "Kobryn Volodymyr": "ER926535",
+    "Kolodii Yakym": "FT849662",
+    "Kolomiiets Ivan": "GA645275",
+    "Konopko Valerii": "FF053247",
+    "Kopytenkov Yevhenii": "FE979077",
+    "Korytko Dariusz": "DBW755661",
+    "KOSAL ROBERT": "",
+    "Kostiushko Mykola": "GK486545",
+    "Kot Yevhen": "FG811125",
+    "Kovalenko Oleksandr": "ER209645",
+    "Koval Serhiy": "FP869224",
+    "Kowalik Mariusz": "CDT 888356",
+    "KOŻUCHOWSKI ROBERT": "",
+    "KUDZINOWSKI DARIUSZ": "",
+    "Krajewski Dariusz": "CAI130741",
+    "Krotochenko Vitalii": "FH307765",
+    "Krysanau Mikalai": "BM2820222",
+    "Kucemba Dariusz": "DCM094068",
+    "Kucemba Piotr": "AUB244476",
+    "Kulytskyi Oleh": "FG827044",
+    "Kuts Mykhailo": "FA817015",
+    "Kuzmenko Oleksandr": "FE118937",
+    "Lahovskyi Yurii": "FF536086",
+    "Larin Viacheslav": "FY003990",
+    "Levchenko Valentyn": "FP017979",
+    "Li Lel": "MP4128448",
+    "Litvinok Dzmitry": "AB3709578",
+    "Liubenkyi Serhii": "FS140049",
+    "Loshkarov Yurii": "FB955630",
+    "Łuczywo Marek": "CAF590573",
+    "Lukianenko Viktor": "FH310753",
+    "Luk'yanets Pavlo": "FH905370",
+    "Lutsyshyn Andrii": "FC431522",
+    "Majcherek Maciej": "CAD106312",
+    "Mandrykin Viacheslav": "FU401400",
+    "Marnopolskyi Oleksandr": "FF238706",
+    "Martynets Petro": "FK181368",
+    "Matviienkov Vladyslav": "FV491165",
+    "Mazur Serhii": "FE817311",
+    "Medviediev Vadym": "EX576215",
+    "Melniaichuk Ihar": "AB3713812",
+    "Mihal Anton": "FZ090695",
+    "Mikhalkevich Tadevush": "MC3237828Po",
+    "Mikhalkevich Uladzislau": "MC3524904",
+    "Molla Oleksandr": "FN678019",
+    "Mosin Barys": "BM2860540",
+    "Mosin Dmytro": "FS134847",
+    "Mrzygłód Andrzej": "AXN846387",
+    "Muliar Valerii": "FB373115",
+    "Musiienko Yaroslav": "FJ645581",
+    "Mykhailov Oleh": "GB210880",
+    "Mysak Andriy": "FE645746",
+    "Nachev Andrii": "FG670196",
+    "Navitski Viktar": "MC3308384",
+    "Nenko Tymofii": "GG913582",
+    "Oliinyk Oleksandr": "ER205525",
+    "Omelchenko Taras": "FG676109",
+    "Padlipski Henadzi": "MP4564956",
+    "Palamarchuk Taras": "FE200153",
+    "Panchyshyn Vasyl": "FJ885910",
+    "Pankiv Viktor": "GL217804",
+    "Pashchuk Petro": "FJ312819",
+    "Paulovich Uladzimir": "MP4681209",
+    "Pereklad Oleksandr": "FB907902",
+    "Petrov Denys": "FG604460",
+    "Pidlypchak Ruslan": "FT667062",
+    "Podoliak Stepan": "GB666369",
+    "Pohribnyi Hryhorii": "FK614552",
+    "Poltiev Vitalii": "FS875213",
+    "Ponomarov Serhii": "FE382381",
+    "Popelnjuk Aliaksei": "MP4415631",
+    "Popov Roman": "FC793141",
+    "Potalov Oleksandr": "FL102993",
+    "Prus Dariusz": "DBX981643",
+    "Przybyło Roman": "CCG080534",
+    "Pstyga Sergei": "MP4255032",
+    "Pyshchyk Andrii": "FE166456",
+    "Pyshchyk Dmytro": "FF588273",
+    "Radchenko Serhii": "FE870648",
+    "Reshetnykov Ihor": "FJ815334",
+    "Romanenko Oleksandr": "FE658106",
+    "Romanowski Piotr": "CGE260983",
+    "Romasz Grzegorz": "DCC638691",
+    "Rudenko Ruslan": "FG543497",
+    "Sapozhnyk Mykola": "FU433451",
+    "Saran Ruslan": "FH285282",
+    "Saroka Leanid": "AB3978321",
+    "Satsuta Serhii": "FT189085",
+    "Savenko Vitalii": "FC902279",
+    "Sestrenskyi Oleksandr": "ES754310",
+    "Shcherban Oleksandr": "FA810023",
+    "Shemeta Oleh": "FB698037",
+    "Sheremet Yurii": "FX537260",
+    "Shlemak Oleksandr": "FH088234",
+    "Shmatkovskyi Oleksandr": "FE807977",
+    "Shonts Vitalii": "GD258585",
+    "Shtrazgheim Serhii": "FZ587645",
+    "Shumak Kiryl": "AB3066952",
+    "Shvets Vitalii": "FK893951",
+    "SIDELNIK GRZEGORZ": "",
+    "Siuda Paweł": "CEW466688",
+    "Siusko Ihor": "FV115961",
+    "Śliwiński Marek": "",
+    "Solonynko Petro": "FY429562",
+    "Sośnicki Piotr": "",
+    "Sosnin Leonid": "FE372378",
+    "Stakhovskyy Mykhaylo": "GB696474",
+    "Stasiak Stanisław": "",
+    "Stasiuk Anatolii": "FL021918",
+    "Surhanau Uladzimir": "KB2376821",
+    "Sytnik Alexandr": "PD0253165",
+    "Szemraj Waldemar": "CDW203084",
+    "Tatchyn Mykola": "FE658473",
+    "Ternovskyi Oleksandr": "EX082854",
+    "Ternovskyi Roman": "ET255778",
+    "Tesak Jan": "CDE527861",
+    "Turchuk Mikhail": "MC3587499",
+    "Ulozas Vitalii": "FX502264",
+    "Uść Damian": "CHJ460659",
+    "Varekha Roman": "FZ378048",
+    "Vasylchenko Oleksandr": "EH263076",
+    "Vasylchenko Oleksii": "PU806292",
+    "Vikhrou Uladzislau": "AB3062321",
+    "Vikhrou Valery": "AB2766426",
+    "Vrushchak Pavlo": "FV527327",
+    "Vyhnych Hennadii": "FT910646",
+    "Wardaszko Marek": "DFG276609",
+    "Wesołowski Marcin": "DHJ532504",
+    "Wilk Mariusz": "",
+    "Wiśniewski Piotr": "DBK387897",
+    "Włodarczyk Piotr": "DBB979660",
+    "Wojakiewicz Mariusz": "DFT565894",
+    "Wojciechowski Arkadiusz": "DGZ992356",
+    "Yakovenko Ihor": "FE008986",
+    "Yashchenko Oleksandr": "FT951304",
+    "Yunusov Salavat": "FA1299361",
+    "Yurkov Pavlo": "GA444389",
+    "Zarzycki Robert": "",
+    "Żągiel Marek": "CET823147",
+    "Zhelepa Oleksii": "FA095321",
+    "Zhernosek Mykhailo": "FE793828",
+    "Zhuk Volodymyr": "FJ764516",
+    "Zhyhalov Ihor": "FX402395",
+    "Ziuliev Roman": "ES107995",
+    "Znamerovskyi Vasyl": "FB430098",
+    "Zydczyk Dariusz": "CHW830871"
+};
+
+/*
+        function openDriverModal() {
+            driverModal.style.display = 'block';
+        }
+        function closeDriverModal() {
+            driverModal.style.display = 'none';
+        }
+        function populateDriverList() {
+            for (let driverName in driverPassportMap) {
+                let divItem = document.createElement('div');
+                divItem.className = 'driver-list-item';
+                divItem.textContent = driverName;
+                divItem.onclick = function() {
+                    chooseDriver(driverName);
+                };
+                driverListContainer.appendChild(divItem);
+            }
+        }
+        function chooseDriver(driverName) {
+            let driverNameInput = document.getElementById("driverName");
+            let passportInput = document.getElementById("passport");
+            if (driverName === "Inny kierowca") {
+                driverNameInput.value = "";
+                passportInput.value = "";
+                driverNameInput.readOnly = false;
+                passportInput.readOnly = false;
+            } else {
+                driverNameInput.value = driverName;
+                passportInput.value = driverPassportMap[driverName] || "";
+                driverNameInput.readOnly = true;
+                passportInput.readOnly = true;
+            }
+            closeDriverModal();
+            const kierInput = document.getElementById("kierowca");
+            if (kierInput) {
+                if (driverName === "Inny kierowca") {
+                    kierInput.value = "";
+                    kierInput.readOnly = false;
+                } else {
+                    kierInput.value = driverName;
+                    kierInput.readOnly = true;
+                }
+            }
+        }
+*/
+
+function populateDriverSelect(selectId, mapObj) {
+  const sel = document.getElementById(selectId);
+  if (!sel) return;
+
+  // очистим на всякий
+  sel.innerHTML = '';
+
+  // Сортировка по алфавиту (по желанию)
+  const names = Object.keys(mapObj);
+  names.sort((a, b) => a.localeCompare(b, 'pl'));
+
+  for (const name of names) {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    sel.appendChild(opt);
+  }
+}
+
+        /* ------------------------------
+           Модальное окно для выбора przewoźnika
+        ------------------------------ */
+        let carrierModal;
+        let carrierListContainer;
+        let carriers = ["Chomar", "Henze"];
+        function openCarrierModal() {
+            carrierModal.style.display = 'block';
+        }
+        function closeCarrierModal() {
+            carrierModal.style.display = 'none';
+        }
+        function populateCarrierList() {
+            carriers.forEach(carrier => {
+                let divItem = document.createElement('div');
+                divItem.className = 'carrier-list-item';
+                divItem.textContent = carrier;
+                divItem.onclick = function() {
+                    chooseCarrier(carrier);
+                };
+                carrierListContainer.appendChild(divItem);
+            });
+        }
+        function chooseCarrier(carrierName) {
+            let przewoznikInput = document.getElementById("przewoznik");
+            przewoznikInput.value = carrierName;
+            przewoznikInput.readOnly = true;
+            closeCarrierModal();
+        }
+
+        /* ------------------------------
+           ВКЛАДКА 1: Generowanie awizacji dla ELX
+        ------------------------------ */
+        function generujAwizacje() {
+            let tourNo = document.getElementById("tourNo").value;
+            let loadingPlaces = document.getElementById("loadingPlaces").value;
+            let arrivalDate = document.getElementById("actualArrivalDate").value; // "2025-08-08"
+            let arrivalTime = document.getElementById("actualArrivalTime").value; // "07:30"
+            let driverName = document.getElementById("driverName").value;
+            let passport = document.getElementById("passport").value;
+            let truckPlate = document.getElementById("truckPlate").value;
+            let trailerType = document.getElementById("trailerType").value;
+            let zollCustoms = document.getElementById("zollCustoms").value;
+            let przewoznik = document.getElementById("przewoznik").value;
+// Сбор стран из Trasa (игнорируем пустые)
+const routeIds = ["routeCountry1","routeCountry2","routeCountry3","routeCountry4","routeCountry5"];
+const routeArr = routeIds
+  .map(id => (document.getElementById(id) ? document.getElementById(id).value.trim() : ""))
+  .filter(v => v); // удаляем пустые
+
+// Строка маршрута, минимум 2 — иначе оставим пустым
+const routeStr = (routeArr.length >= 2) ? routeArr.join(" \u2192 ") : ""; // стрелка →
+            let tabela = `
+                <table>
+                    <tr>
+                        <th>Tour no.:</th>
+                        <td>${tourNo}</td>
+                    </tr>
+                    <tr>
+                        <th>Loading places:</th>
+                        <td>${loadingPlaces}</td>
+                    </tr>
+                    <tr>
+                      <th>Actual arrival date:</th>
+                      <td>${arrivalDate || "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Actual arrival time:</th>
+                      <td>${arrivalTime || "-"}</td>
+                    </tr>
+                    <tr>
+                        <th>Driver's name:</th>
+                        <td>${driverName}</td>
+                    </tr>
+                    <tr>
+                        <th>Passport:</th>
+                        <td>${passport}</td>
+                    </tr>
+                    <tr>
+                        <th>Truck plate no.:</th>
+                        <td>${truckPlate}</td>
+                    </tr>
+                    <tr>
+                        <th>Trailer type:</th>
+                        <td>${trailerType}</td>
+                    </tr>
+                    <tr>
+                        <th>ZOLL/CUSTOMS:</th>
+                        <td>${zollCustoms}</td>
+                    </tr>
+                    <tr>
+                        <th>Carrier:</th>
+                        <td>${przewoznik}</td>
+                    </tr>
+<tr>
+    <th>Trasa:</th>
+    <td>${routeStr || "-"}</td>
+</tr>
+                </table>
+            `;
+            document.getElementById("wynik").innerHTML = tabela;
+        }
+
+        function fmtDate(iso) {
+          if (!iso) return "";
+          const [y,m,d] = iso.split("-");
+          return `${d}.${m}.${y}`;
+        }
+
+        function kopiujAwizacje() {
+            let zakres = document.createRange();
+            zakres.selectNode(document.getElementById("wynik"));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(zakres);
+            try {
+                document.execCommand('copy');
+                alert("Skopiowano awizację do schowka!");
+            } catch (err) {
+                alert("Niestety, nie udało się skopiować.");
+            }
+            window.getSelection().removeAllRanges();
+        }
+
+        /* ------------------------------
+           Функция отправки письма через mailto:
+           Используем innerText для получения текстового содержимого таблицы
+        ------------------------------ */
+        function sendEmail() {
+            let tourNo = document.getElementById("tourNo").value.trim();
+            let loadingPlaces = document.getElementById("loadingPlaces").value;
+            // Используем innerText вместо innerHTML
+            let tableText = document.getElementById("wynik").innerText;
+
+            if (!tableText) {
+                alert("Najpierw wygeneruj awizację (przycisk 'Generuj awizację').");
+                return;
+            }
+
+            let emailMap = {
+                "Żarów": "fgw.zarow@electrolux.com",
+                "Świdnica": "fgw.swidnica@electrolux.com",
+                "Oława": "fgw.olawa@electrolux.com",
+                "Siewierz": "fgw.swidierz@electrolux.com",
+                "Mirków": "electrolux.mirkow@bcube.com.pl",
+                "Rothenburg": "wvz.rothenburg@aeg-hausgeraete.de",
+                "Porcia": "FDCPorcia@electrolux.it",
+                "Santa Lucia di Paive": "FDCSusegana@electrolux.it",
+                "Forli": "FDCForli@electrolux.it",
+                "Solaro": "FDCSolaro@electrolux.it,sorveglianza.solaro@electrolux.it"
+            };
+
+            let recipient = emailMap[loadingPlaces] || "unknown@electrolux.com";
+            let subject = encodeURIComponent(tourNo || "Awizacja");
+            let body = encodeURIComponent(tableText);
+            let mailtoLink = "mailto:" + recipient 
+                             + "?subject=" + subject
+                             + "&body=" + body;
+            window.location.href = mailtoLink;
+        }
+
+        /* ------------------------------
+           ВКЛАДКА 2: Generacja zlecenia dla kierowcy przy neutralizacji
+        ------------------------------ */
+        function generujSMS2() {
+            let lang = document.getElementById("langSelect").value;
+            let adresZaladunku = document.getElementById("adresZaladunku").value;
+            let dataZaladunku = document.getElementById("dataZaladunku").value;
+            let referencja = document.getElementById("referencja").value;
+            let wagaAdres = document.getElementById("wagaAdres").value;
+            let adresRozladunku = document.getElementById("adresRozladunku").value;
+            let dataRozladunku = document.getElementById("dataRozladunku").value;
+            let adresNeutralizacji = document.getElementById("adresNeutralizacji").value;
+            let finalText = "";
+            if (lang === "RU") {
+                finalText = `
+НЕЙТРАЛЬНАЯ ЗАГРУЗКА \\ НЕЙТРАЛЬНАЯ ВЫГРУЗКА
+
+Загрузка:
+- ${adresZaladunku}
+- ${dataZaladunku}
+- Референция: ${referencja}
+
+ВЗВЕШИВАЕМСЯ ГРУЖЕННЫМИ И ПУСТЫМИ:
+- ${wagaAdres}
+
+Выгрузка:
+- ${adresRozladunku}
+- ${dataRozladunku}
+
+Выписываем CMR для места погрузки:
+- загрузка - ${adresZaladunku}
+- выгрузка - ${adresNeutralizacji}
+
+Выписываем CMR для места выгрузки:
+- загрузка - ${adresNeutralizacji}
+- выгрузка - ${adresRozladunku}
+
+Помните! Место загрузки не должно знать, куда грузится товар. 
+Место выгрузки не должно знать, откуда приехал товар.
+                `;
+            } else {
+                finalText = `
+NEUTRALNY ZAŁADUNEK \\ NEUTRALNY ROZŁADUNEK
+
+Załadunek:
+- ${adresZaladunku}
+- ${dataZaladunku}
+- Referencja: ${referencja}
+
+Waga przed załadunkiem i po załadunku:
+- ${wagaAdres}
+
+Rozładunek:
+- ${adresRozladunku}
+- ${dataRozladunku}
+
+Wypisujemy CMR dla miejsca załadunku:
+- załadunek - ${adresZaladunku}
+- rozładunek - ${adresNeutralizacji}
+
+Wypisujemy CMR dla miejsca rozładunku:
+- załadunek - ${adresNeutralizacji}
+- rozładunek - ${adresRozladunku}
+
+Pamiętaj! Miejsce załadunku nie powinno wiedzieć, dokąd jedzie towar. 
+Miejsce rozładunku nie powinno wiedzieć, skąd przyjechał towar.
+Obowiązkowo wymagany kwit wagowy.
+                `;
+            }
+            document.getElementById("wynik2textarea").value = finalText.trim();
+        }
+
+        function kopiujZlecenie() {
+            let textArea = document.getElementById("wynik2textarea");
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert("Skopiowano zlecenie do schowka!");
+            } catch (err) {
+                alert("Niestety, nie udało się skopiować.");
+            }
+            window.getSelection().removeAllRanges();
+        }
+
+        /* ------------------------------
+           ВКЛАДКА 3: Generacja zlecenia dla wymiany naczep
+        ------------------------------ */
+        function generujSMS3() {
+            let dataWymiany = document.getElementById("dataWymiany").value;
+            let referencjaZaladowanej = document.getElementById("referencjaZaladowanej").value;
+            let referencjaPustej = document.getElementById("referencjaPustej").value;
+            let dataRozladunku3 = document.getElementById("dataRozladunku3").value;
+            let formattedDataRozladunku = dataRozladunku3.replace("T", " ") + " fix";
+            let sms = `
+WYMIANA NACZEP:
+- Robert Bosch GmbH Auf d. Breit 4, 76227 Karlsruhe, Niemcy
+- ${dataWymiany}
+- referencja dla załadowanej naczepy: ${referencjaZaladowanej}
+- referencja dla pustej naczepy: ${referencjaPustej}
+
+ROZŁADUNEK:
+- Kuehne + Nagel Magazynowa 3, 55-040 Bielany Wrocławskie
+- ${formattedDataRozladunku}
+
+Po wymianie naczepy należy poinformować dyspozytora o numerze odebranej załadowanej naczepy. Przed każdą podróżą, po wymianie naczepy, należy zawsze sprawdzić stan poduszek w naczepie, a w przypadku ich uszkodzenia przesłać zdjęcie do dyspozytora i poinformować o tym pracownika firmy Bosch.
+            `;
+            document.getElementById("wynik3textarea").value = sms.trim();
+        }
+
+        function kopiujZlecenie3() {
+            let textArea = document.getElementById("wynik3textarea");
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert("Skopiowano zlecenie do schowka!");
+            } catch (err) {
+                alert("Niestety, nie udało się skopiować.");
+            }
+            window.getSelection().removeAllRanges();
+        }
+
+        /* ------------------------------
+           ВКЛАДКА 4: Sebastian
+        ------------------------------ */
+        window.addEventListener('DOMContentLoaded', () => {
+  const input      = document.getElementById('input');
+  const output     = document.getElementById('output');
+  const emailInput = document.getElementById('emailInput');
+
+  // Восстановим сохранённый e-mail
+  emailInput.value = localStorage.getItem('savedEmail') || '';
+
+  // Навешиваем слушатели
+  input.addEventListener('input', generateMessage);
+  input.addEventListener('keydown', e => { if (e.ctrlKey && e.key==='Enter') copyToClipboard(); });
+  output.addEventListener('click', () => {
+    const range = document.createRange();
+    range.selectNodeContents(output);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+            emailInput.value = localStorage.getItem('savedEmail') || '';
+            input.addEventListener('input', generateMessage);
+            input.addEventListener('keydown', function(e) { if (e.ctrlKey && e.key === 'Enter') copyToClipboard(); });
+            output.addEventListener('click', () => { const range = document.createRange(); range.selectNodeContents(output); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); });
+
+            function generateMessage() {
+                const text = input.value.trim(); output.classList.remove('success','error');
+                if (!text) { output.textContent = ''; return; }
+                try {
+                    const elems = text.split(/\s+/);
+                    let zal = elems[0], pusta = elems[1], ref = elems[2];
+                    const kier = elems[3] + ' ' + elems[4];
+                    const data = elems[elems.length-2]; let godz = elems[elems.length-1].replace(';',':').replace('h','');
+                    let msg = '';
+                    if (zal.startsWith('PT')) {
+                        msg = `Wymiana naczep w:  Fiege Logistics, Mittelrheinstraße 1, DE-67550 Worms (GPS: 49.685859, 8.344207).\nWyładunek ${data} ${godz} w:  Kuehne + Nagel Sp. z o.o., Adres: Magazynowa 3, 55-040 Bielany Wrocławskie.\n\nUWAGA!! Zostawiasz swoją naczepę i zabierasz załadowaną naczepę.\n\nNumer referencyjny na odbiór załadowanej naczepy: ${zal}\n\nUWAGA: W naczepie, którą zostawiasz, musi być założony komplet desek bocznych.\n\nDAJ POTEM PROSZĘ ZNAĆ, JAKĄ NACZEPĘ ZAŁADOWANĄ ZABRAŁEŚ – to jest bardzo ważne.`;
+                        output.textContent = msg; output.classList.add('success'); return;
+                    }
+                    if (pusta.toLowerCase()==='direct'||pusta.toLowerCase()==='direkt') {
+                        msg = `Wymiana naczep w: Robert Bosch GmbH, Adres: Auf d. Breit 4, 76227 Karlsruhe, Niemcy\nGPS: 49.018616,8.473981\nWyładunek ${data} ${godz} Kuehne + Nagel Sp. z o.o., Magazynowa 3, 55-040 Bielany Wrocławskie.\n\nNumer referencyjny na załadunek: ${zal}`;
+                        output.textContent = msg; output.classList.add('success'); return;
+                    }
+                    msg = `Wymiana naczep w: Robert Bosch GmbH, Adres: Auf d. Breit 4, 76227 Karlsruhe, Niemcy\nGPS: 49.018616,8.473981\nWyładunek ${data} ${godz} Kuehne + Nagel Sp. z o.o., Magazynowa 3, 55-040 Bielany Wrocławskie.\n\nUWAGA!! Zostawiasz swoją naczepę i zabierasz załadowaną naczepę.\nW naczepie, którą zabierzesz, skontroluj stan poduszek.\n\nNumer referencyjny na zostawienie pustej naczepy: ${pusta}\nNumer referencyjny na odbiór załadowanej naczepy: ${zal}\n\nUWAGA: W naczepie, którą zostawiasz, musi być założony komplet desek bocznych.\n\nDAJ POTEM PROSZĘ ZNAĆ, JAKĄ NACZEPĘ ZAŁADOWANĄ ZABRAŁĘŚ – to jest bardzo ważne.`;
+                    output.textContent = msg; output.classList.add('success');
+                } catch(e) { output.textContent = '❌ Błąd generowania'; output.classList.add('error'); }
+            }
+            window.copyToClipboard = function() {
+                const txt = output.textContent; if (!txt) return alert('Brak wiadomości');
+                navigator.clipboard.writeText(txt).then(showCopyMessage).catch(err=>alert('Błąd kopiowania: '+err));
+            };
+            window.clearAll = function() { input.value=''; output.textContent=''; output.classList.remove('success','error'); input.focus(); };
+            function showCopyMessage() { const m=document.getElementById('copyMessage'); m.classList.add('show'); setTimeout(()=>m.classList.remove('show'),2000); }
+            window.saveEmail = function() { localStorage.setItem('savedEmail', emailInput.value); };
+window.sendReminderEmail = function() {
+    const mail = emailInput.value.trim();
+    if (!mail) {
+        alert('Podaj e-mail');
+        return;
+    }
+    const elems = input.value.trim().split(/\s+/);
+    const kier = elems.length >= 5
+        ? `${elems[3]} ${elems[4]}`
+        : 'kierowca';
+    const subject = encodeURIComponent(`Wyklarować naczepy — ${kier}`);
+    const body = encodeURIComponent(
+        `Przypominam o wyklarowaniu naczep ${kier}\n\nnie dziękuj — Seba :)`
+    );
+    window.location.href = `mailto:${mail}?subject=${subject}&body=${body}`;
+};
+            document.getElementById('year').textContent = new Date().getFullYear();
+        });
+
+        /* ------------------------------
+   ВКЛАДКА 5: Portiernia
+------------------------------ */
+        function sendEquipmentEmail() {
+            const driver = document.getElementById('kierowca').value.trim();
+            const ciagnik = document.getElementById('ciagnik').value.trim();
+            const naczepa = document.getElementById('naczepa').value.trim();
+	    const kiedy = document.getElementById('kiedy').value.trim();
+
+            if (!driver) {
+                alert('Proszę wybrać kierowcę.');
+                return;
+            }
+
+            // Тема: имя водителя + (если есть) ciagnik/naczepa
+            let subjParts = [driver];
+            if (ciagnik) subjParts.push(ciagnik);
+            if (naczepa) subjParts.push(naczepa);
+            const subject = encodeURIComponent(subjParts.join(' '));
+
+// Тело письма
+let parts = [];
+if (driver) parts.push(`kierowcy ${driver}`);
+if (ciagnik) parts.push(`ciągnik ${ciagnik}`);
+if (naczepa) parts.push(`naczepę ${naczepa}`);
+if (kiedy) parts.push(kiedy);
+
+let body = `Dzień dobry.\n\nProszę wydać dla ` + parts.join(', ');
+const bodyEncoded = encodeURIComponent(body);
+
+            // Собираем mailto
+            const mailtoLink = `mailto:portiernia@chomar.pl?subject=${subject}&body=${bodyEncoded}`;
+            window.location.href = mailtoLink;
+        }
+    </script>
+</head>
+<body>
+    <!-- Меню вкладок -->
+    <ul class="tabs">
+        <li class="active" data-tab="tab1" onclick="openTab('tab1')">Awizacja ELX</li>
+        <li data-tab="tab2" onclick="openTab('tab2')">Neutralizacja (SMS)</li>
+        <li data-tab="tab3" onclick="openTab('tab3')">Mapa z trasą</li>
+        <li data-tab="tab4" onclick="openTab('tab4')">Generator Karlsruhe+Worms</li>
+        <li data-tab="tab5" onclick="openTab('tab5')">Portiernia</li>
+        <li data-tab="tab6" onclick="openTab('tab6')">AETR: Pauses & Kompensacje</li>
+    </ul>
+
+<!-- Модальное окно выбора водителя
+    <div id="driverModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDriverModal()">&times;</span>
+            <h2>Wybierz kierowcę</h2>
+            <p>Кликните в имя:</p>
+            <div id="driverListContainer"></div>
+        </div>
+    </div>
+    -->
+
+    <!-- ВКЛАДКА 1 -->
+    <div class="container tab-content active" id="tab1">
+        <div class="author">© 2025 Leonid Podmakov</div>
+        <h1>Generowanie awizacji dla ELX</h1>
+        <div class="form-group">
+            <label for="tourNo">Tour no.:</label>
+            <input type="text" id="tourNo" />
+        </div>
+        <div class="form-group">
+            <label for="loadingPlaces">Loading places:</label>
+            <select id="loadingPlaces">
+                <option value="Żarów">Żarów</option>
+                <option value="Świdnica">Świdnica</option>
+                <option value="Oława">Oława</option>
+                <option value="Siewierz">Siewierz</option>
+                <option value="Mirków">Mirków</option>
+                <option value="Rothenburg">Rothenburg</option>
+                <option value="Porcia">Porcia</option>
+                <option value="Santa Lucia di Paive">Santa Lucia di Paive</option>
+                <option value="Forli">Forli</option>
+                <option value="Solaro">Solaro</option>
+            </select>
+        </div>
+        <div class="form-group">
+          <label for="actualArrivalDate">Actual arrival — Date:</label>
+          <input type="date" id="actualArrivalDate" />
+        </div>
+        <div class="form-group">
+          <label for="actualArrivalTime">Actual arrival — Time:</label>
+          <input type="time" id="actualArrivalTime" />
+        </div>
+  <p class="white-text" style="margin-top:15px;opacity:.9">
+Tutaj wpisujemy aktualne ETA na miejsce załadunku, o której godzinie auto faktycznie będzie.
+  </p>
+<div class="form-group">
+  <label for="driverName">Driver's name:</label>
+  <select id="driverName">
+    <!-- сюда попадут <option>…</option> -->
+  </select>
+</div>
+        <div class="form-group">
+            <label for="passport">Passport:</label>
+            <input type="text" id="passport" readonly />
+        </div>
+        <div class="form-group">
+            <label for="truckPlate">Truck plate no.:</label>
+            <input type="text" id="truckPlate" />
+        </div>
+        <div class="form-group">
+            <label for="trailerType">Trailer type:</label>
+            <select id="trailerType">
+                <option value="A11 - Mega">A11 - Mega</option>
+                <option value="A15 - Tandem">A15 - Tandem</option>
+                <option value="B11 - Mega BDE">B11 - Mega BDE</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="zollCustoms">ZOLL/CUSTOMS:</label>
+            <select id="zollCustoms">
+                <option value="brak">brak</option>
+                <option value="Gerlach; Georg-Wittig-Straße 1; 79761; Waldshut-Tiengen; DE">
+                    Gerlach; Georg-Wittig-Straße 1; 79761; Waldshut-Tiengen; DE
+                </option>
+                <option value="Gerlach; via G. Porta 2; 6830; Chiasso; CH">
+                    Gerlach; via G. Porta 2; 6830; Chiasso; CH
+                </option>
+                <option value="Gerlach AG; Senderstraße 30; 6922; Wolfurt; AT">
+                    Gerlach AG; Senderstraße 30; 6922; Wolfurt; AT
+                </option>
+                <option value="Gerlach; Rue des Transitaires; 68300; Saint Louis; FR">
+                    Gerlach; Rue des Transitaires; 68300; Saint Louis; FR
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+          <label for="przewoznik">Carrier:</label>
+          <select id="przewoznik">
+            <option value="Chomar">Chomar</option>
+            <option value="Henze">Henze</option>
+          </select>
+        </div>
+<div class="form-group" id="routeGroup">
+  <label for="routeCountry1">Trasa:</label>
+  <select id="routeCountry1" class="countrySel">
+  <option value="">—</option>
+  <option>PL</option><option>DE</option><option>AT</option><option>CZ</option><option>IT</option>
+  <option>SK</option><option>FR</option><option>DK</option><option>HU</option><option>SI</option><option>CH</option>
+</select>
+  <select id="routeCountry2" class="countrySel">
+  <option value="">—</option>
+  <option>PL</option><option>DE</option><option>AT</option><option>CZ</option><option>IT</option>
+  <option>SK</option><option>FR</option><option>DK</option><option>HU</option><option>SI</option><option>CH</option>
+</select>
+  <select id="routeCountry3" class="countrySel">
+  <option value="">—</option>
+  <option>PL</option><option>DE</option><option>AT</option><option>CZ</option><option>IT</option>
+  <option>SK</option><option>FR</option><option>DK</option><option>HU</option><option>SI</option><option>CH</option>
+</select>
+  <select id="routeCountry4" class="countrySel">
+  <option value="">—</option>
+  <option>PL</option><option>DE</option><option>AT</option><option>CZ</option><option>IT</option>
+  <option>SK</option><option>FR</option><option>DK</option><option>HU</option><option>SI</option><option>CH</option>
+</select>
+  <select id="routeCountry5" class="countrySel">
+  <option value="">—</option>
+  <option>PL</option><option>DE</option><option>AT</option><option>CZ</option><option>IT</option>
+  <option>SK</option><option>FR</option><option>DK</option><option>HU</option><option>SI</option><option>CH</option>
+</select>
+  <!-- Подсказка: выберите 2–5 стран, пустые игнорируются -->
+</div>
+        <button class="btn" onclick="generujAwizacje()">Generuj awizację</button>
+        <button class="btn" onclick="kopiujAwizacje()">Kopiuj awizację</button>
+        <button class="btn" onclick="sendEmail()">Wyślij awizację</button>
+        <div id="wynik"></div>
+    </div>
+
+    <!-- ВКЛАДКА 2 -->
+    <div class="container tab-content" id="tab2">
+        <div class="author">© 2025 Leonid Podmakov</div>
+        <h1>Generacja zlecenia dla kierowcy przy neutralizacji</h1>
+        <div class="form-group">
+            <label for="langSelect">Język:</label>
+            <select id="langSelect">
+                <option value="RU">Русский</option>
+                <option value="PL" selected>Polski</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="adresZaladunku">Adres załadunku:</label>
+            <input type="text" id="adresZaladunku" />
+        </div>
+        <div class="form-group">
+            <label for="dataZaladunku">Data załadunku:</label>
+            <input type="datetime-local" id="dataZaladunku" />
+        </div>
+        <div class="form-group">
+            <label for="referencja">Referencja:</label>
+            <input type="text" id="referencja" />
+        </div>
+        <div class="form-group">
+            <label for="wagaAdres">Waga (adres):</label>
+            <input type="text" id="wagaAdres" />
+        </div>
+        <div class="form-group">
+            <label for="adresRozladunku">Adres rozładunku:</label>
+            <input type="text" id="adresRozladunku" />
+        </div>
+        <div class="form-group">
+            <label for="dataRozladunku">Data rozładunku:</label>
+            <input type="datetime-local" id="dataRozladunku" />
+        </div>
+        <div class="form-group">
+            <label for="adresNeutralizacji">Adres neutralizacji:</label>
+            <input type="text" id="adresNeutralizacji" />
+        </div>
+        <button class="btn" onclick="generujSMS2()">Generuj zlecenie</button>
+        <button class="btn" onclick="kopiujZlecenie()">Kopiuj zlecenie</button>
+        <div id="wynik2">
+            <textarea id="wynik2textarea" placeholder="Tutaj pojawi się wygenerowane zlecenie..."></textarea>
+        </div>
+    </div>
+
+    <!-- ВКЛАДКА 3 -->
+    <div class="container tab-content" id="tab3">
+        <div class="author">© 2025 Leonid Podmakov</div>
+        <h1>Mapa z trasą (OpenRouteService + Leaflet)</h1>
+        <iframe src="https://maps.openrouteservice.org/directions?n1=51.107&n2=17.038&n3=8&a=51.107,17.038,52.229,21.012&b=0&c=0&k1=en-US&k2=km" loading="lazy"></iframe>
+
+        <h2>Geokodowanie adresów (OpenStreetMap Nominatim)</h2>
+        <form onsubmit="searchAddress(event)">
+            <div class="form-group">
+                <label for="address">Wprowadź adres:</label>
+                <input type="text" ; color: #ffffff; id="address" ; placeholder="np. Magazynowa 3, Bielany Wrocławskie" />
+            </div>
+            <button class="btn" type="submit">Szukaj</button>
+        </form>
+        <div style="margin-top: 20px; text-align: center; color: #ffffff; font-size: 15px" id="geoResult">Wynik geokodowania pojawi się tutaj.</div>
+    </div>
+
+    <!-- ВКЛАДКА 4 -->
+    <div class="container tab-content" id="tab4">
+        <div class="author">© 2025 Sebastian Szymański</div>
+        <h1>Generator wiadomości — Wymiana naczep (Karlsruhe/Worms → K+N)</h1>
+        <label>Skopiuj tylko cały wiersz z tabelki dotyczący Twojego kierowcy (tabelkę wysyła planista):</label>
+        <textarea id="input" rows="4" placeholder="RB-KA-xxxxxx\tRB-KA-xxxxxx\tREF..."></textarea>
+        <div id="output" title="Kliknij, aby zaznaczyć cały tekst"></div>
+        <button class="btn" onclick="copyToClipboard()">Kopiuj do schowka (Ctrl + Enter)</button>
+        <button class="btn" onclick="clearAll()">Wyczyść wszystko</button>
+        <h3 class="white-text">Twój e-mail (zapamiętany):</h3>
+        <input type="email" id="emailInput" placeholder="Twój e-mail" oninput="saveEmail()" />
+        <button class="btn" onclick="sendReminderEmail()">Wyślij przypomnienie na e-mail</button>
+        <div style="margin-top: 20px; text-align: center; color: #ffffff; font-size: 15px; font-weight: bold;">
+            <strong>Ważne informacje dla dyspozytora:</strong><br>
+            DYSPOZYTORZE — pamiętaj o WYKLAROWANIU naczep w DESCE oraz w pliku NACZEPOWYM: pozostawionej naczepy oraz nowo zabranej.<br>
+            🐗 sprawdza klar naczep 2 razy w tygodniu!
+        </div>
+        <div id="copyMessage">Skopiowano ✅</div>
+    </div>
+
+<!-- ВКЛАДКА 5 -->
+<div class="container tab-content" id="tab5">
+
+  <!-- NOWY: generator z wklejanym wierszem -->
+  <h1>Portiernia — generator maila</h1>
+  <div class="author">© 2025 Sebastian Szymański</div>
+
+  <label class="white-text" style="font-weight:600;">
+    Wklej wiersz (Imię Nazwisko; Numer; Data)
+  </label>
+<textarea id="portInput" rows="3"
+            placeholder="Piotr Cudecki; DPL3T82; 12.08
+Dima Tokar; DPL2T53; 13.08"
+            style="width:100%; font-family:monospace; font-size:14px; padding:10px; box-sizing:border-box; margin:10px 0;"></textarea>
+
+  <div id="portOutput" title="Kliknij, aby zaznaczyć cały tekst"
+       style="border:1px solid #ccc; min-height:180px; white-space:pre-wrap; background:#fff; padding:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); cursor:pointer;"></div>
+
+  <button class="btn" onclick="portCopy()">Kopiuj</button>
+  <button class="btn" onclick="portMail()">Otwórz mail</button>
+  <button class="btn" onclick="portClear()">Wyczyść</button>
+
+  <div id="copyMessagePort" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+       background-color:#6fcf97; color:#fff; padding:10px 20px; border-radius:5px; font-size:14px; opacity:0; visibility:hidden; transition:opacity .5s, visibility .5s; z-index:1000;">
+    Skopiowano ✅
+  </div>
+
+  <hr style="margin:24px 0; border:none; border-top:1px dashed rgba(255,255,255,.4)">
+
+  <!-- STARY: klasyczny formularz -->
+  <h1 class="white-text" style="margin-top:0">Portiernia</h1>
+  <div class="author">© 2025 Leonid Podmakov</div>
+
+  <div class="form-group">
+    <label for="kierowca">Kierowca:</label>
+    <select id="kierowca">
+      <!-- опции -->
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="ciagnik">Ciągnik:</label>
+    <input type="text" id="ciagnik" placeholder="opcjonalnie">
+  </div>
+
+  <div class="form-group">
+    <label for="naczepa">Naczepa:</label>
+    <input type="text" id="naczepa" placeholder="opcjonalnie">
+  </div>
+
+  <div class="form-group">
+    <label for="kiedy">Kiedy?</label>
+    <input type="text" id="kiedy" placeholder="np. 12.08 lub 12/08 lub 2025-08-12">
+  </div>
+
+  <button class="btn" onclick="sendEquipmentEmail()">Generuj mail</button>
+</div>
+
+<!-- ВКЛАДКА 6 -->
+<div class="container tab-content" id="tab6">
+  <div class="author">© 2025 Leonid Podmakov</div>
+  <h1>Pauzy tygodniowe i kompensacje (ostatnie 4 tyg.)</h1>
+
+  <div class="form-group">
+    <label>Start pauzy — Data:</label>
+    <input type="date" id="restStartDate">
+  </div>
+  <div class="form-group">
+    <label>Start pauzy — Godzina:</label>
+    <input type="time" id="restStartTime">
+  </div>
+
+  <div class="form-group">
+    <label>Koniec pauzy — Data:</label>
+    <input type="date" id="restEndDate">
+  </div>
+  <div class="form-group">
+    <label>Koniec pauzy — Godzina:</label>
+    <input type="time" id="restEndTime">
+  </div>
+
+  <div class="form-group">
+    <label>Godziny tej pauzy, które zaliczyć jako kompensację (opcjonalnie):</label>
+    <input type="number" min="0" step="0.25" id="restCompHours" placeholder="np. 3.5">
+  </div>
+
+  <button class="btn" onclick="aetrAddPause()">Zapisz pauzę</button>
+  <button class="btn" onclick="aetrClearAll()" title="Usuwa tylko dane z zakładki 6">Wyczyść pauzy</button>
+
+  <h2>Twoje pauzy</h2>
+  <table id="aetrTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Start</th>
+        <th>Koniec</th>
+        <th>Czas [h]</th>
+        <th>Typ</th>
+        <th>Kompensacja użyta [h]</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h2>Podsumowanie (rolling 4 tygodnie)</h2>
+  <div id="aetrSummary" class="white-text" style="line-height:1.6"></div>
+
+  <p class="white-text" style="margin-top:15px;opacity:.9">
+    Założenia kalkulatora: wykrywa tygodniowe odpoczynki (≥24h). 
+    ≥45h = normalny, 24–44:59 = skrócony (powstaje niedobór = 45h − czas pauzy). 
+    Kompensacja musi być w jednym kawałku i „dołączona” do innego odpoczynku — w UI możesz wpisać, ile godzin danej pauzy liczysz jako kompensację. 
+    Zaległość liczona z ostatnich 4 tygodni (ISO-tygodnie, poniedziałek–niedziela).
+  </p>
+</div>
+<script>
+function copyToClipboard() {
+    const sms = document.getElementById("smsOutput");
+    if (sms) {
+        navigator.clipboard.writeText(sms.textContent || sms.value || "").then(() => {
+            alert("Skopiowano do schowka!");
+        });
+    }
+}
+
+function clearAll() {
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+    document.getElementById("smsOutput").textContent = "";
+}
+
+function sendReminderEmail() {
+    const email = prompt("Podaj adres email:");
+    if (!email) return;
+    const subject = "Przypomnienie: zadanie dla kierowcy";
+    const body = document.getElementById("smsOutput").textContent || "";
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  // Заполняем оба выпадающих списка
+  populateDriverSelect('driverName', driverPassportMap);
+  populateDriverSelect('kierowca', driverPassportMap);
+
+  // Автоподстановка паспорта в табе 1
+  const driverSel = document.getElementById('driverName');
+  const passportInput = document.getElementById('passport');
+
+  function syncPassport() {
+    const name = driverSel.value;
+    passportInput.value = driverPassportMap[name] || '';
+    // Разрешим ручной ввод, если выбрали "Inny kierowca"
+    const manual = name === 'Inny kierowca';
+    passportInput.readOnly = !manual;
+  }
+
+  // Сразу проставим для первого значения
+  syncPassport();
+  // И на каждое изменение
+  driverSel.addEventListener('change', syncPassport);
+});
+// ===== AETR — Zakładka 6 =====
+const AETR_STORE_KEY = 'aetr_weekly_rests_v1';
+
+function aetrLoad() {
+  try { return JSON.parse(localStorage.getItem(AETR_STORE_KEY) || '[]'); }
+  catch { return []; }
+}
+function aetrSave(rows) {
+  localStorage.setItem(AETR_STORE_KEY, JSON.stringify(rows));
+}
+
+function toISO(dt) { // Date -> 'YYYY-MM-DD HH:MM'
+  const pad = n => String(n).padStart(2,'0');
+  return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+}
+
+function parseLocalDateTime(dateStr, timeStr) {
+  if (!dateStr || !timeStr) return null;
+  // tworzymy lokalny czas (bez strefy)
+  const [Y,M,D] = dateStr.split('-').map(Number);
+  const [h,m] = timeStr.split(':').map(Number);
+  return new Date(Y, (M-1), D, h, m, 0, 0);
+}
+
+function hoursDiff(a, b) { // b - a w godzinach
+  return (b - a) / 36e5;
+}
+
+function classifyWeeklyRest(h) {
+  if (h >= 45) return 'weekly (normal)';
+  if (h >= 24) return 'weekly (reduced)';
+  return '—';
+}
+
+// ISO week helpers (tydzień zaczyna się w poniedziałek)
+function isoWeekStart(d) {
+  const dt = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const day = (dt.getDay() + 6) % 7; // 0=pon,6=nd
+  dt.setDate(dt.getDate() - day);
+  dt.setHours(0,0,0,0);
+  return dt;
+}
+function isoWeekEnd(d) {
+  const s = isoWeekStart(d); // poniedziałek 00:00
+  const e = new Date(s.getTime());
+  e.setDate(e.getDate() + 7);       // pon + 7 dni = pon. następnego tygodnia
+  e.setMilliseconds(-1);            // niedziela 23:59:59.999
+  return e;
+}
+
+function addWeeks(date, n) {
+  const d = new Date(date.getTime());
+  d.setDate(d.getDate() + n*7);
+  return d;
+}
+
+function isoWeekOf(date) {
+  const d = new Date(date.getTime());
+  d.setHours(0,0,0,0);
+  // czwartek w tym tygodniu
+  d.setDate(d.getDate() + 3 - ((d.getDay()+6)%7));
+  const week1 = new Date(d.getFullYear(),0,4);
+  return 1 + Math.round(((d - week1) / 86400000 - 3 + ((week1.getDay()+6)%7)) / 7);
+}
+function isoYearOf(date) {
+  const d = new Date(date.getTime());
+  d.setDate(d.getDate() + 3 - ((d.getDay()+6)%7));
+  return d.getFullYear();
+}
+
+function aetrAddPause() {
+  const sd = document.getElementById('restStartDate').value;
+  const st = document.getElementById('restStartTime').value;
+  const ed = document.getElementById('restEndDate').value;
+  const et = document.getElementById('restEndTime').value;
+  const comp = parseFloat(document.getElementById('restCompHours').value || '0') || 0;
+
+  const start = parseLocalDateTime(sd, st);
+  const end   = parseLocalDateTime(ed, et);
+  if (!start || !end || end <= start) {
+    alert('Sprawdź daty/godziny: koniec musi być po starcie.');
+    return;
+  }
+
+  const hours = +hoursDiff(start, end).toFixed(2);
+  const type = classifyWeeklyRest(hours);
+
+  const row = {
+    id: Date.now(),
+    startISO: toISO(start),
+    endISO: toISO(end),
+    hours,
+    type,
+    compHours: comp
+  };
+  const rows = aetrLoad();
+  rows.push(row);
+  aetrSave(rows);
+  aetrRender();
+  // очистка формы
+  ['restStartDate','restStartTime','restEndDate','restEndTime','restCompHours']
+    .forEach(id => document.getElementById(id).value = '');
+}
+
+function aetrDelete(id) {
+  const rows = aetrLoad().filter(r => r.id !== id);
+  aetrSave(rows);
+  aetrRender();
+}
+
+function aetrClearAll() {
+  if (!confirm('Usunąć wszystkie zapisane pauzy (zakładka 6)?')) return;
+  aetrSave([]);
+  aetrRender();
+}
+
+function aetrRender() {
+  const tbody = document.querySelector('#aetrTable tbody');
+  tbody.innerHTML = '';
+  const rows = aetrLoad().sort((a,b) => a.startISO.localeCompare(b.startISO)); // rosnąco
+
+  rows.forEach((r, idx) => {
+    const tr = document.createElement('tr');
+    const td = (t)=>{ const x=document.createElement('td'); x.textContent=t; return x; };
+
+    tr.appendChild(td(String(idx+1)));
+    tr.appendChild(td(r.startISO));
+    tr.appendChild(td(r.endISO));
+    tr.appendChild(td(r.hours.toFixed(2)));
+    tr.appendChild(td(r.type));
+    tr.appendChild(td((r.compHours||0).toFixed(2)));
+
+    const act = document.createElement('td');
+    const del = document.createElement('button');
+    del.className = 'btn';
+    del.textContent = 'Usuń';
+    del.onclick = ()=>aetrDelete(r.id);
+    act.appendChild(del);
+    tr.appendChild(act);
+
+    tbody.appendChild(tr);
+  });
+
+  aetrComputeSummary(rows);
+}
+
+function aetrComputeSummary(rows) {
+  // zakres 4 tygodni (rolling) jak wcześniej
+  const today = new Date();
+  const startOfThisWeek = isoWeekStart(today);
+  const startOf4WeeksAgo = new Date(startOfThisWeek.getTime());
+  startOf4WeeksAgo.setDate(startOf4WeeksAgo.getDate() - 7*3);
+
+  // przygotuj wpisy z datami
+  const parsed = rows.map(r=>{
+    const [d,t] = r.startISO.split(' ');
+    const [Y,M,D] = d.split('-').map(Number);
+    const [h,m]  = t.split(':').map(Number);
+    const start = new Date(Y, M-1, D, h, m);
+    return { ...r, _start: start };
+  });
+
+  const inRange = parsed.filter(r=> r._start >= startOf4WeeksAgo);
+
+  // grupowanie tygodniowe
+  const byWeek = {};
+  for (const r of inRange) {
+    const wk = `${isoYearOf(r._start)}-W${String(isoWeekOf(r._start)).padStart(2,'0')}`;
+    (byWeek[wk] ||= []).push(r);
+  }
+
+  // Linie tygodniowe + dług całkowity + wykorzystana kompensacja (jak wcześniej)
+  let debt = 0;
+  let usedComp = 0;
+  const lines = [];
+  const weekKeys = Object.keys(byWeek).sort();
+
+  for (const wk of weekKeys) {
+    const arr = byWeek[wk];
+    const weekly = arr.filter(r => r.hours >= 24);
+    const totalWeekly = weekly.reduce((s,r)=>s+r.hours, 0);
+    const reduced = weekly.filter(r => r.hours < 45);
+    const reducedDebt = reduced.reduce((s,r)=> s + (45 - r.hours), 0);
+    const compUsed = arr.reduce((s,r)=> s + (r.compHours||0), 0);
+
+    debt += reducedDebt;
+    usedComp += compUsed;
+
+    const tag = weekly.length
+      ? weekly.map(r => r.type.replace('weekly ','').replace('(','').replace(')','')).join(', ')
+      : 'brak weekly rest';
+
+    lines.push(`• ${wk}: weekly rests = ${totalWeekly.toFixed(2)} h (${tag}); skrócenia = ${reducedDebt.toFixed(2)} h; kompensacja użyta = ${compUsed.toFixed(2)} h`);
+  }
+
+  const outstanding = Math.max(0, +(debt - usedComp).toFixed(2));
+
+  // ===== NOWOŚĆ: Terminy kompensacji (dla każdego skrócenia)
+  // 1) Zbuduj listę "deficytów" (każde skrócenie = 45 - hours) z tygodniem startu i deadlinem = koniec 3. tygodnia po tygodniu skrócenia.
+  // 2) Zbuduj listę "kompensacji" (pauzy z compHours>0) wraz z datą startu.
+  // 3) Alokuj kompensacje do deficytów w porządku chronologicznym (greedy), z zastrzeżeniem: kompensacja liczy się tylko, jeśli pauza zaczyna się PRZED deadlinem danego deficytu.
+  const deficits = []; // {wkKey, amount, weekStart, deadlineEnd, allocated}
+  for (const wk of weekKeys) {
+    const arr = byWeek[wk] || [];
+    const reduced = arr.filter(r => r.hours >= 24 && r.hours < 45);
+    if (!reduced.length) continue;
+
+    // tydzień skrócenia:
+    // start tygodnia i jego koniec
+    const anyStart = arr[0]._start;
+    const weekStart = isoWeekStart(anyStart);
+    const weekEnd   = isoWeekEnd(anyStart);
+    // deadline = koniec 3. tygodnia po TYM tygodniu (czyli koniec tygodnia: week + 3)
+    const deadlineEnd = isoWeekEnd(addWeeks(weekStart, 3));
+
+    for (const r of reduced) {
+      const amount = +(45 - r.hours).toFixed(2);
+      deficits.push({
+        wkKey: wk,
+        amount,
+        allocated: 0,
+        weekStart,
+        deadlineEnd
+      });
+    }
+  }
+
+  // sortuj deficyty wg tygodnia (chronologicznie)
+  deficits.sort((a,b)=> a.weekStart - b.weekStart);
+
+  // zbuduj pule kompensacji (z całego zbioru, nie tylko inRange, bo user mógł dodać "kompensację" poza 4 tyg.)
+  const comps = parsed
+    .filter(r => (r.compHours||0) > 0)
+    .map(r => ({ when: r._start, remaining: +(r.compHours||0).toFixed(2) }))
+    .sort((a,b)=> a.when - b.when);
+
+  // alokacja greedy
+  for (const def of deficits) {
+    for (const c of comps) {
+      if (c.remaining <= 0) continue;
+      // kompensacja może być "dołączona" do innego odpoczynku, ale MUSI nastąpić najpóźniej do końca 3. tygodnia po tygodniu skrócenia
+      if (c.when > def.deadlineEnd) continue; // za późno na ten deficyt
+      const need = +(def.amount - def.allocated).toFixed(2);
+      if (need <= 0) break;
+      const take = Math.min(need, c.remaining);
+      def.allocated = +(def.allocated + take).toFixed(2);
+      c.remaining   = +(c.remaining - take).toFixed(2);
+    }
+  }
+
+  // statusy i kolory
+  const deadlineLines = [];
+  for (const d of deficits) {
+    const left = Math.max(0, +(d.amount - d.allocated).toFixed(2));
+    const dlDate = d.deadlineEnd; // Date
+    const daysLeft = Math.ceil((dlDate - today) / 86400000);
+
+    let badge = '';
+    if (left <= 0) {
+      badge = '✅ OK';
+    } else if (today > dlDate) {
+      badge = '⛔ PRZETERMINOWANE';
+    } else if (daysLeft <= 7) {
+      badge = '⚠️ Termin za ≤7 dni';
+    } else {
+      badge = '• w toku';
+    }
+    const dlHuman = `${dlDate.getFullYear()}-${String(dlDate.getMonth()+1).padStart(2,'0')}-${String(dlDate.getDate()).padStart(2,'0')} 23:59`;
+    deadlineLines.push(
+      `• ${d.wkKey}: skrócenie ${d.amount.toFixed(2)} h → skompensowano ${d.allocated.toFixed(2)} h, pozostaje ${left.toFixed(2)} h; deadline: <strong>${dlHuman}</strong> — ${badge}`
+    );
+  }
+
+  // bonus: 2-tyg. 90h jak było
+  const pairs = [];
+  for (let i=0;i<weekKeys.length-1;i++){
+    const w1 = weekKeys[i], w2 = weekKeys[i+1];
+    const w1Weekly = (byWeek[w1]||[]).filter(r=>r.hours>=24).reduce((s,r)=>s+r.hours,0);
+    const w2Weekly = (byWeek[w2]||[]).filter(r=>r.hours>=24).reduce((s,r)=>s+r.hours,0);
+    pairs.push(`• ${w1} + ${w2}: ${(w1Weekly+w2Weekly).toFixed(2)} h ${ (w1Weekly+w2Weekly)>=90 ? '✅ (≥90)' : '⚠️ (<90)' }`);
+  }
+
+  // render
+  const box = document.getElementById('aetrSummary');
+  box.innerHTML =
+    (lines.length ? lines.join('<br>') : 'Brak zapisanych pauz w ostatnich 4 tygodniach.') +
+    `<br><br><strong>Razem skrócenia:</strong> ${debt.toFixed(2)} h` +
+    `<br><strong>Razem kompensacja użyta:</strong> ${usedComp.toFixed(2)} h` +
+    `<br><strong>Do skompensowania (pozostało):</strong> ${outstanding.toFixed(2)} h` +
+    (pairs.length ? `<br><br><strong>Dwutygodniowy wymóg 90h (orientacyjnie):</strong><br>${pairs.join('<br>')}` : '') +
+    (deadlineLines.length ? `<br><br><strong>Terminy kompensacji:</strong><br>${deadlineLines.join('<br>')}` : '');
+}
+
+// automatyczne odświeżenie UI przy wejściu na zakładkę
+document.addEventListener('DOMContentLoaded', () => {
+  // jeśli od razu otworzysz tab6 — wyrenderuj
+  aetrRender();
+});
+</script>
+<script>
+/* ===== Portiernia — smart parser (ONLY: Imię Nazwisko, Data, Rej; no time, no LNG/MEGA) ===== */
+(function(){
+  const MAIL_TO   = 'portiernia@chomar.pl';
+  const THIS_YEAR = new Date().getFullYear();
+
+  // утилиты
+  const norm = s => s.replace(/\s+/g,' ').trim();
+  const stripBullet = s => s.replace(/^[\u25CF\u25CB\u2B24\u2B55\u25C9\u25CE\u25A0\u2022\-\u2796\u2795\u26AA\u26AB\ufeff\s⏺️⏺▪️•○●▶️➡️]+/u,'').trim();
+
+  // Имя Фамилия: два слова без цифр (поддержка PL/UA букв)
+  const nameWordsRe = /[A-Za-zĄĆĘŁŃÓŚŹŻа-яёіїєґÄÖÜß-]+/i;
+  function extractName(fragment){
+    const words = fragment.split(/\s+/).filter(w => nameWordsRe.test(w) && !/\d/.test(w));
+    if (words.length >= 2) return norm(`${words[0]} ${words[1]}`);
+    return words[0] || '';
+  }
+
+// ДАТА БЕЗ ВРЕМЕНИ: допускаем DD.MM, DD.MM.YYYY, DD-MM-YYYY, YYYY-MM-DD, DD/MM, DD/MM/YYYY
+function parseDateOnly(s){
+  s = ' ' + s + ' ';
+
+  // DD.MM.YYYY
+  let m = s.match(/\b(\d{1,2})[.](\d{1,2})[.](\d{4})\b/);
+  if (m){
+    const dd = m[1].padStart(2,'0'), mm = m[2].padStart(2,'0'), yyyy = m[3];
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  // DD.MM -> текущий год
+  m = s.match(/\b(\d{1,2})[.](\d{1,2})\b/);
+  if (m){
+    const dd = m[1].padStart(2,'0'), mm = m[2].padStart(2,'0');
+    return `${THIS_YEAR}-${mm}-${dd}`;
+  }
+
+  // DD-MM-YYYY
+  m = s.match(/\b(\d{1,2})-(\d{1,2})-(\d{4})\b/);
+  if (m){
+    const dd = m[1].padStart(2,'0'), mm = m[2].padStart(2,'0'), yyyy = m[3];
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  // YYYY-MM-DD
+  m = s.match(/\b(\d{4})-(\d{2})-(\d{2})\b/);
+  if (m){
+    return `${m[1]}-${m[2]}-${m[3]}`;
+  }
+
+  // DD/MM/YYYY
+  m = s.match(/\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/);
+  if (m){
+    const dd = m[1].padStart(2,'0'), mm = m[2].padStart(2,'0'), yyyy = m[3];
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  // DD/MM -> текущий год
+  m = s.match(/\b(\d{1,2})\/(\d{1,2})\b/);
+  if (m){
+    const dd = m[1].padStart(2,'0'), mm = m[2].padStart(2,'0');
+    return `${THIS_YEAR}-${mm}-${dd}`;
+  }
+
+  return '';
+}
+
+  // Номер (тягач/прицеп): смешанные буквы+цифры длиной ≥5 (DW1ABC2, DPL3T82, PT1234 и т.п.)
+  const isPlate = x => /^[A-Za-z0-9\-]{5,}$/.test(x) && /[A-Za-z]/.test(x) && /\d/.test(x);
+
+  function parseLine(lineRaw){
+    if (!lineRaw || !lineRaw.trim()) return null;
+
+    // убираем маркеры, нормализуем
+    let s = stripBullet(lineRaw);
+    s = s.replace(/\t+/g, '\t').replace(/[ ]{2,}/g,' ').trim();
+
+    // сначала пробуем табы, иначе — 2+ пробела / запятая / ; как разделители
+    let parts = s.split('\t');
+    if (parts.length === 1) parts = s.split(/\s{2,}|[,;]\s*/);
+    parts = parts.map(p => p.trim()).filter(Boolean);
+    if (!parts.length) return null;
+
+    // Имя — из первого фрагмента; если не нашли — из всей строки
+    let driver = extractName(parts[0]);
+    if (!driver) driver = extractName(s);
+
+    // Дата — из всей строки (без времени)
+    const date = parseDateOnly(lineRaw);
+
+    // Номер — из оставшихся частей (исключая ФИО)
+    const restTokens = parts.slice(1).join(' ').split(/[,\s]+/).filter(Boolean);
+    let plate = '';
+    for (const t of restTokens){
+      const T = t.toUpperCase();
+      if (isPlate(T)) { plate = T; break; }
+    }
+
+    // fallback: если номер могли поставить рядом с ФИО в одной колонке
+    if (!plate){
+      const near = parts.join(' ').split(/\s+/);
+      const cand = near.find(x => isPlate(x.toUpperCase()));
+      if (cand) plate = cand.toUpperCase();
+    }
+
+    // Игнорируем любые короткие буквенные пометки (LNG/MEGA/JUMBO и т.п.) — не сохраняем их.
+
+    if (!driver && !plate && !date) return null;
+    return { driver: norm(driver||'kierowca'), plate, date };
+  }
+
+  // Склейка по водителю (если данные на разных строках)
+  function mergePerDriver(items){
+    const map = new Map();
+    for (const it of items){
+      const key = it.driver.toLowerCase();
+      if (!map.has(key)){
+        map.set(key, { driver: it.driver, plate:'', date:'' });
+      }
+      const cur = map.get(key);
+      if (it.plate && !cur.plate) cur.plate = it.plate;
+      if (it.date  && !cur.date)  cur.date  = it.date;
+    }
+    return [...map.values()];
+  }
+
+  function buildLines(objs){
+    // формат строки: "- Imię Nazwisko — REJ — YYYY-MM-DD" (если даты нет — без неё)
+    return objs.map(o=>{
+      const parts = [o.plate, o.date].filter(Boolean).join(' — ');
+      return `- ${o.driver}${parts ? ' — ' + parts : ''}`;
+    });
+  }
+
+  function buildBody(objs){
+    const lines = buildLines(objs);
+    let body = `Dzień dobry.\n\nProszę o wydanie dla poniższych kierowców:\n\n`;
+    body += lines.join('\n');
+    body += `\n\nDziękuję.`;
+    return body;
+  }
+
+  const enc = s => encodeURIComponent(s);
+
+  // Публичные действия
+  window.portGenerate = function(){
+    const input  = document.getElementById('portInput');
+    const output = document.getElementById('portOutput');
+    const raw = (input.value||'').trim();
+    if (!raw){ output.textContent = ''; return; }
+
+    const rows   = raw.split(/\r?\n/).map(r => r.trim()).filter(Boolean);
+    const parsed = rows.map(parseLine).filter(Boolean);
+
+    if (!parsed.length){
+      output.textContent = '❌ Brak danych. Wklej linie: Imię Nazwisko [TAB/spacje] REJ [TAB/spacje] data (DD.MM lub YYYY-MM-DD).';
+      return;
+    }
+
+    const merged = mergePerDriver(parsed);
+    const body   = buildBody(merged);
+    output.textContent = body;
+  };
+
+  window.portCopy = function(){
+    const out = document.getElementById('portOutput');
+    const txt = out.textContent.trim();
+    if (!txt) return alert('Brak treści do kopiowania.');
+    navigator.clipboard.writeText(txt);
+  };
+
+  window.portClear = function(){
+    document.getElementById('portInput').value = '';
+    document.getElementById('portOutput').textContent = '';
+  };
+
+  window.portMail = function(){
+    const out = document.getElementById('portOutput');
+    const txt = out.textContent.trim();
+    if (!txt) return alert('Najpierw wklej i wygeneruj treść.');
+    const first = (txt.split('\n').find(x=>x.startsWith('- ')) || '').replace(/^-\s*/,'');
+    const subject = first ? `Wjazd kierowców — ${first}` : 'Wjazd kierowców';
+    window.location.href = `mailto:${MAIL_TO}?subject=${enc(subject)}&body=${enc(txt)}`;
+  };
+
+  // UX
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const input  = document.getElementById('portInput');
+    const output = document.getElementById('portOutput');
+    if (!input || !output) return;
+    input.addEventListener('input', portGenerate);
+    input.addEventListener('keydown', e => { if (e.ctrlKey && e.key==='Enter') portCopy(); });
+    output.addEventListener('click', () => {
+      const r = document.createRange(); r.selectNodeContents(output);
+      const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    });
+  });
+})();
+</script>
+</body>
+</html>
