@@ -1893,7 +1893,7 @@ function parseDateOnly(s){
       if (it.plate && !cur.plate) cur.plate = it.plate;
       if (it.date  && !cur.date)  cur.date  = it.date;
     }
-    return [.map.values()];
+    return [...map.values()];
   }
 
   function buildLines(objs){
@@ -2236,6 +2236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
