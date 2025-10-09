@@ -1320,30 +1320,6 @@ Tutaj wpisujemy aktualne ETA na miejsce załadunku, o której godzinie auto fakt
 <!-- ВКЛАДКА 5 -->
 <div class="container tab-content" id="tab5">
 
-  <!-- NOWY: generator z wklejanym wierszem -->
-  <h1>Portiernia — generator maila</h1>
-  <div class="author">© 2025 Pomysł Seby, realizacja przez Leo</div>
-
-  <label class="white-text" style="font-weight:600;">
-    Wklej wiersz (Imię Nazwisko; Numer; Data)
-  </label>
-<textarea id="portInput" rows="3"
-            placeholder="Piotr Cudecki; DPL3T82; 12.08
-Dima Tokar; DPL2T53; 13.08"
-            style="width:100%; font-family:monospace; font-size:14px; padding:10px; box-sizing:border-box; margin:10px 0;"></textarea>
-
-  <div id="portOutput" title="Kliknij, aby zaznaczyć cały tekst"
-       style="border:1px solid #ccc; min-height:180px; white-space:pre-wrap; background:#fff; padding:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); cursor:pointer;"></div>
-
-  <button class="btn" onclick="portCopy()">Kopiuj</button>
-  <button class="btn" onclick="portMail()">Otwórz mail</button>
-  <button class="btn" onclick="portClear()">Wyczyść</button>
-
-  <div id="copyMessagePort" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-       background-color:#6fcf97; color:#fff; padding:10px 20px; border-radius:5px; font-size:14px; opacity:0; visibility:hidden; transition:opacity .5s, visibility .5s; z-index:1000;">
-    Skopiowano ✅
-  </div>
-
   <hr style="margin:24px 0; border:none; border-top:1px dashed rgba(255,255,255,.4)">
 
   <!-- STARY: klasyczny formularz -->
@@ -2254,6 +2230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
