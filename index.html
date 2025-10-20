@@ -1104,7 +1104,6 @@ const bodyEncoded = encodeURIComponent(body);
     <ul class="tabs">
         <li class="active" data-tab="tab1" onclick="openTab('tab1')">Awizacja ELX</li>
         <li data-tab="tab2" onclick="openTab('tab2')">Neutralizacja (SMS)</li>
-        <li data-tab="tab3" onclick="openTab('tab3')">Mapa z trasą</li>
         <li data-tab="tab4" onclick="openTab('tab4')">Generator Karlsruhe+Worms</li>
         <li data-tab="tab5" onclick="openTab('tab5')">Portiernia</li>
         <li data-tab="tab6" onclick="openTab('tab6')">AETR: Pauses & Kompensacje</li>
@@ -1282,23 +1281,6 @@ Tutaj wpisujemy aktualne ETA na miejsce załadunku, o której godzinie auto fakt
         <div id="wynik2">
             <textarea id="wynik2textarea" placeholder="Tutaj pojawi się wygenerowane zlecenie..."></textarea>
         </div>
-    </div>
-
-    <!-- ВКЛАДКА 3 -->
-    <div class="container tab-content" id="tab3">
-        <div class="author">© 2025 Leonid Podmakov</div>
-        <h1>Mapa z trasą (OpenRouteService + Leaflet)</h1>
-        <iframe src="https://maps.openrouteservice.org/" loading="lazy"></iframe>
-
-        <h2>Geokodowanie adresów (OpenStreetMap Nominatim)</h2>
-        <form onsubmit="searchAddress(event)">
-            <div class="form-group">
-                <label for="address">Wprowadź adres:</label>
-                <input type="text" ; color: #ffffff; id="address" ; placeholder="np. Magazynowa 3, Bielany Wrocławskie" />
-            </div>
-            <button class="btn" type="submit">Szukaj</button>
-        </form>
-        <div style="margin-top: 20px; text-align: center; color: #ffffff; font-size: 15px" id="geoResult">Wynik geokodowania pojawi się tutaj.</div>
     </div>
 
     <!-- ВКЛАДКА 4 -->
@@ -2231,6 +2213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
