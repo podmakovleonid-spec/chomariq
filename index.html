@@ -493,6 +493,20 @@
         .axle-dot.active-ok { background: #10b981; transform: scale(1.1); box-shadow: 0 0 10px rgba(16,185,129,0.4); }
         .axle-dot.active-error { background: #ef4444; transform: scale(1.2); box-shadow: 0 0 15px rgba(239,68,68,0.5); }
 
+        /* Анимация пульсации для перегруза */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); transform: scale(1.1); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); transform: scale(1.1); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); transform: scale(1.1); }
+        }
+
+        .axle-dot.active-error {
+            background: #ef4444 !important;
+            animation: pulse-red 1.5s infinite; /* Запуск бесконечной пульсации */
+            border: 2px solid #fff;
+            z-index: 10;
+        }
+        
         .calc-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1972,6 +1986,7 @@ Obowiązkowo wymagany kwit wagowy.
 
 </body>
 </html>
+
 
 
 
