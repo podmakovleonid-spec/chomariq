@@ -499,6 +499,25 @@
             gap: 20px;
         }
 
+        .calc-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.05rem;
+    /* To dodaje odstęp pod każdym rzędem */
+    margin-bottom: 25px; 
+    padding-bottom: 10px;
+    /* Delikatna linia oddzielająca dla lepszego wizualu */
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.calc-summary-row:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+    font-size: 1.3rem; /* Masa całkowita będzie nieco większa */
+    padding-top: 10px;
+}
+
         .axle-card {
             background: white;
             padding: 20px;
@@ -1788,7 +1807,7 @@ Obowiązkowo wymagany kwit wagowy.
                     el.innerHTML = "Brak danych";
                     el.className = "axle-status";
                 } else if (value <= limit) {
-                    el.innerHTML = "✓ OK (" + (limit - value) + " kg zapasu)";
+                    el.innerHTML = "✅ OK (" + (limit - value) + " kg zapasu)";
                     el.className = "axle-status ok";
                 } else {
                     el.innerHTML = "❌ Przekroczenie o " + (value - limit) + " kg!";
@@ -1818,7 +1837,7 @@ Obowiązkowo wymagany kwit wagowy.
                     trlTotalStatus.innerHTML = "Brak danych";
                     trlTotalStatus.className = "axle-status";
                 } else if (trlTotal <= AXLE_LIMITS.trl_group) {
-                    trlTotalStatus.innerHTML = "✓ OK";
+                    trlTotalStatus.innerHTML = "✅ OK";
                     trlTotalStatus.className = "axle-status ok";
                 } else {
                     trlTotalStatus.innerHTML = "❌ Przekroczenie!";
@@ -1831,7 +1850,7 @@ Obowiązkowo wymagany kwit wagowy.
                     totalStatus.innerHTML = "Brak danych";
                     totalStatus.className = "axle-status";
                 } else if (grandTotal <= AXLE_LIMITS.total) {
-                    totalStatus.innerHTML = "✓ OK";
+                    totalStatus.innerHTML = "✅ OK";
                     totalStatus.className = "axle-status ok";
                 } else {
                     totalStatus.innerHTML = "❌ Przekroczenie!";
@@ -1843,6 +1862,7 @@ Obowiązkowo wymagany kwit wagowy.
 
 </body>
 </html>
+
 
 
 
