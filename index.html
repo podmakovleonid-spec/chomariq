@@ -553,6 +553,60 @@
         @media (max-width: 768px) {
             .calc-grid { grid-template-columns: 1fr; }
         }
+
+/* ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ TAB 8 */
+        .country-selector {
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .warning-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 10px 15px;
+            margin: 15px 0;
+            color: #92400e;
+            font-size: 0.9rem;
+            display: none; /* Показывается скриптом */
+        }
+        .ldm-optimizer {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .ldm-track {
+            height: 30px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            position: relative;
+            margin: 20px 0 10px 0;
+        }
+        .ldm-safe-zone {
+            position: absolute;
+            height: 100%;
+            background: rgba(16, 185, 129, 0.4);
+            border: 2px dashed #059669;
+        }
+        .fine-indicator {
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .btn-report {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 20px;
+        }
     </style>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1722,147 +1776,203 @@ Obowiązkowo wymagany kwit wagowy.
     </script>
 
 <div class="container tab-content" id="tab8">
-        <div class="author">© 2026 Leonid Podmakov</div>
-        <h1>Kalkulator Nacisków na Osie (UE i CH)</h1>
+    <div class="author">© 2026 Leonid Podmakov</div>
+    <h1>Kalkulator Nacisków na Osie (UE i CH)</h1>
 
-        <h2>Ciągnik</h2>
-        <div class="axle-row">
-            <div class="form-group">
-                <label>Oś 1 (Kierująca) <span style="text-transform:none; font-weight:normal; color:#94a3b8;">(Limit: 9 000 kg)</span></label>
-                <input type="number" id="tr1" placeholder="Wpisz kg..." oninput="calculateAxles()">
-            </div>
-            <div id="status-tr1" class="axle-status">Brak danych</div>
+    <div class="country-selector">
+        <div class="form-group">
+            <label>Kraj (Limity):</label>
+            <select id="country-select" onchange="calculateAxles()" style="width:100%; padding:10px; border-radius:8px;">
+                <option value="EU">UE Standard (40t)</option>
+                <option value="CH">Szwajcaria (40t - Strict)</option>
+                <option value="PL_INT">Polska (Intermodal - 44t)</option>
+                <option value="DE">Niemcy (40t)</option>
+            </select>
         </div>
-        <div class="axle-row">
-            <div class="form-group">
-                <label>Oś 2 (Napędowa) <span style="text-transform:none; font-weight:normal; color:#94a3b8;">(Limit: 11 500 kg)</span></label>
-                <input type="number" id="tr2" placeholder="Wpisz kg..." oninput="calculateAxles()">
-            </div>
-            <div id="status-tr2" class="axle-status">Brak danych</div>
-        </div>
-
-        <h2>Naczepa</h2>
-        <div class="axle-row">
-            <div class="form-group">
-                <label>Oś 1 <span style="text-transform:none; font-weight:normal; color:#94a3b8;">(Limit: 9 000 kg)</span></label>
-                <input type="number" id="trl1" placeholder="Wpisz kg..." oninput="calculateAxles()">
-            </div>
-            <div id="status-trl1" class="axle-status">Brak danych</div>
-        </div>
-        <div class="axle-row">
-            <div class="form-group">
-                <label>Oś 2 <span style="text-transform:none; font-weight:normal; color:#94a3b8;">(Limit: 9 000 kg)</span></label>
-                <input type="number" id="trl2" placeholder="Wpisz kg..." oninput="calculateAxles()">
-            </div>
-            <div id="status-trl2" class="axle-status">Brak danych</div>
-        </div>
-        <div class="axle-row">
-            <div class="form-group">
-                <label>Oś 3 <span style="text-transform:none; font-weight:normal; color:#94a3b8;">(Limit: 9 000 kg)</span></label>
-                <input type="number" id="trl3" placeholder="Wpisz kg..." oninput="calculateAxles()">
-            </div>
-            <div id="status-trl3" class="axle-status">Brak danych</div>
-        </div>
-
-<div class="calc-summary">
-    <div class="calc-summary-row">
-        <span><b>SUMA WÓZKA NACZEPY (LIMIT 24 000 KG):</b></span>
-        <div class="calc-summary-val" style="text-align: right;">
-            <div id="trl-total-val" style="font-weight: bold; font-size: 1.4rem; color: #000;">0 kg</div>
-            <div id="trl-total-status" class="axle-status" style="font-size: 0.9rem;">Brak danych</div>
+        <div class="form-group">
+            <label>Typ naczepy:</label>
+            <select id="trailer-type" onchange="calculateAxles()" style="width:100%; padding:10px; border-radius:8px;">
+                <option value="standard">Firanka / Chłodnia (13.6m)</option>
+            </select>
         </div>
     </div>
 
-    <div class="calc-summary-row">
-        <span><b>MASA CAŁKOWITA (Limit 40 000 kg):</b></span>
-        <div class="calc-summary-val" style="text-align: right;">
-            <div id="total-val" style="font-weight: bold; font-size: 1.4rem; color: #000;">0 kg</div>
-            <div id="total-status" class="axle-status" style="font-size: 0.9rem;">Brak danych</div>
+    <div class="truck-viz">
+        <div id="dot-tr1" class="axle-dot">T1</div>
+        <div id="dot-tr2" class="axle-dot">T2</div>
+        <div style="width: 40px;"></div>
+        <div id="dot-trl1" class="axle-dot">N1</div>
+        <div id="dot-trl2" class="axle-dot">N2</div>
+        <div id="dot-trl3" class="axle-dot">N3</div>
+    </div>
+
+    <div id="balance-warning" class="warning-box">
+        ⚠️ <b>Słaba przyczepność:</b> Zbyt mały nacisk na oś kierującą! Przesuń ładunek do przodu.
+    </div>
+
+    <div class="payload-box">
+        <div>
+            <label style="color:white; margin:0;">Tara (kg):</label>
+            <input type="number" id="tara" value="14500" oninput="calculateAxles()" style="width:120px; background:rgba(255,255,255,0.2); border:1px solid white; color:white; border-radius:4px;">
+        </div>
+        <div>
+            Ladunek (Netto): <b id="payload-val">0 kg</b>
         </div>
     </div>
+
+    <div class="calc-grid">
+        <div class="axle-card">
+            <h3>Ciągnik</h3>
+            <div class="form-group">
+                <label>Oś 1 (Max <span id="lim-tr1">9</span>t)</label>
+                <input type="number" id="tr1" placeholder="kg" oninput="calculateAxles()">
+                <div class="progress-container"><div id="prog-tr1" class="progress-bar"></div></div>
+            </div>
+            <div class="form-group">
+                <label>Oś 2 (Max <span id="lim-tr2">11.5</span>t)</label>
+                <input type="number" id="tr2" placeholder="kg" oninput="calculateAxles()">
+                <div class="progress-container"><div id="prog-tr2" class="progress-bar"></div></div>
+            </div>
+        </div>
+
+        <div class="axle-card">
+            <h3>Naczepa</h3>
+            <div class="form-group">
+                <label>Osie N1, N2, N3 (kg)</label>
+                <input type="number" id="trl1" placeholder="N1" oninput="calculateAxles()" style="margin-bottom:5px;">
+                <input type="number" id="trl2" placeholder="N2" oninput="calculateAxles()" style="margin-bottom:5px;">
+                <input type="number" id="trl3" placeholder="N3" oninput="calculateAxles()">
+            </div>
+        </div>
+    </div>
+
+    <div class="ldm-optimizer">
+        <label><b>Optymalny środek ciężkości (LDM):</b></label>
+        <div class="ldm-track">
+            <div id="safe-zone" class="ldm-safe-zone" style="left: 30%; width: 25%;"></div>
+        </div>
+        <small style="color:#64748b">Zielona strefa pokazuje gdzie umieścić środek ciężkości ładunku (metry od przodu).</small>
+    </div>
+
+    <div class="calc-summary">
+        <div class="calc-summary-row">
+            <span><b>SUMA WÓZKA NACZEPY:</b></span>
+            <div class="calc-summary-val" style="text-align: right;">
+                <div id="trl-total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
+                <div id="trl-total-status" class="axle-status">Brak danych</div>
+            </div>
+        </div>
+
+        <div class="calc-summary-row">
+            <span><b>MASA CAŁKOWITA:</b></span>
+            <div class="calc-summary-val" style="text-align: right;">
+                <div id="total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
+                <div id="total-status" class="axle-status">Brak danych</div>
+            </div>
+        </div>
+
+        <div id="fine-box" class="fine-indicator" style="display:none;"></div>
+    </div>
+
+    <button class="btn-report" onclick="generateReport()">Kopiuj Raport dla Kierowcy (WhatsApp)</button>
+
+    <script>
+        const COUNTRY_LIMITS = {
+            'EU': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 40000 },
+            'CH': { tr1: 8000, tr2: 11500, trl_sum: 24000, total: 40000 },
+            'PL_INT': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 44000 },
+            'DE': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 40000 }
+        };
+
+        function calculateAxles() {
+            const country = document.getElementById('country-select').value;
+            const L = COUNTRY_LIMITS[country];
+            
+            // Обновляем текст лимитов в UI
+            document.getElementById('lim-tr1').innerText = L.tr1/1000;
+            document.getElementById('lim-tr2').innerText = L.tr2/1000;
+
+            const ids = ['tr1', 'tr2', 'trl1', 'trl2', 'trl3'];
+            let v = {};
+            ids.forEach(id => v[id] = parseFloat(document.getElementById(id).value) || 0);
+
+            // 1. Индивидуальные оси
+            ids.forEach(id => {
+                let limit = (id === 'tr1') ? L.tr1 : (id === 'tr2' ? L.tr2 : 9000);
+                let prog = document.getElementById('prog-' + id);
+                if(prog) prog.style.width = Math.min((v[id]/limit)*100, 100) + '%';
+                if(prog) prog.style.background = v[id] > limit ? '#ef4444' : '#10b981';
+                document.getElementById('dot-' + id).className = v[id] === 0 ? "axle-dot" : (v[id] > limit ? "axle-dot active-error" : "axle-dot active-ok");
+            });
+
+            // 2. Развесовка (Сцепление)
+            const tractorWeight = v.tr1 + v.tr2;
+            const balanceWarn = document.getElementById('balance-warning');
+            if (v.tr1 > 0 && v.tr1 < (tractorWeight * 0.20)) {
+                balanceWarn.style.display = 'block';
+            } else {
+                balanceWarn.style.display = 'none';
+            }
+
+            // 3. Суммы
+            let trlSum = v.trl1 + v.trl2 + v.trl3;
+            let total = tractorWeight + trlSum;
+            let tara = parseFloat(document.getElementById('tara').value) || 0;
+
+            document.getElementById('trl-total-val').innerText = trlSum + " kg";
+            document.getElementById('trl-total-status').innerText = trlSum > L.trl_sum ? "❌ PRZEKROCZENIE" : "✅ OK";
+            document.getElementById('trl-total-status').className = trlSum > L.trl_sum ? "axle-status error" : "axle-status ok";
+
+            document.getElementById('total-val').innerText = total + " kg";
+            document.getElementById('total-status').innerText = total > L.total ? "❌ PRZEKROCZENIE" : "✅ OK";
+            document.getElementById('total-status').className = total > L.total ? "axle-status error" : "axle-status ok";
+            document.getElementById('payload-val').innerText = Math.max(0, total - tara) + " kg";
+
+            // 4. Штрафы (Пример Германии)
+            const fineBox = document.getElementById('fine-box');
+            if (total > L.total) {
+                let over = ((total - L.total) / L.total) * 100;
+                fineBox.style.display = 'block';
+                fineBox.style.background = '#fee2e2';
+                fineBox.style.color = '#991b1b';
+                fineBox.innerText = `Ryzyko mandatu (DE/AT): ok. ${over > 5 ? '140-400' : '35-80'} EUR + zakaz jazdy`;
+            } else {
+                fineBox.style.display = 'none';
+            }
+
+            // 6. Оптимизатор зоны погрузки (упрощенная модель)
+            const safeZone = document.getElementById('safe-zone');
+            if (total > tara) {
+                // Чем тяжелее груз, тем уже зона безопасности
+                let margin = Math.max(10, 40 - (total/2000));
+                safeZone.style.left = "25%"; 
+                safeZone.style.width = margin + "%";
+            }
+        }
+
+        function generateReport() {
+            const country = document.getElementById('country-select').value;
+            const total = document.getElementById('total-val').innerText;
+            const payload = document.getElementById('payload-val').innerText;
+            const status = document.getElementById('total-status').innerText;
+            
+            const text = `🚛 RAPORT WAGI (${country})\n` +
+                         `--------------------------\n` +
+                         `Masa Całkowita: ${total}\n` +
+                         `Waga Towaru: ${payload}\n` +
+                         `Status: ${status}\n` +
+                         `--------------------------\n` +
+                         `Sprawdzone w ChomarIQ 2026`;
+            
+            navigator.clipboard.writeText(text);
+            alert("Raport skopiowany do schowka! Możesz go wkleić do WhatsApp.");
+        }
+    </script>
 </div>
-
-        <p class="white-text" style="text-align:center; margin-top:20px; font-size:0.85rem;">
-            Limity uwzględniają standardowy ruch międzynarodowy w UE i Szwajcarii dla zestawów 5-osiowych (40t). Nie dotyczy transportu intermodalnego.
-        </p>
-
-        <script>
-            const AXLE_LIMITS = {
-                tr1: 9000,
-                tr2: 11500,
-                trl_single: 9000,
-                trl_group: 24000,
-                total: 40000
-            };
-
-            function getAxleValue(id) {
-                let val = document.getElementById(id).value;
-                return val ? parseFloat(val) : 0;
-            }
-
-            function updateAxleStatus(elementId, value, limit) {
-                const el = document.getElementById(elementId);
-                const inputVal = document.getElementById(elementId.replace('status-', '')).value;
-                
-                if (value === 0 && inputVal === "") {
-                    el.innerHTML = "Brak danych";
-                    el.className = "axle-status";
-                } else if (value <= limit) {
-                    el.innerHTML = "✅ OK (" + (limit - value) + " kg zapasu)";
-                    el.className = "axle-status ok";
-                } else {
-                    el.innerHTML = "❌ Przekroczenie o " + (value - limit) + " kg!";
-                    el.className = "axle-status error";
-                }
-            }
-
-            function calculateAxles() {
-                let tr1 = getAxleValue('tr1');
-                let tr2 = getAxleValue('tr2');
-                let trl1 = getAxleValue('trl1');
-                let trl2 = getAxleValue('trl2');
-                let trl3 = getAxleValue('trl3');
-
-                updateAxleStatus('status-tr1', tr1, AXLE_LIMITS.tr1);
-                updateAxleStatus('status-tr2', tr2, AXLE_LIMITS.tr2);
-                updateAxleStatus('status-trl1', trl1, AXLE_LIMITS.trl_single);
-                updateAxleStatus('status-trl2', trl2, AXLE_LIMITS.trl_single);
-                updateAxleStatus('status-trl3', trl3, AXLE_LIMITS.trl_single);
-
-                let trlTotal = trl1 + trl2 + trl3;
-                let grandTotal = tr1 + tr2 + trlTotal;
-
-                document.getElementById('trl-total-val').innerText = trlTotal + " kg";
-                const trlTotalStatus = document.getElementById('trl-total-status');
-                if (trlTotal === 0 && !document.getElementById('trl1').value && !document.getElementById('trl2').value && !document.getElementById('trl3').value) {
-                    trlTotalStatus.innerHTML = "Brak danych";
-                    trlTotalStatus.className = "axle-status";
-                } else if (trlTotal <= AXLE_LIMITS.trl_group) {
-                    trlTotalStatus.innerHTML = "✅ OK";
-                    trlTotalStatus.className = "axle-status ok";
-                } else {
-                    trlTotalStatus.innerHTML = "❌ Przekroczenie!";
-                    trlTotalStatus.className = "axle-status error";
-                }
-
-                document.getElementById('total-val').innerText = grandTotal + " kg";
-                const totalStatus = document.getElementById('total-status');
-                if (grandTotal === 0) {
-                    totalStatus.innerHTML = "Brak danych";
-                    totalStatus.className = "axle-status";
-                } else if (grandTotal <= AXLE_LIMITS.total) {
-                    totalStatus.innerHTML = "✅ OK";
-                    totalStatus.className = "axle-status ok";
-                } else {
-                    totalStatus.innerHTML = "❌ Przekroczenie!";
-                    totalStatus.className = "axle-status error";
-                }
-            }
-        </script>
-    </div>
 
 </body>
 </html>
+
 
 
 
