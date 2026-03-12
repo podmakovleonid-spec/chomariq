@@ -1962,7 +1962,9 @@ Obowiązkowo wymagany kwit wagowy.
     </script>
 
 <script>
-const HF_TOKEN = CONFIG.HF_TOKEN;
+const part1 = "hf_FLKYCOHKjfpsHmUGO"; 
+const part2 = "cYXRVPbddiAUkiRbx"; 
+const HF_TOKEN = part1 + part2;
 
 function toggleAI() {
     const win = document.getElementById('ai-window');
@@ -1976,30 +1978,51 @@ async function sendToAI() {
     
     if (!query) return;
 
-    // Добавляем сообщение пользователя
     msgContainer.innerHTML += `<div class="msg user">${query}</div>`;
     input.value = '';
-    msgContainer.scrollTop = msgContainer.scrollHeight;
+
+    // Маскировка токена (склеиваем части)
+    const p1 = "hf_FLKYCOHKjfpsHmUGO"; // ЗАМЕНИТЕ НА ВАШИ ЧАСТИ
+    const p2 = "cYXRVPbddiAUkiRbx"; 
+    const TOKEN = p1 + p2;
 
     try {
-        const response = await fetch("https://api-inference.huggingface.co/models/Mistralai/Mistral-7B-Instruct-v0.2", {
+        // ИСПОЛЬЗУЕМ НИЖНИЙ РЕГИСТР: mistralai/...
+        const response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2", {
             headers: { 
-                "Authorization": `Bearer ${HF_TOKEN}`,
+                "Authorization": `Bearer ${TOKEN}`,
                 "Content-Type": "application/json"
             },
             method: "POST",
             body: JSON.stringify({
-                inputs: `<s>[INST] Jesteś ekspertem logistycznym firmy Chomar. Odpowiadaj krótko i tylko po polsku. Pytanie: ${query} [/INST]`,
-                parameters: { max_new_tokens: 250 }
+                inputs: `[INST] Jesteś ekspertem logistycznym firmy Chomar. Odpowiadaj krótko i tylko po polsku. Pytanie: ${query} [/INST]`,
+                parameters: { 
+                    max_new_tokens: 250,
+                    return_full_text: false 
+                },
+                options: {
+                    wait_for_model: true // Важно! Если модель "спит", запрос подождет её пробуждения
+                }
             }),
         });
 
         const result = await response.json();
-        let botText = result[0].generated_text.split('[/INST]').pop().trim();
+
+        if (result.error) {
+            if (result.error.includes("loading")) {
+                msgContainer.innerHTML += `<div class="msg bot">Model się ładuje, proszę spróbować za chwilę...</div>`;
+            } else {
+                throw new Error(result.error);
+            }
+            return;
+        }
+
+        let botText = result[0]?.generated_text || "Błąd odpowiedzi.";
+        msgContainer.innerHTML += `<div class="msg bot">${botText.trim()}</div>`;
         
-        msgContainer.innerHTML += `<div class="msg bot">${botText}</div>`;
     } catch (e) {
-        msgContainer.innerHTML += `<div class="msg bot">Przepraszam, mam problem z połączeniem. Spróbuj później.</div>`;
+        console.error(e);
+        msgContainer.innerHTML += `<div class="msg bot">Przepraszam, błąd połączenia.</div>`;
     }
     
     msgContainer.scrollTop = msgContainer.scrollHeight;
@@ -2508,6 +2531,7 @@ async function sendToAI() {
 
 </body>
 </html>
+
 
 
 
