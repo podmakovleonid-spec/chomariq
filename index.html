@@ -466,6 +466,50 @@
             table { display: block; overflow-x: auto; white-space: nowrap; }
         }
 
+/* Стили для темной темы */
+body.dark-mode {
+    --bg-color: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.8);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --text-main: #f1f5f9;
+    --text-secondary: #94a3b8;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.2) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(56, 189, 248, 0.2) 0px, transparent 50%);
+}
+
+body.dark-mode .tabs {
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea,
+body.dark-mode #wynik, 
+body.dark-mode #output,
+body.dark-mode table,
+body.dark-mode .axle-card {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+
+body.dark-mode th {
+    background-color: #334155;
+    color: #cbd5e1;
+}
+
+body.dark-mode tr:hover td {
+    background-color: #334155;
+}
+
+body.dark-mode .weather-item {
+    color: #f1f5f9;
+}
+
 /* TAB 8 - ADVANCED AXLE CALC */
         .truck-viz {
             display: flex;
@@ -493,7 +537,7 @@
         .axle-dot.active-ok { background: #10b981; transform: scale(1.1); box-shadow: 0 0 10px rgba(16,185,129,0.4); }
         .axle-dot.active-error { background: #ef4444; transform: scale(1.2); box-shadow: 0 0 15px rgba(239,68,68,0.5); }
 
-        /* Анимация пульсации для перегруза */
+/* Анимация пульсации для перегруза */
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); transform: scale(1.1); }
             70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); transform: scale(1.1); }
@@ -506,7 +550,7 @@
             border: 2px solid #fff;
             z-index: 10;
         }
-        
+
         .calc-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -621,6 +665,134 @@
             font-weight: bold;
             margin-top: 20px;
         }
+
+/* Стили для индикатора Центра Тяжести */
+        .cog-container {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            margin-top: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: visible;
+        }
+        
+        #cog-marker {
+            position: absolute;
+            top: -5px;
+            left: 50%; /* Будет меняться скриптом */
+            width: 4px;
+            height: 30px;
+            background: #6366f1; /* Твой основной фиолетовый акцент */
+            border-radius: 2px;
+            transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+#cog-marker::after {
+    content: 'CENTER OF GRAVITY';
+    position: absolute;
+    /* Изменяем здесь: */
+    bottom: 100%;       /* Ставим нижнюю границу текста к верху маркера */
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 8px; /* Небольшой отступ, чтобы текст не прилипал */
+    
+    font-size: 9px;
+    font-weight: bold;
+    color: #6366f1;
+    white-space: nowrap;
+}
+
+        .cog-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+/* Стиль кнопки AI */
+#ai-bubble {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+    z-index: 1000;
+    transition: transform 0.3s;
+}
+#ai-bubble:hover { transform: scale(1.1); }
+
+/* Окно чата */
+#ai-window {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 350px;
+    height: 450px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow-soft);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    border: 1px solid var(--card-border);
+}
+
+#ai-header {
+    background: var(--accent-gradient);
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+#ai-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.msg { padding: 8px 12px; border-radius: 10px; max-width: 80%; }
+.msg.bot { background: #f1f5f9; align-self: flex-start; color: #1e293b; }
+.msg.user { background: #6366f1; color: white; align-self: flex-end; }
+
+#ai-input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+#ai-input-area input {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    outline: none;
+}
+
+#ai-input-area button {
+    background: none;
+    border: none;
+    color: #6366f1;
+    font-weight: bold;
+    cursor: pointer;
+}
     </style>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1470,7 +1642,7 @@ Obowiązkowo wymagany kwit wagowy.
         <div class="author">© 2026 Leonid Podmakov</div>
         <h1 style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
     Generowanie awizacji dla 
-    <img src="https://1000logos.net/wp-content/uploads/2021/05/Electrolux-logo.png" 
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Electrolux_2015.svg/2560px-Electrolux_2015.svg.png" 
          alt="Electrolux Logo" 
          style="height: 32px; width: auto; vertical-align: middle; margin-top: 4px;">
 </h1>
@@ -1789,206 +1961,553 @@ Obowiązkowo wymagany kwit wagowy.
         });
     </script>
 
+<script>
+const HF_TOKEN = "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";
+
+function toggleAI() {
+    const win = document.getElementById('ai-window');
+    win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+}
+
+async function sendToAI() {
+    const input = document.getElementById('ai-query');
+    const msgContainer = document.getElementById('ai-messages');
+    const query = input.value.trim();
+    
+    if (!query) return;
+
+    // Добавляем сообщение пользователя
+    msgContainer.innerHTML += `<div class="msg user">${query}</div>`;
+    input.value = '';
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+
+    try {
+        const response = await fetch("https://api-inference.huggingface.co/models/Mistralai/Mistral-7B-Instruct-v0.2", {
+            headers: { 
+                "Authorization": `Bearer ${HF_TOKEN}`,
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                inputs: `<s>[INST] Jesteś ekspertem logistycznym firmy Chomar. Odpowiadaj krótko i tylko po polsku. Pytanie: ${query} [/INST]`,
+                parameters: { max_new_tokens: 250 }
+            }),
+        });
+
+        const result = await response.json();
+        let botText = result[0].generated_text.split('[/INST]').pop().trim();
+        
+        msgContainer.innerHTML += `<div class="msg bot">${botText}</div>`;
+    } catch (e) {
+        msgContainer.innerHTML += `<div class="msg bot">Przepraszam, mam problem z połączeniem. Spróbuj później.</div>`;
+    }
+    
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+</script>
+
 <div class="container tab-content" id="tab8">
+
     <div class="author">© 2026 Leonid Podmakov</div>
+
     <h1>Kalkulator Nacisków na Osie (UE i CH)</h1>
 
+
+
     <div class="country-selector">
+
         <div class="form-group">
+
             <label>Kraj (Limity):</label>
+
             <select id="country-select" onchange="calculateAxles()" style="width:100%; padding:10px; border-radius:8px;">
+
                 <option value="EU">UE Standard (40t)</option>
+
                 <option value="CH">Szwajcaria (40t - Strict)</option>
+
                 <option value="PL_INT">Polska (Intermodal - 44t)</option>
+
                 <option value="DE">Niemcy (40t)</option>
+
             </select>
+
         </div>
+
         <div class="form-group">
+
             <label>Typ naczepy:</label>
+
             <select id="trailer-type" onchange="calculateAxles()" style="width:100%; padding:10px; border-radius:8px;">
+
                 <option value="standard">Firanka / Chłodnia (13.6m)</option>
+
             </select>
+
         </div>
+
     </div>
+
+
 
     <div class="truck-viz">
+
         <div id="dot-tr1" class="axle-dot">T1</div>
+
         <div id="dot-tr2" class="axle-dot">T2</div>
+
         <div style="width: 40px;"></div>
+
         <div id="dot-trl1" class="axle-dot">N1</div>
+
         <div id="dot-trl2" class="axle-dot">N2</div>
+
         <div id="dot-trl3" class="axle-dot">N3</div>
+
     </div>
+
+
+
+<div style="background: #fff; padding: 20px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; margin-bottom: 20px;">
+
+
+
+        <div style="padding: 0 10px;">
+
+            <div class="cog-container">
+
+                <div id="cog-marker"></div>
+
+            </div>
+
+            <div class="cog-label">
+
+                <span>PRZÓD (KABINA)</span>
+
+                <span id="cog-percent">Środek: 50%</span>
+
+                <span>TYŁ (DRZWI)</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
 
     <div id="balance-warning" class="warning-box">
+
         ⚠️ <b>Słaba przyczepność:</b> Zbyt mały nacisk na oś kierującą! Przesuń ładunek do przodu.
+
     </div>
+
+
 
     <div class="payload-box">
+
         <div>
+
             <label style="color:white; margin:0;">Tara (kg):</label>
+
             <input type="number" id="tara" value="14500" oninput="calculateAxles()" style="width:120px; background:rgba(255,255,255,0.2); border:1px solid white; color:white; border-radius:4px;">
+
         </div>
+
         <div>
+
             Ladunek (Netto): <b id="payload-val">0 kg</b>
+
         </div>
+
     </div>
+
+
 
     <div class="calc-grid">
-        <div class="axle-card">
-            <h3>Ciągnik</h3>
-            <div class="form-group">
-                <label>Oś 1 (Max <span id="lim-tr1">9</span>t)</label>
-                <input type="number" id="tr1" placeholder="kg" oninput="calculateAxles()">
-                <div class="progress-container"><div id="prog-tr1" class="progress-bar"></div></div>
-            </div>
-            <div class="form-group">
-                <label>Oś 2 (Max <span id="lim-tr2">11.5</span>t)</label>
-                <input type="number" id="tr2" placeholder="kg" oninput="calculateAxles()">
-                <div class="progress-container"><div id="prog-tr2" class="progress-bar"></div></div>
-            </div>
-        </div>
 
         <div class="axle-card">
-            <h3>Naczepa</h3>
+
+            <h3>Ciągnik</h3>
+
             <div class="form-group">
-                <label>Osie N1, N2, N3 (kg)</label>
-                <input type="number" id="trl1" placeholder="N1" oninput="calculateAxles()" style="margin-bottom:5px;">
-                <input type="number" id="trl2" placeholder="N2" oninput="calculateAxles()" style="margin-bottom:5px;">
-                <input type="number" id="trl3" placeholder="N3" oninput="calculateAxles()">
+
+                <label>Oś 1 (Max <span id="lim-tr1">9</span>t)</label>
+
+                <input type="number" id="tr1" placeholder="kg" oninput="calculateAxles()">
+
+                <div class="progress-container"><div id="prog-tr1" class="progress-bar"></div></div>
+
             </div>
+
+            <div class="form-group">
+
+                <label>Oś 2 (Max <span id="lim-tr2">11.5</span>t)</label>
+
+                <input type="number" id="tr2" placeholder="kg" oninput="calculateAxles()">
+
+                <div class="progress-container"><div id="prog-tr2" class="progress-bar"></div></div>
+
+            </div>
+
         </div>
+
+
+
+        <div class="axle-card">
+
+            <h3>Naczepa</h3>
+
+            <div class="form-group">
+
+                <label>Osie N1, N2, N3 (kg)</label>
+
+                <input type="number" id="trl1" placeholder="N1" oninput="calculateAxles()" style="margin-bottom:5px;">
+
+                <input type="number" id="trl2" placeholder="N2" oninput="calculateAxles()" style="margin-bottom:5px;">
+
+                <input type="number" id="trl3" placeholder="N3" oninput="calculateAxles()">
+
+            </div>
+
+        </div>
+
     </div>
+
+
 
     <div class="ldm-optimizer">
+
         <label><b>Optymalny środek ciężkości (LDM):</b></label>
+
         <div class="ldm-track">
+
             <div id="safe-zone" class="ldm-safe-zone" style="left: 30%; width: 25%;"></div>
+
         </div>
+
         <small style="color:#64748b">Zielona strefa pokazuje gdzie umieścić środek ciężkości ładunku (metry od przodu).</small>
+
     </div>
+
+
 
     <div class="calc-summary">
-        <div class="calc-summary-row">
-            <span><b>SUMA WÓZKA NACZEPY:</b></span>
-            <div class="calc-summary-val" style="text-align: right;">
-                <div id="trl-total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
-                <div id="trl-total-status" class="axle-status">Brak danych</div>
-            </div>
-        </div>
 
         <div class="calc-summary-row">
-            <span><b>MASA CAŁKOWITA:</b></span>
+
+            <span><b>SUMA WÓZKA NACZEPY:</b></span>
+
             <div class="calc-summary-val" style="text-align: right;">
-                <div id="total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
-                <div id="total-status" class="axle-status">Brak danych</div>
+
+                <div id="trl-total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
+
+                <div id="trl-total-status" class="axle-status">Brak danych</div>
+
             </div>
+
         </div>
+
+
+
+        <div class="calc-summary-row">
+
+            <span><b>MASA CAŁKOWITA:</b></span>
+
+            <div class="calc-summary-val" style="text-align: right;">
+
+                <div id="total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
+
+                <div id="total-status" class="axle-status">Brak danych</div>
+
+            </div>
+
+        </div>
+
+
 
         <div id="fine-box" class="fine-indicator" style="display:none;"></div>
+
     </div>
+
+
 
     <button class="btn-report" onclick="generateReport()">Kopiuj Raport dla Kierowcy (WhatsApp)</button>
 
-    <script>
+
+
+ <script>
+
         const COUNTRY_LIMITS = {
+
             'EU': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 40000 },
+
             'CH': { tr1: 8000, tr2: 11500, trl_sum: 24000, total: 40000 },
+
             'PL_INT': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 44000 },
+
             'DE': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 40000 }
+
         };
 
+
+
         function calculateAxles() {
+
+            // 1. Получаем настройки страны
+
             const country = document.getElementById('country-select').value;
+
             const L = COUNTRY_LIMITS[country];
+
             
-            // Обновляем текст лимитов в UI
-            document.getElementById('lim-tr1').innerText = L.tr1/1000;
-            document.getElementById('lim-tr2').innerText = L.tr2/1000;
+
+            // Обновляем текст лимитов в интерфейсе
+
+            if(document.getElementById('lim-tr1')) document.getElementById('lim-tr1').innerText = L.tr1/1000;
+
+            if(document.getElementById('lim-tr2')) document.getElementById('lim-tr2').innerText = L.tr2/1000;
+
+
+
+            // 2. Учет топлива (если есть ползунок fuel)
+
+            const fuelInput = document.getElementById('fuel');
+
+            const fuelLiters = fuelInput ? parseFloat(fuelInput.value) : 0;
+
+            if(document.getElementById('fuel-liters')) document.getElementById('fuel-liters').innerText = fuelLiters;
+
+            const fuelWeight = Math.round(fuelLiters * 0.85); // 1л дизеля ~ 0.85кг
+
+
+
+            // 3. Получаем значения из полей ввода
 
             const ids = ['tr1', 'tr2', 'trl1', 'trl2', 'trl3'];
+
             let v = {};
+
             ids.forEach(id => v[id] = parseFloat(document.getElementById(id).value) || 0);
 
-            // 1. Индивидуальные оси
+
+
+            // Добавляем вес топлива к ведущей оси тягача (T2)
+
+            let tr2_with_fuel = v.tr2 + fuelWeight;
+
+
+
+            // 4. Проверка каждой оси (Прогресс-бары и Пульсация)
+
             ids.forEach(id => {
-                let limit = (id === 'tr1') ? L.tr1 : (id === 'tr2' ? L.tr2 : 9000);
+
+                let currentVal = (id === 'tr2') ? tr2_with_fuel : v[id];
+
+                let limit = (id === 'tr1') ? L.tr1 : (id === 'tr2' ? L.tr2 : 9000); // 9т лимит для осей прицепа
+
+                
+
                 let prog = document.getElementById('prog-' + id);
-                if(prog) prog.style.width = Math.min((v[id]/limit)*100, 100) + '%';
-                if(prog) prog.style.background = v[id] > limit ? '#ef4444' : '#10b981';
-                document.getElementById('dot-' + id).className = v[id] === 0 ? "axle-dot" : (v[id] > limit ? "axle-dot active-error" : "axle-dot active-ok");
+
+                if(prog) {
+
+                    prog.style.width = Math.min((currentVal/limit)*100, 100) + '%';
+
+                    prog.style.background = currentVal > limit ? '#ef4444' : '#10b981';
+
+                }
+
+                
+
+                let dot = document.getElementById('dot-' + id);
+
+                if(dot) {
+
+                    dot.className = currentVal === 0 ? "axle-dot" : (currentVal > limit ? "axle-dot active-error" : "axle-dot active-ok");
+
+                }
+
             });
 
-            // 2. Развесовка (Сцепление)
-            const tractorWeight = v.tr1 + v.tr2;
+
+
+            // 5. Расчет Развесовки (Сцепление передней оси)
+
+            const tractorWeight = v.tr1 + tr2_with_fuel;
+
             const balanceWarn = document.getElementById('balance-warning');
-            if (v.tr1 > 0 && v.tr1 < (tractorWeight * 0.20)) {
-                balanceWarn.style.display = 'block';
-            } else {
-                balanceWarn.style.display = 'none';
+
+            if (balanceWarn) {
+
+                // Если на переднюю ось давит меньше 20% веса тягача — это опасно
+
+                if (v.tr1 > 0 && v.tr1 < (tractorWeight * 0.20)) {
+
+                    balanceWarn.style.display = 'block';
+
+                } else {
+
+                    balanceWarn.style.display = 'none';
+
+                }
+
             }
 
-            // 3. Суммы
+
+
+            // 6. Итоговые суммы
+
             let trlSum = v.trl1 + v.trl2 + v.trl3;
+
             let total = tractorWeight + trlSum;
+
             let tara = parseFloat(document.getElementById('tara').value) || 0;
 
+
+
+            // Обновляем Вес Прицепа
+
             document.getElementById('trl-total-val').innerText = trlSum + " kg";
-            document.getElementById('trl-total-status').innerText = trlSum > L.trl_sum ? "❌ PRZEKROCZENIE" : "✅ OK";
-            document.getElementById('trl-total-status').className = trlSum > L.trl_sum ? "axle-status error" : "axle-status ok";
+
+            const trlStatus = document.getElementById('trl-total-status');
+
+            trlStatus.innerText = trlSum > L.trl_sum ? "❌ PRZEKROCZENIE" : "✅ OK";
+
+            trlStatus.className = trlSum > L.trl_sum ? "axle-status error" : "axle-status ok";
+
+
+
+            // Обновляем Общий Вес
 
             document.getElementById('total-val').innerText = total + " kg";
-            document.getElementById('total-status').innerText = total > L.total ? "❌ PRZEKROCZENIE" : "✅ OK";
-            document.getElementById('total-status').className = total > L.total ? "axle-status error" : "axle-status ok";
+
+            const totStatus = document.getElementById('total-status');
+
+            totStatus.innerText = total > L.total ? "❌ PRZEKROCZENIE" : "✅ OK";
+
+            totStatus.className = total > L.total ? "axle-status error" : "axle-status ok";
+
+
+
+            // Чистый вес груза
+
             document.getElementById('payload-val').innerText = Math.max(0, total - tara) + " kg";
 
-            // 4. Штрафы (Пример Германии)
-            const fineBox = document.getElementById('fine-box');
-            if (total > L.total) {
-                let over = ((total - L.total) / L.total) * 100;
-                fineBox.style.display = 'block';
-                fineBox.style.background = '#fee2e2';
-                fineBox.style.color = '#991b1b';
-                fineBox.innerText = `Ryzyko mandatu (DE/AT): ok. ${over > 5 ? '140-400' : '35-80'} EUR + zakaz jazdy`;
-            } else {
-                fineBox.style.display = 'none';
+
+
+            // 7. Расчет Центра Тяжести (CoG)
+
+            const cogMarker = document.getElementById('cog-marker');
+
+            if (cogMarker && total > 0) {
+
+                // Вычисляем положение: чем тяжелее прицеп относительно тягача, тем дальше маркер
+
+                let cogPosition = (trlSum / total) * 100;
+
+                cogPosition = Math.max(15, Math.min(85, cogPosition)); // Ограничиваем края
+
+                cogMarker.style.left = cogPosition + "%";
+
+                
+
+                // Меняем цвет CoG если развесовка плохая
+
+                cogMarker.style.background = (cogPosition > 70 || cogPosition < 30) ? "#f59e0b" : "#6366f1";
+
+                if(document.getElementById('cog-percent')) {
+
+                    document.getElementById('cog-percent').innerText = "Rozkład: " + Math.round(cogPosition) + "%";
+
+                }
+
             }
 
-            // 6. Оптимизатор зоны погрузки (упрощенная модель)
-            const safeZone = document.getElementById('safe-zone');
-            if (total > tara) {
-                // Чем тяжелее груз, тем уже зона безопасности
-                let margin = Math.max(10, 40 - (total/2000));
-                safeZone.style.left = "25%"; 
-                safeZone.style.width = margin + "%";
+
+
+            // 8. Штрафы (Пример Германии)
+
+            const fineBox = document.getElementById('fine-box');
+
+            if (fineBox) {
+
+                if (total > L.total) {
+
+                    let over = ((total - L.total) / L.total) * 100;
+
+                    fineBox.style.display = 'block';
+
+                    fineBox.innerText = `Ryzyko mandatu (DE/AT): ok. ${over > 5 ? '140-400' : '35-80'} EUR + zakaz jazdy`;
+
+                } else {
+
+                    fineBox.style.display = 'none';
+
+                }
+
             }
+
         }
+
+
 
         function generateReport() {
+
             const country = document.getElementById('country-select').value;
+
             const total = document.getElementById('total-val').innerText;
+
             const payload = document.getElementById('payload-val').innerText;
+
             const status = document.getElementById('total-status').innerText;
+
             
+
             const text = `🚛 RAPORT WAGI (${country})\n` +
+
                          `--------------------------\n` +
+
                          `Masa Całkowita: ${total}\n` +
+
                          `Waga Towaru: ${payload}\n` +
+
                          `Status: ${status}\n` +
+
                          `--------------------------\n` +
+
                          `Sprawdzone w ChomarIQ 2026`;
+
             
+
             navigator.clipboard.writeText(text);
+
             alert("Raport skopiowany do schowka! Możesz go wkleić do WhatsApp.");
+
         }
+
     </script>
+
+</div>
+
+<div id="ai-bubble" onclick="toggleAI()">🤖</div>
+
+<div id="ai-window">
+    <div id="ai-header">
+        <span>ChomarIQ AI Assistant</span>
+        <span style="cursor:pointer" onclick="toggleAI()">✕</span>
+    </div>
+    <div id="ai-messages">
+        <div class="msg bot">Cześć! Jestem Twoim asystentem ChomarIQ. W czym mogę Ci pomóc?</div>
+    </div>
+    <div id="ai-input-area">
+        <input type="text" id="ai-query" placeholder="Zadaj pytanie..." onkeypress="if(event.key==='Enter') sendToAI()">
+        <button onclick="sendToAI()">Go</button>
+    </div>
 </div>
 
 </body>
 </html>
-
-
-
 
 
 
