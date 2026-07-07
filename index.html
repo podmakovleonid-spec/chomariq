@@ -7,9 +7,11 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-    <style>
+<style>
+        /* ==========================================================================
+           1. ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ (2026 PALETTE)
+           ========================================================================== */
         :root {
-            /* Nowoczesna paleta kolorów 2026 */
             --bg-color: #f4f6f9;
             --card-bg: rgba(255, 255, 255, 0.75);
             --card-border: rgba(255, 255, 255, 0.8);
@@ -22,61 +24,9 @@
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
-            
             --page-max: 1100px;
         }
 
-/* Навигационная панель */
-.tabs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Распределяет элементы по краям */
-    padding: 10px 30px;
-    gap: 10px;
-}
-
-/* Логотип слева */
-.logo-item { flex: 0 0 150px; display: flex; align-items: center; }
-.logo-item img { height: 40px; width: auto; }
-
-/* Центрирование кнопок */
-.tabs-center {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex: 1; /* Занимает всё свободное пространство, толкая края */
-}
-
-/* Виджет погоды справа */
-.weather-item { 
-    flex: 0 0 150px; 
-    display: flex; 
-    justify-content: flex-end; 
-    align-items: center; 
-    gap: 8px;
-    font-size: 14px;
-    color: var(--text-main);
-}
-
-#weather-icon {
-    font-size: 20px;
-}
-
-/* Адаптивность для мобилок */
-@media (max-width: 1024px) {
-    .tabs {
-        flex-direction: column;
-        height: auto;
-        padding: 15px;
-    }
-    .logo-item, .tabs-center, .weather-item {
-        flex: none;
-        justify-content: center;
-        width: 100%;
-    }
-}
-
-        /* TŁO I BAZA */
         body {
             margin: 0;
             padding: 0;
@@ -84,7 +34,6 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            /* Subtelne animowane tło "Mesh Gradient" */
             background-image: 
                 radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
@@ -96,7 +45,186 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* NAGŁÓWKI I TEKSTY */
+        /* ==========================================================================
+           2. НАВИГАЦИОННАЯ ПАНЕЛЬ 2026 (FLOATING GLASS PILL - COLLAPSIBLE)
+           ========================================================================== */
+        @keyframes navSlideDown {
+            0% { opacity: 0; transform: translateY(-25px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes weatherPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12) rotate(3deg); }
+        }
+
+        .nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 94%;
+            max-width: 1350px;
+            margin: 20px auto 10px;
+            padding: 10px 24px;
+            
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 20px 40px -15px rgba(99, 102, 241, 0.12),
+                0 4px 12px -2px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.6);
+                
+            position: relative;
+            z-index: 999;
+            animation: navSlideDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .nav-header:hover {
+            box-shadow: 
+                0 25px 50px -12px rgba(99, 102, 241, 0.18),
+                0 6px 16px -2px rgba(0, 0, 0, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.88);
+        }
+
+        .logo-item { 
+            flex: 0 0 140px; 
+            display: flex; 
+            align-items: center; 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+        .logo-item:hover { transform: scale(1.04); }
+        .logo-item img { 
+            height: 38px; 
+            width: auto; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
+        }
+
+        .tabs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0; /* Убираем gap, чтобы скрытые вкладки не оставляли пустого места */
+            flex: 1;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .tabs li {
+            padding: 10px 20px !important;
+            font-size: 13.5px !important;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            border-radius: 30px !important;
+            color: var(--text-main) !important;
+            background: transparent !important;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap; /* Предотвращает перенос строк при анимации */
+            transition: all 1s cubic-bezier(0.25, 1, 0.33, 1) !important;
+            border: 1px solid transparent !important;
+            position: relative;
+            overflow: hidden;
+            box-shadow: none !important;
+            margin: 0 3px;
+            max-width: 260px;
+            opacity: 1;
+        }
+
+        /* --- СКРЫТИЕ НЕАКТИВНЫХ ВКЛАДОК ПО УМОЛЧАНИЮ --- */
+.tabs li:not(.active) {
+    /* Эти свойства удаляем из этого блока, чтобы они были видны сразу */
+    opacity: 1 !important;
+    max-width: 260px !important;
+    pointer-events: auto !important;
+}
+
+/* Создаем класс для скрытого состояния */
+.tabs.collapsed li:not(.active) {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+    border-width: 0 !important;
+    transform: scale(0.85);
+    pointer-events: none;
+    flex: 0 0 0% !important;
+}
+
+        /* --- ПЛАВНОЕ РАСКРЫТИЕ ПРИ НАВЕДЕНИИ НА ТЕКУЩУЮ ВКЛАДКУ/ПАНЕЛЬ --- */
+        .tabs:hover li:not(.active) {
+            max-width: 260px !important;
+            opacity: 1 !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+            margin: 0 3px !important;
+            transform: scale(1);
+            pointer-events: auto;
+            flex: 0 1 auto !important;
+        }
+
+        .tabs li:not(.active):hover {
+            color: #4f46e5 !important;
+            background: rgba(99, 102, 241, 0.08) !important;
+            transform: translateY(-2px) scale(1.02);
+            border-color: rgba(99, 102, 241, 0.15) !important;
+        }
+
+        .tabs li:active {
+            transform: translateY(0) scale(0.96) !important;
+        }
+
+        /* Активная кнопка с Neon Glow эффектом */
+        .tabs li.active {
+            background: var(--accent-gradient) !important;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 
+                0 6px 20px rgba(99, 102, 241, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+            padding-left: 26px !important;
+            padding-right: 26px !important;
+        }
+
+        .weather-item { 
+            flex: 0 0 50px; 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center; 
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            background: rgba(241, 245, 249, 0.7);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .weather-item:hover {
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: #cbd5e1;
+        }
+
+        #weather-icon {
+            font-size: 18px;
+            display: inline-block;
+            animation: weatherPulse 4s infinite ease-in-out;
+        }
+
+        /* ==========================================================================
+           3. ТИПОГРАФИЯ И ЗАГОЛОВКИ
+           ========================================================================== */
         h1, h2, h3 {
             font-weight: 700;
             letter-spacing: -0.02em;
@@ -118,67 +246,11 @@
             letter-spacing: 1px;
         }
 
-        .white-text {
-            color: var(--text-secondary); /* Zmiana na ciemny dla czytelności na jasnym tle */
-        }
-        
-/* Обновленное объемное меню (не закрепленное) */
-.tabs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    
-    /* Увеличили вертикальный padding с 5px до 12px для объема */
-    padding: 12px 30px; 
-    
-    /* Отступы и центровка */
-    margin: 20px auto;
-    width: 95%;
-    max-width: 1350px;
-    
-    /* Форма капсулы */
-    border-radius: 50px; 
-    background: rgba(255, 255, 255, 0.95); /* Чуть плотнее цвет */
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 1);
-    
-    /* Усиленная тень для объема */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 
-                0 4px 6px rgba(0, 0, 0, 0.05);
-    
-    /* ОТКРЕПЛЕНИЕ: теперь меню будет уходить вверх при скролле */
-    position: relative; 
-    top: 0;
-    z-index: 999;
-}
+        .white-text { color: var(--text-secondary); }
 
-.tabs li {
-    list-style: none;
-    padding: 10px 22px !important;
-    font-size: 14px !important;
-    font-weight: 500;
-    border-radius: 25px !important; /* Тоже закругленные кнопки */
-    transition: all 0.3s ease;
-    cursor: pointer;
-    background: transparent !important;
-    color: var(--text-main) !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-        .tabs li:hover {
-            color: var(--text-main);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-.tabs li.active {
-    background: var(--accent-gradient) !important;
-    color: white !important;
-    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3) !important;
-}
-
-        /* GŁÓWNY KONTENER (KARTA) */
+        /* ==========================================================================
+           4. ГЛАВНЫЙ КОНТЕНЕР И ТАБЫ
+           ========================================================================== */
         .container {
             max-width: var(--page-max);
             width: 92%;
@@ -202,7 +274,9 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* FORMULARZE */
+        /* ==========================================================================
+           5. ФОРМЫ И ЭЛЕМЕНТЫ ВВОДА
+           ========================================================================== */
         .form-group {
             margin-bottom: 20px;
             display: flex;
@@ -252,16 +326,12 @@
             line-height: 1.6;
         }
 
-        /* Specjalne dla trasy */
         #routeGroup {
             flex-direction: row;
             flex-wrap: wrap;
             align-items: center;
         }
-        #routeGroup label {
-            width: 100%;
-            margin-bottom: 5px;
-        }
+        #routeGroup label { width: 100%; margin-bottom: 5px; }
         .countrySel {
             width: auto !important;
             flex: 1;
@@ -269,7 +339,9 @@
             text-align: center;
         }
 
-        /* PRZYCISKI */
+        /* ==========================================================================
+           6. КНОПКИ
+           ========================================================================== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -294,11 +366,11 @@
             background: var(--accent-hover);
         }
 
-        .btn:active {
-            transform: translateY(1px);
-        }
+        .btn:active { transform: translateY(1px); }
 
-        /* WYNIKI I TABELE */
+        /* ==========================================================================
+           7. ТАБЛИЦЫ И БЛОКИ ВЫВОДА
+           ========================================================================== */
         #wynik, #output {
             margin-top: 25px;
             background: #fff;
@@ -334,11 +406,8 @@
         }
         
         #wynik tr:last-child th, 
-        #wynik tr:last-child td {
-            border-bottom: none;
-        }
+        #wynik tr:last-child td { border-bottom: none; }
 
-        /* TABELA GŁÓWNA (np. STATUSY) */
         table {
             width: 100%;
             border-collapse: separate;
@@ -368,7 +437,9 @@
         tr:last-child td { border-bottom: none; }
         tr:hover td { background-color: #f8fafc; }
 
-        /* TAB 4 SEBASTIAN */
+        /* ==========================================================================
+           8. СПЕЦИФИЧЕСКИЕ СТИЛИ ВКЛАДОК (SEBASTIAN, AETR, NOTIFICATIONS)
+           ========================================================================== */
         #tab4 #output {
             font-family: 'Monaco', 'Consolas', monospace;
             white-space: pre-wrap;
@@ -401,7 +472,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* IFRAME */
         .tab-content iframe {
             width: 100%;
             height: 70vh;
@@ -410,9 +480,8 @@
             box-shadow: var(--shadow-sharp);
         }
 
-        /* AETR Summary Box */
         #aetrSummary {
-            background: #1e293b; /* Ciemne tło dla kontrastu w sekcji podsumowania */
+            background: #1e293b;
             color: #f1f5f9;
             padding: 25px;
             border-radius: var(--radius-md);
@@ -422,7 +491,6 @@
         }
         #aetrSummary strong { color: #fff; }
 
-        /* NOTIFICATIONS BOX */
         #notifBlock {
             background: linear-gradient(to right, #fff, #f8fafc) !important;
             border: 1px solid #e2e8f0 !important;
@@ -439,78 +507,9 @@
             color: #a855f7;
         }
 
-        /* RESPONSYWNOŚĆ */
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-                padding: 20px;
-                margin-top: 10px;
-            }
-            .tabs {
-                padding: 10px;
-                gap: 5px;
-            }
-            .tabs li {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-                flex-grow: 1;
-                text-align: center;
-            }
-            .btn {
-                width: 100%;
-                margin-right: 0;
-            }
-            #routeGroup { gap: 5px; }
-            
-            /* Tabela mobilna */
-            table { display: block; overflow-x: auto; white-space: nowrap; }
-        }
-
-/* Стили для темной темы */
-body.dark-mode {
-    --bg-color: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.8);
-    --card-border: rgba(255, 255, 255, 0.1);
-    --text-main: #f1f5f9;
-    --text-secondary: #94a3b8;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.2) 0px, transparent 50%),
-        radial-gradient(at 0% 100%, rgba(56, 189, 248, 0.2) 0px, transparent 50%);
-}
-
-body.dark-mode .tabs {
-    background: rgba(30, 41, 59, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode input, 
-body.dark-mode select, 
-body.dark-mode textarea,
-body.dark-mode #wynik, 
-body.dark-mode #output,
-body.dark-mode table,
-body.dark-mode .axle-card {
-    background-color: #1e293b;
-    color: #f1f5f9;
-    border-color: #334155;
-}
-
-body.dark-mode th {
-    background-color: #334155;
-    color: #cbd5e1;
-}
-
-body.dark-mode tr:hover td {
-    background-color: #334155;
-}
-
-body.dark-mode .weather-item {
-    color: #f1f5f9;
-}
-
-/* TAB 8 - ADVANCED AXLE CALC */
+        /* ==========================================================================
+           9. КАЛЬКУЛЯТОР НАЦИСКОВ (TAB 8: AXLE CALC & COG VIZ)
+           ========================================================================== */
         .truck-viz {
             display: flex;
             justify-content: center;
@@ -535,9 +534,7 @@ body.dark-mode .weather-item {
             transition: all 0.3s;
         }
         .axle-dot.active-ok { background: #10b981; transform: scale(1.1); box-shadow: 0 0 10px rgba(16,185,129,0.4); }
-        .axle-dot.active-error { background: #ef4444; transform: scale(1.2); box-shadow: 0 0 15px rgba(239,68,68,0.5); }
-
-/* Анимация пульсации для перегруза */
+        
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); transform: scale(1.1); }
             70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); transform: scale(1.1); }
@@ -546,7 +543,7 @@ body.dark-mode .weather-item {
 
         .axle-dot.active-error {
             background: #ef4444 !important;
-            animation: pulse-red 1.5s infinite; /* Запуск бесконечной пульсации */
+            animation: pulse-red 1.5s infinite;
             border: 2px solid #fff;
             z-index: 10;
         }
@@ -558,23 +555,21 @@ body.dark-mode .weather-item {
         }
 
         .calc-summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.05rem;
-    /* To dodaje odstęp pod każdym rzędem */
-    margin-bottom: 25px; 
-    padding-bottom: 10px;
-    /* Delikatna linia oddzielająca dla lepszego wizualu */
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+            margin-bottom: 25px; 
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
 
-.calc-summary-row:last-child {
-    margin-bottom: 0;
-    border-bottom: none;
-    font-size: 1.3rem; /* Masa całkowita będzie nieco większa */
-    padding-top: 10px;
-}
+        .calc-summary-row:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            font-size: 1.3rem;
+            padding-top: 10px;
+        }
 
         .axle-card {
             background: white;
@@ -608,11 +603,6 @@ body.dark-mode .weather-item {
             align-items: center;
         }
 
-        @media (max-width: 768px) {
-            .calc-grid { grid-template-columns: 1fr; }
-        }
-
-/* ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ TAB 8 */
         .country-selector {
             margin-bottom: 20px;
             display: grid;
@@ -626,7 +616,7 @@ body.dark-mode .weather-item {
             margin: 15px 0;
             color: #92400e;
             font-size: 0.9rem;
-            display: none; /* Показывается скриптом */
+            display: none;
         }
         .ldm-optimizer {
             background: #f1f5f9;
@@ -666,7 +656,6 @@ body.dark-mode .weather-item {
             margin-top: 20px;
         }
 
-/* Стили для индикатора Центра Тяжести */
         .cog-container {
             position: relative;
             width: 100%;
@@ -680,29 +669,27 @@ body.dark-mode .weather-item {
         #cog-marker {
             position: absolute;
             top: -5px;
-            left: 50%; /* Будет меняться скриптом */
+            left: 50%;
             width: 4px;
             height: 30px;
-            background: #6366f1; /* Твой основной фиолетовый акцент */
+            background: #6366f1;
             border-radius: 2px;
             transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
         }
 
-#cog-marker::after {
-    content: 'CENTER OF GRAVITY';
-    position: absolute;
-    /* Изменяем здесь: */
-    bottom: 100%;       /* Ставим нижнюю границу текста к верху маркера */
-    left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: 8px; /* Небольшой отступ, чтобы текст не прилипал */
-    
-    font-size: 9px;
-    font-weight: bold;
-    color: #6366f1;
-    white-space: nowrap;
-}
+        #cog-marker::after {
+            content: 'CENTER OF GRAVITY';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            font-size: 9px;
+            font-weight: bold;
+            color: #6366f1;
+            white-space: nowrap;
+        }
 
         .cog-label {
             display: flex;
@@ -711,21 +698,221 @@ body.dark-mode .weather-item {
             color: var(--text-secondary);
             margin-top: 5px;
         }
+
+        /* ==========================================================================
+           10. ТЕМНАЯ ТЕМА (DARK MODE)
+           ========================================================================== */
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f1f5f9;
+            --text-secondary: #94a3b8;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.2) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(56, 189, 248, 0.2) 0px, transparent 50%);
+        }
+
+        body.dark-mode .nav-header {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+        body.dark-mode .tabs li:not(.active):hover {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #818cf8 !important;
+        }
+        body.dark-mode .weather-item {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #f1f5f9;
+        }
+
+        body.dark-mode input, 
+        body.dark-mode select, 
+        body.dark-mode textarea,
+        body.dark-mode #wynik, 
+        body.dark-mode #output,
+        body.dark-mode table,
+        body.dark-mode .axle-card {
+            background-color: #1e293b;
+            color: #f1f5f9;
+            border-color: #334155;
+        }
+
+        body.dark-mode th {
+            background-color: #334155;
+            color: #cbd5e1;
+        }
+
+        body.dark-mode tr:hover td { background-color: #334155; }
+
+        /* ==========================================================================
+           11. АДАПТИВНОСТЬ (RESPONSIVE / MEDIA QUERIES)
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .nav-header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px;
+                border-radius: 28px;
+            }
+            .logo-item, .weather-item {
+                flex: none;
+                width: 100%;
+                justify-content: center;
+            }
+            .tabs {
+                flex-wrap: wrap;
+                width: 100%;
+                gap: 0;
+            }
+            .tabs li {
+                flex: 1 1 45%;
+                text-align: center;
+                padding: 8px 12px !important;
+                font-size: 12.5px !important;
+            }
+            .tabs:hover li:not(.active) {
+                flex: 1 1 45% !important;
+                max-width: 100% !important;
+                padding: 8px 12px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+                margin-top: 10px;
+            }
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+            #routeGroup { gap: 5px; }
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+            .calc-grid { grid-template-columns: 1fr; }
+        }
+
+/* ==========================================================================
+   КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ (THEME TOGGLE)
+   ========================================================================== */
+.theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    color: var(--text-main);
+    font-size: 16px;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+    flex-shrink: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    background: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+body.dark-mode .theme-toggle-btn {
+    background-color: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #fbbf24;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .theme-toggle-btn:hover {
+    background-color: rgba(51, 65, 85, 0.9);
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.25);
+}
+
+/* 1. Делаем логотип контейнером для блика */
+.logo-item {
+    position: relative;
+    overflow: hidden; /* Обрезает блик, чтобы он не выходил за границы */
+    border-radius: 8px; /* Опционально: добавьте скругление, если нужно */
+}
+
+/* 2. Создаем сам блик */
+.logo-item::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    /* Блик: от прозрачного к белому и обратно */
+    background: linear-gradient(
+        to bottom right, 
+        rgba(255, 255, 255, 0) 40%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        rgba(255, 255, 255, 0) 60%
+    );
+    transform: rotate(45deg);
+    opacity: 0; /* Изначально блик скрыт */
+    transition: opacity 0.5s ease;
+}
+
+/* 3. Активируем анимацию при наведении */
+.logo-item:hover::after {
+    opacity: 1;
+    animation: shine 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 4. Само движение блика */
+@keyframes shine {
+    0% { transform: rotate(45deg) translateX(-50%); }
+    100% { transform: rotate(45deg) translateX(50%); }
+}
     </style>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        /* [LOGIKA JS POZOSTAJE BEZ ZMIAN] */
-        
+function showMonkey() {
+    const overlay = document.getElementById('monkey-overlay');
+    overlay.style.display = 'flex'; // Показываем слой
+    
+    // Скрываем слой через 10 секунд
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 10000);
+}
+
+function hideMonkey() {
+    document.getElementById('monkey-overlay').style.display = 'none';
+}
+window.addEventListener('DOMContentLoaded', () => {
+    // Ждем 5 секунд и добавляем класс, который скроет неактивные вкладки
+    setTimeout(() => {
+        const tabsContainer = document.querySelector('.tabs');
+        if (tabsContainer) {
+            tabsContainer.classList.add('collapsed');
+        }
+    }, 5000);
+});
         function openTab(tabId) {
             document.querySelectorAll('.tabs li').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
-            // Znajdź przycisk
             const btn = document.querySelector(`[data-tab="${tabId}"]`);
             if(btn) btn.classList.add('active');
             
-            // Znajdź treść
             const content = document.getElementById(tabId);
             if(content) content.classList.add('active');
         }
@@ -749,17 +936,12 @@ body.dark-mode .weather-item {
                 .catch(() => document.getElementById('geoResult').innerText = 'Błąd przy geokodowaniu.');
         }
 
-        // Initialize default tab
         window.onload = () => {
              openTab('tab1');
-             // Initialize maps if needed
              if(typeof initMap === 'function') initMap();
-             // Render AETR
              if(typeof aetrRender === 'function') aetrRender();
-             // Populate drivers
              populateDriverSelect('driverName', driverPassportMap);
              populateDriverSelect('kierowca', driverPassportMap);
-             // Sync passport
              const driverSel = document.getElementById('driverName');
              const passportInput = document.getElementById('passport');
              const syncPassport = () => {
@@ -1538,39 +1720,42 @@ Obowiązkowo wymagany kwit wagowy.
     </script>
 </head>
 <body>
-<ul class="tabs">
-    <li class="logo-item">
+<nav class="nav-header">
+    <div class="logo-item" onclick="openTab('tab1')">
         <img src="https://www.chomar.pl/wp-content/uploads/2024/11/chomar_logo_4.png" alt="Chomar Logo">
-    </li>
+    </div>
 
-    <div class="tabs-center">
+    <ul class="tabs">
         <li class="active" data-tab="tab1" onclick="openTab('tab1')">Awizacja ELX</li>
         <li data-tab="tab2" onclick="openTab('tab2')">Neutralizacja (SMS)</li>
         <li data-tab="tab4" onclick="openTab('tab4')">Generator Karlsruhe</li>
         <li data-tab="tab5" onclick="openTab('tab5')">Portiernia</li>
-        <li data-tab="tab6" onclick="openTab('tab6')">AETR: Pauzy</li>
+        <li data-tab="tab6" onclick="openTab('tab6')">Pauzy & Kompensacje</li>
         <li data-tab="tab7" onclick="openTab('tab7')" style="display: none;">STATUSY</li>
-        <li data-tab="tab8" onclick="openTab('tab8')">Kalkulator Nacisków na Osie</li>
-    </div>
+        <li data-tab="tab8" onclick="openTab('tab8')">Kalkulator Nacisków</li>
+    </ul>
 
-    <div id="weather-widget" class="weather-item">
-        <span id="weather-temp">...°C</span>
-        <span id="weather-icon"></span>
+<div id="weather-widget" class="weather-item" onclick="showMonkey()" style="cursor: pointer;">
+    <span id="weather-temp">...°C</span>
+    <span id="weather-icon"></span>
+</div>
+
+    <div style="display: flex; align-items: center; margin-left: 8px;">
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()" title="Переключить тему" aria-label="Переключить тему">
+            🌙
+        </button>
     </div>
-</ul>
+</nav>
 
     <div class="container tab-content active" id="tab1">
         <div class="author">© 2026 Leonid Podmakov</div>
         <h1 style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
-    Generowanie awizacji dla 
-    <img src="https://1000logos.net/wp-content/uploads/2021/05/Electrolux-logo.png" 
-         alt="Electrolux Logo" 
-         style="height: 32px; width: auto; vertical-align: middle; margin-top: 4px;">
+    Generowanie awizacji dla Electrolux
 </h1>
         
         <div class="form-group">
             <label for="tourNo">Tour no.:</label>
-            <input type="text" id="tourNo" placeholder="Wpisz numer trasy..." />
+            <input type="text" id="tourNo" placeholder="Wpisz numer zlecenia ELX..." />
         </div>
         
         <div class="form-group">
@@ -1675,6 +1860,7 @@ Obowiązkowo wymagany kwit wagowy.
     <div class="container tab-content" id="tab2">
         <div class="author">© 2026 Leonid Podmakov</div>
         <h1>Generacja zlecenia (Neutralizacja)</h1>
+<div class="author">Strona generuje gotowe zadanie dla kierowcy, gdy w zleceniu jest neutralizacja</div>
         
         <div class="form-group">
             <label for="langSelect">Język:</label>
@@ -1758,12 +1944,12 @@ Obowiązkowo wymagany kwit wagowy.
 
         <div class="form-group">
             <label for="ciagnik">Ciągnik:</label>
-            <input type="text" id="ciagnik" placeholder="np. DW 12345 (opcjonalnie)">
+            <input type="text" id="ciagnik" placeholder="np. DSR39922 (opcjonalnie)">
         </div>
 
         <div class="form-group">
             <label for="naczepa">Naczepa:</label>
-            <input type="text" id="naczepa" placeholder="np. P01 (opcjonalnie)">
+            <input type="text" id="naczepa" placeholder="np. DPL7T34 (opcjonalnie)">
         </div>
 
         <div class="form-group">
@@ -1776,7 +1962,8 @@ Obowiązkowo wymagany kwit wagowy.
 
     <div class="container tab-content" id="tab6">
         <div class="author">© 2026 Leonid Podmakov</div>
-        <h1>AETR: Pauzy & Kompensacje</h1>
+        <h1>Pauzy & Kompensacje</h1>
+<div class="author">W przypadku wątpliwości dotyczących rekompensaty za odpoczynki kierowcy – gdy należy ustalić, ile godzin odpoczynku tygodniowego trzeba oddać i w jakim terminie – na tej stronie można wprowadzić 3–4 ostatnie odpoczynki kierowcy, a system automatycznie dokona szczegółowych obliczeń.</div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="form-group">
@@ -1844,7 +2031,7 @@ Obowiązkowo wymagany kwit wagowy.
         
  </div> <script>
         async function updateWeather() {
-            const lat = 49.97; // Координаты Pietrzykowice
+            const lat = 49.97;
             const lon = 18.98;
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
 
@@ -1854,7 +2041,6 @@ Obowiązkowo wymagany kwit wagowy.
                 const temp = Math.round(data.current_weather.temperature);
                 const code = data.current_weather.weathercode;
 
-                // Простая интерпретация кодов погоды в эмодзи
                 let icon = "☀️";
                 if (code >= 1 && code <= 3) icon = "🌤️";
                 else if (code >= 45 && code <= 48) icon = "🌫️";
@@ -1874,12 +2060,41 @@ Obowiązkowo wymagany kwit wagowy.
             }
         }
 
-        // Запуск при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
             updateWeather();
-            // Обновление каждые 30 минут
             setInterval(updateWeather, 1800000);
         });
+
+/* ==========================================================================
+   ЛОГИКА ТЕМНОЙ ТЕМЫ (DARK MODE WITH LOCALSTORAGE)
+   ========================================================================== */
+function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById('themeToggleBtn');
+    
+    body.classList.toggle('dark-mode');
+    
+    const isDark = body.classList.contains('dark-mode');
+    
+    if (btn) {
+        btn.innerHTML = isDark ? '☀️' : '🌙';
+    }
+    
+    localStorage.setItem('chomar_theme', isDark ? 'dark' : 'light');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('chomar_theme');
+    const btn = document.getElementById('themeToggleBtn');
+    
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (btn) btn.innerHTML = '☀️';
+    } else {
+        document.body.classList.remove('dark-mode');
+        if (btn) btn.innerHTML = '🌙';
+    }
+});
     </script>
 
 <div class="container tab-content" id="tab8">
@@ -1916,7 +2131,7 @@ Obowiązkowo wymagany kwit wagowy.
 
             <select id="trailer-type" onchange="calculateAxles()" style="width:100%; padding:10px; border-radius:8px;">
 
-                <option value="standard">Firanka / Chłodnia (13.6m)</option>
+                <option value="standard">MEGA (13.6m)</option>
 
             </select>
 
@@ -2130,15 +2345,11 @@ Obowiązkowo wymagany kwit wagowy.
 
         function calculateAxles() {
 
-            // 1. Получаем настройки страны
-
             const country = document.getElementById('country-select').value;
 
             const L = COUNTRY_LIMITS[country];
 
             
-
-            // Обновляем текст лимитов в интерфейсе
 
             if(document.getElementById('lim-tr1')) document.getElementById('lim-tr1').innerText = L.tr1/1000;
 
@@ -2146,19 +2357,15 @@ Obowiązkowo wymagany kwit wagowy.
 
 
 
-            // 2. Учет топлива (если есть ползунок fuel)
-
             const fuelInput = document.getElementById('fuel');
 
             const fuelLiters = fuelInput ? parseFloat(fuelInput.value) : 0;
 
             if(document.getElementById('fuel-liters')) document.getElementById('fuel-liters').innerText = fuelLiters;
 
-            const fuelWeight = Math.round(fuelLiters * 0.85); // 1л дизеля ~ 0.85кг
+            const fuelWeight = Math.round(fuelLiters * 0.85);
 
 
-
-            // 3. Получаем значения из полей ввода
 
             const ids = ['tr1', 'tr2', 'trl1', 'trl2', 'trl3'];
 
@@ -2168,19 +2375,15 @@ Obowiązkowo wymagany kwit wagowy.
 
 
 
-            // Добавляем вес топлива к ведущей оси тягача (T2)
-
             let tr2_with_fuel = v.tr2 + fuelWeight;
 
 
-
-            // 4. Проверка каждой оси (Прогресс-бары и Пульсация)
 
             ids.forEach(id => {
 
                 let currentVal = (id === 'tr2') ? tr2_with_fuel : v[id];
 
-                let limit = (id === 'tr1') ? L.tr1 : (id === 'tr2' ? L.tr2 : 9000); // 9т лимит для осей прицепа
+                let limit = (id === 'tr1') ? L.tr1 : (id === 'tr2' ? L.tr2 : 9000);
 
                 
 
@@ -2208,15 +2411,11 @@ Obowiązkowo wymagany kwit wagowy.
 
 
 
-            // 5. Расчет Развесовки (Сцепление передней оси)
-
             const tractorWeight = v.tr1 + tr2_with_fuel;
 
             const balanceWarn = document.getElementById('balance-warning');
 
             if (balanceWarn) {
-
-                // Если на переднюю ось давит меньше 20% веса тягача — это опасно
 
                 if (v.tr1 > 0 && v.tr1 < (tractorWeight * 0.20)) {
 
@@ -2232,8 +2431,6 @@ Obowiązkowo wymagany kwit wagowy.
 
 
 
-            // 6. Итоговые суммы
-
             let trlSum = v.trl1 + v.trl2 + v.trl3;
 
             let total = tractorWeight + trlSum;
@@ -2241,8 +2438,6 @@ Obowiązkowo wymagany kwit wagowy.
             let tara = parseFloat(document.getElementById('tara').value) || 0;
 
 
-
-            // Обновляем Вес Прицепа
 
             document.getElementById('trl-total-val').innerText = trlSum + " kg";
 
@@ -2254,8 +2449,6 @@ Obowiązkowo wymagany kwit wagowy.
 
 
 
-            // Обновляем Общий Вес
-
             document.getElementById('total-val').innerText = total + " kg";
 
             const totStatus = document.getElementById('total-status');
@@ -2266,29 +2459,21 @@ Obowiązkowo wymagany kwit wagowy.
 
 
 
-            // Чистый вес груза
-
             document.getElementById('payload-val').innerText = Math.max(0, total - tara) + " kg";
 
 
-
-            // 7. Расчет Центра Тяжести (CoG)
 
             const cogMarker = document.getElementById('cog-marker');
 
             if (cogMarker && total > 0) {
 
-                // Вычисляем положение: чем тяжелее прицеп относительно тягача, тем дальше маркер
-
                 let cogPosition = (trlSum / total) * 100;
 
-                cogPosition = Math.max(15, Math.min(85, cogPosition)); // Ограничиваем края
+                cogPosition = Math.max(15, Math.min(85, cogPosition));
 
                 cogMarker.style.left = cogPosition + "%";
 
                 
-
-                // Меняем цвет CoG если развесовка плохая
 
                 cogMarker.style.background = (cogPosition > 70 || cogPosition < 30) ? "#f59e0b" : "#6366f1";
 
@@ -2301,8 +2486,6 @@ Obowiązkowo wymagany kwit wagowy.
             }
 
 
-
-            // 8. Штрафы (Пример Германии)
 
             const fineBox = document.getElementById('fine-box');
 
@@ -2365,30 +2548,10 @@ Obowiązkowo wymagany kwit wagowy.
     </script>
 
 </div>
-
+<!-- Полноэкранный слой для локальной гифки -->
+<div id="monkey-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; cursor: pointer;" onclick="hideMonkey()">
+    <img src="1.gif" alt="1.gif" style="max-width: 80%; max-height: 80%; border-radius: 15px;">
+</div>
+</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
