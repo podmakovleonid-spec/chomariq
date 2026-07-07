@@ -1748,7 +1748,6 @@ Obowiązkowo wymagany kwit wagowy.
 </nav>
 
     <div class="container tab-content active" id="tab1">
-        <div class="author">© 2026 Leonid Podmakov</div>
         <h1 style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
     Generowanie awizacji dla Electrolux
 </h1>
@@ -1858,7 +1857,6 @@ Obowiązkowo wymagany kwit wagowy.
     </div>
 
     <div class="container tab-content" id="tab2">
-        <div class="author">© 2026 Leonid Podmakov</div>
         <h1>Generacja zlecenia (Neutralizacja)</h1>
 <div class="author">Strona generuje gotowe zadanie dla kierowcy, gdy w zleceniu jest neutralizacja</div>
         
@@ -1934,7 +1932,6 @@ Obowiązkowo wymagany kwit wagowy.
     </div>
 
     <div class="container tab-content" id="tab5">
-        <div class="author">© 2026 Leonid Podmakov</div>
         <h1>Portiernia</h1>
         
         <div class="form-group">
@@ -1961,7 +1958,6 @@ Obowiązkowo wymagany kwit wagowy.
     </div>
 
     <div class="container tab-content" id="tab6">
-        <div class="author">© 2026 Leonid Podmakov</div>
         <h1>Pauzy & Kompensacje</h1>
 <div class="author">W przypadku wątpliwości dotyczących rekompensaty za odpoczynki kierowcy – gdy należy ustalić, ile godzin odpoczynku tygodniowego trzeba oddać i w jakim terminie – na tej stronie można wprowadzić 3–4 ostatnie odpoczynki kierowcy, a system automatycznie dokona szczegółowych obliczeń.</div>
 
@@ -2015,7 +2011,6 @@ Obowiązkowo wymagany kwit wagowy.
     </div>
 
     <div class="container tab-content" id="tab7">
-        <div class="author">© 2026 Leonid Podmakov</div>
         <h1>STATUSY</h1>
         <h5 style="text-align: center; color: var(--text-secondary);">Aktualizacja: 20.10.2025</h5>
         
@@ -2098,431 +2093,185 @@ document.addEventListener('DOMContentLoaded', () => {
     </script>
 
 <div class="container tab-content" id="tab8">
-
-    <div class="author">© 2026 Leonid Podmakov</div>
-
     <h1>Kalkulator Nacisków na Osie (UE i CH)</h1>
-
-
-
     <div class="country-selector">
-
         <div class="form-group">
-
             <label>Kraj (Limity):</label>
-
             <select id="country-select" onchange="calculateAxles()" style="width:100%; padding:10px; border-radius:8px;">
-
                 <option value="EU">UE Standard (40t)</option>
-
                 <option value="CH">Szwajcaria (40t - Strict)</option>
-
                 <option value="PL_INT">Polska (Intermodal - 44t)</option>
-
                 <option value="DE">Niemcy (40t)</option>
-
             </select>
-
         </div>
-
         <div class="form-group">
-
             <label>Typ naczepy:</label>
-
             <select id="trailer-type" onchange="calculateAxles()" style="width:100%; padding:10px; border-radius:8px;">
-
                 <option value="standard">MEGA (13.6m)</option>
-
             </select>
-
         </div>
-
     </div>
-
-
-
     <div class="truck-viz">
-
         <div id="dot-tr1" class="axle-dot">T1</div>
-
         <div id="dot-tr2" class="axle-dot">T2</div>
-
         <div style="width: 40px;"></div>
-
         <div id="dot-trl1" class="axle-dot">N1</div>
-
         <div id="dot-trl2" class="axle-dot">N2</div>
-
         <div id="dot-trl3" class="axle-dot">N3</div>
-
     </div>
-
-
-
 <div style="background: #fff; padding: 20px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; margin-bottom: 20px;">
-
-
-
         <div style="padding: 0 10px;">
-
             <div class="cog-container">
-
                 <div id="cog-marker"></div>
-
             </div>
-
             <div class="cog-label">
-
                 <span>PRZÓD (KABINA)</span>
-
                 <span id="cog-percent">Środek: 50%</span>
-
                 <span>TYŁ (DRZWI)</span>
-
             </div>
-
         </div>
-
     </div>
-
-
-
     <div id="balance-warning" class="warning-box">
-
         ⚠️ <b>Słaba przyczepność:</b> Zbyt mały nacisk na oś kierującą! Przesuń ładunek do przodu.
-
     </div>
-
-
-
     <div class="payload-box">
-
         <div>
-
             <label style="color:white; margin:0;">Tara (kg):</label>
-
             <input type="number" id="tara" value="14500" oninput="calculateAxles()" style="width:120px; background:rgba(255,255,255,0.2); border:1px solid white; color:white; border-radius:4px;">
-
         </div>
-
         <div>
-
             Ladunek (Netto): <b id="payload-val">0 kg</b>
-
         </div>
-
     </div>
-
-
-
     <div class="calc-grid">
-
         <div class="axle-card">
-
             <h3>Ciągnik</h3>
-
             <div class="form-group">
-
                 <label>Oś 1 (Max <span id="lim-tr1">9</span>t)</label>
-
                 <input type="number" id="tr1" placeholder="kg" oninput="calculateAxles()">
-
                 <div class="progress-container"><div id="prog-tr1" class="progress-bar"></div></div>
-
             </div>
-
             <div class="form-group">
-
                 <label>Oś 2 (Max <span id="lim-tr2">11.5</span>t)</label>
-
                 <input type="number" id="tr2" placeholder="kg" oninput="calculateAxles()">
-
                 <div class="progress-container"><div id="prog-tr2" class="progress-bar"></div></div>
-
             </div>
-
         </div>
-
-
-
         <div class="axle-card">
-
             <h3>Naczepa</h3>
-
             <div class="form-group">
-
                 <label>Osie N1, N2, N3 (kg)</label>
-
                 <input type="number" id="trl1" placeholder="N1" oninput="calculateAxles()" style="margin-bottom:5px;">
-
                 <input type="number" id="trl2" placeholder="N2" oninput="calculateAxles()" style="margin-bottom:5px;">
-
                 <input type="number" id="trl3" placeholder="N3" oninput="calculateAxles()">
-
             </div>
-
         </div>
-
     </div>
-
-
-
     <div class="ldm-optimizer">
-
         <label><b>Optymalny środek ciężkości (LDM):</b></label>
-
         <div class="ldm-track">
-
             <div id="safe-zone" class="ldm-safe-zone" style="left: 30%; width: 25%;"></div>
-
         </div>
-
         <small style="color:#64748b">Zielona strefa pokazuje gdzie umieścić środek ciężkości ładunku (metry od przodu).</small>
-
     </div>
-
-
-
     <div class="calc-summary">
-
         <div class="calc-summary-row">
-
             <span><b>SUMA WÓZKA NACZEPY:</b></span>
-
             <div class="calc-summary-val" style="text-align: right;">
-
                 <div id="trl-total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
-
                 <div id="trl-total-status" class="axle-status">Brak danych</div>
-
             </div>
-
         </div>
-
-
-
         <div class="calc-summary-row">
-
             <span><b>MASA CAŁKOWITA:</b></span>
-
             <div class="calc-summary-val" style="text-align: right;">
-
                 <div id="total-val" style="font-weight: bold; font-size: 1.2rem;">0 kg</div>
-
                 <div id="total-status" class="axle-status">Brak danych</div>
-
             </div>
-
         </div>
-
-
-
         <div id="fine-box" class="fine-indicator" style="display:none;"></div>
-
     </div>
-
-
-
     <button class="btn-report" onclick="generateReport()">Kopiuj Raport dla Kierowcy (WhatsApp)</button>
-
-
-
  <script>
-
         const COUNTRY_LIMITS = {
-
             'EU': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 40000 },
-
             'CH': { tr1: 8000, tr2: 11500, trl_sum: 24000, total: 40000 },
-
             'PL_INT': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 44000 },
-
             'DE': { tr1: 9000, tr2: 11500, trl_sum: 24000, total: 40000 }
-
         };
-
-
-
         function calculateAxles() {
-
             const country = document.getElementById('country-select').value;
-
             const L = COUNTRY_LIMITS[country];
-
-            
-
             if(document.getElementById('lim-tr1')) document.getElementById('lim-tr1').innerText = L.tr1/1000;
-
             if(document.getElementById('lim-tr2')) document.getElementById('lim-tr2').innerText = L.tr2/1000;
-
-
-
             const fuelInput = document.getElementById('fuel');
-
             const fuelLiters = fuelInput ? parseFloat(fuelInput.value) : 0;
-
             if(document.getElementById('fuel-liters')) document.getElementById('fuel-liters').innerText = fuelLiters;
-
             const fuelWeight = Math.round(fuelLiters * 0.85);
-
-
-
             const ids = ['tr1', 'tr2', 'trl1', 'trl2', 'trl3'];
-
             let v = {};
-
             ids.forEach(id => v[id] = parseFloat(document.getElementById(id).value) || 0);
-
-
-
             let tr2_with_fuel = v.tr2 + fuelWeight;
-
-
-
             ids.forEach(id => {
-
                 let currentVal = (id === 'tr2') ? tr2_with_fuel : v[id];
-
                 let limit = (id === 'tr1') ? L.tr1 : (id === 'tr2' ? L.tr2 : 9000);
-
-                
-
                 let prog = document.getElementById('prog-' + id);
-
                 if(prog) {
-
                     prog.style.width = Math.min((currentVal/limit)*100, 100) + '%';
-
                     prog.style.background = currentVal > limit ? '#ef4444' : '#10b981';
-
                 }
-
-                
-
                 let dot = document.getElementById('dot-' + id);
-
                 if(dot) {
-
                     dot.className = currentVal === 0 ? "axle-dot" : (currentVal > limit ? "axle-dot active-error" : "axle-dot active-ok");
-
                 }
-
             });
-
-
-
             const tractorWeight = v.tr1 + tr2_with_fuel;
-
             const balanceWarn = document.getElementById('balance-warning');
-
             if (balanceWarn) {
-
                 if (v.tr1 > 0 && v.tr1 < (tractorWeight * 0.20)) {
-
                     balanceWarn.style.display = 'block';
-
                 } else {
-
                     balanceWarn.style.display = 'none';
-
                 }
-
             }
-
-
-
             let trlSum = v.trl1 + v.trl2 + v.trl3;
-
             let total = tractorWeight + trlSum;
-
             let tara = parseFloat(document.getElementById('tara').value) || 0;
-
-
-
             document.getElementById('trl-total-val').innerText = trlSum + " kg";
-
             const trlStatus = document.getElementById('trl-total-status');
-
             trlStatus.innerText = trlSum > L.trl_sum ? "❌ PRZEKROCZENIE" : "✅ OK";
-
             trlStatus.className = trlSum > L.trl_sum ? "axle-status error" : "axle-status ok";
-
-
-
             document.getElementById('total-val').innerText = total + " kg";
-
             const totStatus = document.getElementById('total-status');
-
             totStatus.innerText = total > L.total ? "❌ PRZEKROCZENIE" : "✅ OK";
-
             totStatus.className = total > L.total ? "axle-status error" : "axle-status ok";
-
-
-
             document.getElementById('payload-val').innerText = Math.max(0, total - tara) + " kg";
-
-
-
             const cogMarker = document.getElementById('cog-marker');
-
             if (cogMarker && total > 0) {
-
                 let cogPosition = (trlSum / total) * 100;
-
                 cogPosition = Math.max(15, Math.min(85, cogPosition));
-
                 cogMarker.style.left = cogPosition + "%";
-
-                
-
                 cogMarker.style.background = (cogPosition > 70 || cogPosition < 30) ? "#f59e0b" : "#6366f1";
-
                 if(document.getElementById('cog-percent')) {
-
                     document.getElementById('cog-percent').innerText = "Rozkład: " + Math.round(cogPosition) + "%";
-
                 }
-
             }
-
-
-
             const fineBox = document.getElementById('fine-box');
-
             if (fineBox) {
-
                 if (total > L.total) {
-
                     let over = ((total - L.total) / L.total) * 100;
-
                     fineBox.style.display = 'block';
-
                     fineBox.innerText = `Ryzyko mandatu (DE/AT): ok. ${over > 5 ? '140-400' : '35-80'} EUR + zakaz jazdy`;
-
                 } else {
-
                     fineBox.style.display = 'none';
-
                 }
-
             }
-
         }
-
-
-
         function generateReport() {
-
             const country = document.getElementById('country-select').value;
-
             const total = document.getElementById('total-val').innerText;
-
             const payload = document.getElementById('payload-val').innerText;
-
             const status = document.getElementById('total-status').innerText;
-
-            
-
             const text = `🚛 RAPORT WAGI (${country})\n` +
 
                          `--------------------------\n` +
@@ -2537,16 +2286,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                          `Sprawdzone w ChomarIQ 2026`;
 
-            
-
             navigator.clipboard.writeText(text);
-
             alert("Raport skopiowany do schowka! Możesz go wkleić do WhatsApp.");
-
         }
-
     </script>
-
 </div>
 <!-- Полноэкранный слой для локальной гифки -->
 <div id="monkey-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; cursor: pointer;" onclick="hideMonkey()">
