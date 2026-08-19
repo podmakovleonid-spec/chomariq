@@ -563,13 +563,6 @@
             document.getElementById('monkey-overlay').style.display = 'none';
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const tabsContainer = document.querySelector('.tabs');
-                if (tabsContainer) tabsContainer.classList.add('collapsed');
-            }, 5000);
-        });
-
         function openTab(tabId) {
             document.querySelectorAll('.tabs li').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
