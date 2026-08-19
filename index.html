@@ -146,13 +146,16 @@
         }
         body.dark-mode .logo-item img { filter: drop-shadow(0 2px 8px rgba(255,255,255,0.1)) brightness(1.2); }
 
-        .tabs {
+.tabs {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            flex: 1;
-            margin: 0;
+            
+            /* Измененные строки: */
+            flex: 0 1 auto; /* Не даем блоку растягиваться на всю ширину */
+            margin: 0 24px; /* Добавляем безопасный отступ по бокам от логотипа и погоды */
+            
             padding: 6px;
             list-style: none;
             background: rgba(0,0,0,0.03);
