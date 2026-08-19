@@ -204,15 +204,42 @@
         }
         body.dark-mode .tabs li:not(.active):hover { background: rgba(255, 255, 255, 0.08) !important; }
 
-        .tabs li.active {
-            background: var(--text-main) !important;
-            color: var(--bg-base) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+/* Анимация переливающегося градиента */
+        @keyframes dancingGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
+
+        .tabs li.active {
+            /* Танцующий градиент */
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6) !important;
+            background-size: 300% 300% !important;
+            animation: dancingGradient 4s ease infinite !important;
+            
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15); /* Легкая тень текста для читаемости */
+            
+            /* Стеклянная окантовка и свечение */
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 
+                0 8px 16px -4px rgba(139, 92, 246, 0.4), /* Цветная тень (Glow) */
+                inset 0 2px 4px rgba(255, 255, 255, 0.5) !important; /* Внутренний стеклянный блик */
+        }
+
         body.dark-mode .tabs li.active {
-            background: #ffffff !important;
-            color: #000000 !important;
-            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2) !important;
+            /* Градиент для темной темы */
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #6366f1) !important;
+            background-size: 300% 300% !important;
+            animation: dancingGradient 4s ease infinite !important;
+            
+            color: #ffffff !important;
+            
+            /* Адаптированная стеклянная окантовка для темного режима */
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            box-shadow: 
+                0 8px 20px -4px rgba(168, 85, 247, 0.5), 
+                inset 0 2px 4px rgba(255, 255, 255, 0.2) !important;
         }
 
         .weather-item { 
