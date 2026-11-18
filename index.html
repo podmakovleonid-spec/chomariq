@@ -3,470 +3,697 @@
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>ChomarIQ 2026</title>
+    <title>ChomarIQ 2026 // VICE DISPATCH</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
         /* ==========================================================================
-           1. 2026-2027 VISION-OS / BENTO GRID DESIGN SYSTEM
+           1. GRAND THEFT AUTO VI (VICE CITY / LEONIDA) DESIGN SYSTEM
            ========================================================================== */
         :root {
-            /* Light Theme (VisionOS inspired) */
-            --bg-base: #f0f4f8;
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.8);
-            --glass-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.08);
-            --glass-blur: blur(28px) saturate(190%);
+            /* Leonida Day Theme (Miami Art Deco Pastel) */
+            --bg-base: #fdf2ec;
+            --bg-secondary: #fce4ec;
+            --panel-bg: rgba(255, 250, 247, 0.88);
+            --panel-card: rgba(255, 255, 255, 0.92);
+            --panel-border: rgba(255, 42, 133, 0.35);
+            --panel-shadow: 0 20px 50px -12px rgba(255, 42, 133, 0.18), 0 0 0 1px rgba(0, 180, 216, 0.15);
+            --glass-blur: blur(22px) saturate(160%);
             
-            --text-main: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
+            --text-main: #140824;
+            --text-secondary: #4a2c5a;
+            --text-muted: #8a6d99;
             
-            --accent-primary: #3b82f6;
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            --accent-hover: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            --accent-glow: 0 8px 32px -8px rgba(99, 102, 241, 0.5);
+            --neon-pink: #ff2a85;
+            --neon-orange: #ff6b00;
+            --neon-gold: #ffb800;
+            --neon-cyan: #00b4d8;
+            --neon-purple: #7b2cbf;
+
+            --gta-sunset: linear-gradient(135deg, #ff2a85 0%, #ff6b00 55%, #ffb800 100%);
+            --gta-cyber: linear-gradient(135deg, #00b4d8 0%, #ff2a85 100%);
+            --gta-header-grad: linear-gradient(180deg, #ff2a85 0%, #ff6b00 60%, #e09f00 100%);
             
-            --radius-pill: 9999px;
-            --radius-xl: 32px;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
+            --glow-pink: 0 8px 28px -4px rgba(255, 42, 133, 0.45);
+            --glow-cyan: 0 0 20px rgba(0, 180, 216, 0.35);
             
-            --spring-easing: cubic-bezier(0.25, 1.2, 0.3, 1);
+            --radius-lg: 14px;
+            --radius-md: 8px;
+            --radius-sm: 4px;
+            
+            --spring-easing: cubic-bezier(0.22, 1.15, 0.36, 1);
             --fluid-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
-            
-            --page-max: 1200px;
+            --page-max: 1240px;
         }
 
         body.dark-mode {
-            /* Dark Theme (OLED / Cyber minimal) */
-            --bg-base: #020617;
-            --glass-bg: rgba(15, 23, 42, 0.55);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+            /* Vice City Night Theme (Default GTA VI Neon Sunset) */
+            --bg-base: #090414;
+            --bg-secondary: #15072b;
+            --panel-bg: rgba(18, 8, 38, 0.85);
+            --panel-card: rgba(28, 12, 56, 0.78);
+            --panel-border: rgba(255, 42, 133, 0.42);
+            --panel-shadow: 0 28px 64px -12px rgba(0, 0, 0, 0.85), 0 0 32px -8px rgba(255, 42, 133, 0.28);
             
-            --text-main: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
+            --text-main: #ffffff;
+            --text-secondary: #e2d1f9;
+            --text-muted: #9d84bf;
             
-            --accent-primary: #818cf8;
-            --accent-glow: 0 8px 32px -8px rgba(129, 140, 248, 0.4);
+            --neon-cyan: #00f0ff;
+            --gta-header-grad: linear-gradient(180deg, #ffffff 0%, #ffb3d9 45%, #ff2a85 100%);
+            --glow-pink: 0 8px 32px -4px rgba(255, 42, 133, 0.6);
+            --glow-cyan: 0 0 24px rgba(0, 240, 255, 0.45);
         }
 
         /* --------------------------------------------------------------------------
-           BACKGROUND MESH ANIMATION
+           VICE CITY ATMOSPHERIC SUNSET & PALM BACKDROP
            -------------------------------------------------------------------------- */
-        @keyframes aurora {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes horizonPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.55; }
+            50% { transform: translateX(-50%) scale(1.06); opacity: 0.75; }
         }
 
         body {
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-base);
             color: var(--text-main);
-            
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.12), transparent 40%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.12), transparent 40%),
-                radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.12), transparent 40%);
-            background-size: 200% 200%;
-            animation: aurora 20s ease infinite;
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 42, 133, 0.18), transparent 65%),
+                radial-gradient(circle at 12% 25%, rgba(0, 180, 216, 0.14), transparent 45%),
+                radial-gradient(circle at 88% 80%, rgba(255, 107, 0, 0.16), transparent 50%),
+                linear-gradient(180deg, var(--bg-base) 0%, var(--bg-secondary) 100%);
             background-attachment: fixed;
-            
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            transition: background-color 0.6s var(--fluid-easing), color 0.6s var(--fluid-easing);
+            transition: background-color 0.5s var(--fluid-easing), color 0.5s var(--fluid-easing);
+            position: relative;
         }
 
         body.dark-mode {
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 40%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 40%),
-                radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.1), transparent 40%);
+                radial-gradient(ellipse 90% 55% at 50% -5%, rgba(255, 42, 133, 0.32), transparent 65%),
+                radial-gradient(circle at 10% 30%, rgba(0, 240, 255, 0.16), transparent 42%),
+                radial-gradient(circle at 90% 75%, rgba(255, 107, 0, 0.22), transparent 48%),
+                linear-gradient(180deg, #070310 0%, #14062b 55%, #1f0836 100%);
         }
 
+        .vice-backdrop {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .vice-sun {
+            position: absolute;
+            bottom: -140px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 540px;
+            height: 540px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ffb800 0%, #ff6b00 45%, #ff2a85 85%, transparent 100%);
+            opacity: 0.16;
+            filter: blur(2px);
+            mask-image: repeating-linear-gradient(
+                to bottom,
+                #000 0px,
+                #000 18px,
+                transparent 18px,
+                transparent 24px
+            );
+            -webkit-mask-image: repeating-linear-gradient(
+                to bottom,
+                #000 0px,
+                #000 18px,
+                transparent 18px,
+                transparent 24px
+            );
+            animation: horizonPulse 10s ease-in-out infinite;
+        }
+
+        body.dark-mode .vice-sun { opacity: 0.26; }
+
+        .vice-palms-left, .vice-palms-right {
+            position: absolute;
+            bottom: 0;
+            width: 320px;
+            height: 360px;
+            opacity: 0.12;
+            fill: #ff2a85;
+        }
+        body.dark-mode .vice-palms-left,
+        body.dark-mode .vice-palms-right {
+            opacity: 0.22;
+            fill: #05020a;
+            filter: drop-shadow(0 0 12px rgba(255, 42, 133, 0.5));
+        }
+        .vice-palms-left { left: -30px; }
+        .vice-palms-right { right: -30px; transform: scaleX(-1); }
+
+        .vice-scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.12) 50%
+            );
+            background-size: 100% 4px;
+            opacity: 0.25;
+        }
+        body:not(.dark-mode) .vice-scanlines { opacity: 0.06; }
+
         /* ==========================================================================
-           2. DYNAMIC ISLAND NAVBAR
+           2. ROCKSTAR HUD NAVBAR (FIXED CONTAINMENT)
            ========================================================================== */
-        @keyframes slideDownIsland {
-            0% { opacity: 0; transform: translateY(-30px) scale(0.95); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes hudSlideDown {
+            0% { opacity: 0; transform: translateY(-24px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-header, .nav-header * {
+            box-sizing: border-box;
         }
 
         .nav-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 90%;
-            max-width: 1400px;
-            margin: 24px auto 16px;
-            padding: 12px 24px;
-            
-            background: var(--glass-bg);
+            gap: 12px;
+            width: 92%;
+            max-width: 1460px;
+            margin: 20px auto 16px;
+            padding: 10px 18px;
+            background: var(--panel-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
-            
-            border-radius: var(--radius-pill);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow);
-                
+            border-radius: var(--radius-md);
+            border: 1px solid var(--panel-border);
+            border-top: 3px solid var(--neon-pink);
+            box-shadow: var(--panel-shadow);
             position: sticky;
-            top: 24px;
+            top: 16px;
             z-index: 999;
-            animation: slideDownIsland 0.8s var(--spring-easing) forwards;
-            transition: all 0.4s var(--fluid-easing);
+            animation: hudSlideDown 0.6s var(--spring-easing) forwards;
+            transition: all 0.3s var(--fluid-easing);
         }
 
-        .nav-header:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.12);
+        .nav-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            pointer-events: none;
         }
 
-        .logo-item { 
-            flex: 0 0 140px; 
-            display: flex; 
-            align-items: center; 
+        .nav-brand-link {
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        /* GTA VI Logo Lockup */
+        .logo-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
-            transition: transform 0.4s var(--spring-easing);
+            transition: transform 0.3s var(--spring-easing);
+            user-select: none;
         }
-        .logo-item:hover { transform: scale(1.05); }
-        .logo-item img { 
-            height: 34px; 
-            width: auto; 
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
-            transition: filter 0.3s;
-        }
-        body.dark-mode .logo-item img { filter: drop-shadow(0 2px 8px rgba(255,255,255,0.1)) brightness(1.2); }
+        .logo-item:hover { transform: scale(1.04); }
 
-.tabs {
+        .gta-logo-lockup {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 4px;
+        }
+
+        .gta-logo-vi {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.35rem;
+            line-height: 0.85;
+            letter-spacing: 2px;
+            background: var(--gta-sunset);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(255, 42, 133, 0.5));
+            margin-right: -4px;
+            transform: skewX(-6deg);
+        }
+
+        .gta-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 0.95;
+        }
+
+        .gta-logo-main {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.65rem;
+            letter-spacing: 1.5px;
+            color: var(--text-main);
+            text-shadow: 2px 2px 0px var(--neon-pink);
+            white-space: nowrap;
+        }
+
+        .gta-logo-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* Navigation Tabs (Mission Selector Style) */
+        .tabs {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            
-            /* Измененные строки: */
-            flex: 0 1 auto; /* Не даем блоку растягиваться на всю ширину */
-            margin: 0 24px; /* Добавляем безопасный отступ по бокам от логотипа и погоды */
-            
-            padding: 6px;
+            flex-wrap: wrap;
+            gap: 4px;
+            flex: 1 1 auto;
+            min-width: 0;
+            margin: 0;
+            padding: 4px;
             list-style: none;
-            background: rgba(0,0,0,0.03);
-            border-radius: var(--radius-pill);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-            transition: background 0.3s;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
         }
-        body.dark-mode .tabs { background: rgba(255,255,255,0.05); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        body:not(.dark-mode) .tabs {
+            background: rgba(255, 42, 133, 0.06);
+            border-color: rgba(255, 42, 133, 0.18);
+        }
 
         .tabs li {
-            padding: 10px 18px !important;
-            font-size: 14px !important;
-            font-weight: 600;
-            border-radius: var(--radius-pill) !important;
+            padding: 8px 11px !important;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px !important;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-radius: var(--radius-sm) !important;
             color: var(--text-secondary) !important;
             background: transparent !important;
             cursor: pointer;
             user-select: none;
             white-space: nowrap;
-            transition: all 0.4s var(--spring-easing) !important;
+            transition: all 0.25s var(--spring-easing) !important;
             border: 1px solid transparent !important;
             position: relative;
         }
 
-        .tabs.collapsed li:not(.active) {
-            max-width: 0 !important;
-            opacity: 0 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            transform: scale(0.8);
-            pointer-events: none;
-        }
-
-        .tabs:hover li:not(.active) {
-            max-width: 200px !important;
-            opacity: 1 !important;
-            padding: 10px 18px !important;
-            margin: 0 !important;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-
         .tabs li:not(.active):hover {
-            color: var(--text-main) !important;
-            background: rgba(0, 0, 0, 0.04) !important;
-        }
-        body.dark-mode .tabs li:not(.active):hover { background: rgba(255, 255, 255, 0.08) !important; }
-
-/* Анимация переливающегося градиента */
-        @keyframes dancingGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            color: var(--neon-cyan) !important;
+            background: rgba(0, 240, 255, 0.08) !important;
+            border-color: rgba(0, 240, 255, 0.3) !important;
         }
 
         .tabs li.active {
-            /* Танцующий градиент */
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6) !important;
-            background-size: 300% 300% !important;
-            animation: dancingGradient 4s ease infinite !important;
-            
+            background: var(--gta-sunset) !important;
             color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.15); /* Легкая тень текста для читаемости */
-            
-            /* Стеклянная окантовка и свечение */
-            border: 1px solid rgba(255, 255, 255, 0.6) !important;
-            box-shadow: 
-                0 8px 16px -4px rgba(139, 92, 246, 0.4), /* Цветная тень (Glow) */
-                inset 0 2px 4px rgba(255, 255, 255, 0.5) !important; /* Внутренний стеклянный блик */
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            box-shadow: var(--glow-pink), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+            transform: translateY(-1px);
         }
 
-        body.dark-mode .tabs li.active {
-            /* Градиент для темной темы */
-            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #6366f1) !important;
-            background-size: 300% 300% !important;
-            animation: dancingGradient 4s ease infinite !important;
-            
-            color: #ffffff !important;
-            
-            /* Адаптированная стеклянная окантовка для темного режима */
-            border: 1px solid rgba(255, 255, 255, 0.25) !important;
-            box-shadow: 
-                0 8px 20px -4px rgba(168, 85, 247, 0.5), 
-                inset 0 2px 4px rgba(255, 255, 255, 0.2) !important;
+        /* HUD Right Cluster: Wanted Stars + Weather + Theme */
+        .hud-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .wanted-stars {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 12px;
+            padding: 7px 9px;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+        body:not(.dark-mode) .wanted-stars {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(255, 42, 133, 0.25);
+        }
+        .wanted-stars span {
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .wanted-stars span.lit {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+        .wanted-stars:hover span.lit {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
         }
 
         .weather-item { 
             display: flex; 
             justify-content: flex-end; 
             align-items: center; 
-            gap: 10px;
-            font-size: 14px;
+            gap: 7px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
             font-weight: 700;
+            white-space: nowrap;
             color: var(--text-main);
-            background: var(--glass-bg);
-            padding: 8px 16px;
-            border-radius: var(--radius-pill);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: all 0.4s var(--spring-easing);
+            background: rgba(0, 0, 0, 0.28);
+            padding: 7px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            box-shadow: var(--glow-cyan);
+            transition: all 0.3s var(--spring-easing);
             cursor: pointer;
+        }
+        body:not(.dark-mode) .weather-item {
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .weather-item:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            border-color: var(--neon-pink);
+            box-shadow: var(--glow-pink);
         }
+
+        .weather-live-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--neon-pink);
+            box-shadow: 0 0 8px var(--neon-pink);
+            animation: blinkLive 1.6s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes blinkLive { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
         #weather-icon {
-            font-size: 18px;
+            font-size: 15px;
             display: inline-block;
-            animation: weatherPulse 4s infinite ease-in-out;
         }
-        @keyframes weatherPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15) rotate(5deg); } }
 
         /* ==========================================================================
-           3. BENTO BOX CONTAINERS
+           3. MISSION BRIEFING CONTAINERS
            ========================================================================== */
-        @keyframes scaleUp {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes missionReveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .container {
+            box-sizing: border-box;
             max-width: var(--page-max);
-            width: 90%;
-            margin: 40px auto 80px;
-            padding: 48px;
-            background: var(--glass-bg);
+            width: 92%;
+            margin: 32px auto 64px;
+            padding: 40px 44px;
+            background: var(--panel-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--glass-shadow);
-            border: 1px solid var(--glass-border);
-            animation: scaleUp 0.7s var(--spring-easing) forwards;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--panel-shadow);
+            border: 1px solid var(--panel-border);
+            border-left: 4px solid var(--neon-pink);
+            animation: missionReveal 0.5s var(--spring-easing) forwards;
             position: relative;
-            overflow: hidden;
+            z-index: 1;
         }
-        
-        .container::before {
+
+        .container::before, .container::after {
             content: '';
             position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4), transparent 50%);
+            width: 24px;
+            height: 24px;
             pointer-events: none;
-            z-index: 0;
         }
-        body.dark-mode .container::before { background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.03), transparent 50%); }
+        .container::before {
+            top: 10px;
+            right: 10px;
+            border-top: 2px solid var(--neon-cyan);
+            border-right: 2px solid var(--neon-cyan);
+        }
+        .container::after {
+            bottom: 10px;
+            right: 10px;
+            border-bottom: 2px solid var(--neon-pink);
+            border-right: 2px solid var(--neon-pink);
+        }
 
-        .container > * { position: relative; z-index: 1; }
-
-        .tab-content { display: none; opacity: 0; transition: opacity 0.4s; }
-        .tab-content.active { display: block; opacity: 1; animation: fadeIn 0.4s ease-out forwards; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content { display: none; opacity: 0; }
+        .tab-content.active { display: block; opacity: 1; animation: fadeIn 0.35s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         h1, h2, h3 {
-            font-weight: 800;
-            letter-spacing: -0.03em;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
             color: var(--text-main);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             text-align: center;
         }
         
-        h1 { font-size: 2.5rem; margin-top: 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        h2 { font-size: 1.8rem; margin-top: 2rem; }
+        h1 {
+            font-size: 3rem;
+            line-height: 1.05;
+            margin-top: 0;
+            background: var(--gta-header-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 16px rgba(255, 42, 133, 0.35));
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 2rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+        }
+        body:not(.dark-mode) h2 { color: var(--neon-pink); text-shadow: none; }
+
+        h3 { font-size: 1.5rem; letter-spacing: 1.2px; }
         
-        .author { text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 32px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .author {
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--neon-cyan);
+            margin-top: -10px;
+            margin-bottom: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+        }
+        body:not(.dark-mode) .author { color: var(--neon-purple); }
+
+        .white-text {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
         /* ==========================================================================
-           4. FORMS & INPUTS
+           4. FORMS & TACTICAL INPUTS
            ========================================================================== */
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .form-group label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-secondary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--neon-cyan);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-left: 12px;
+            letter-spacing: 0.12em;
+            margin-left: 4px;
+        }
+        body:not(.dark-mode) .form-group label {
+            color: var(--neon-pink);
         }
 
         input[type="text"], input[type="date"], input[type="time"], input[type="datetime-local"],
         input[type="number"], input[type="email"], select, textarea {
             width: 100%;
-            padding: 16px 20px;
-            border: 1px solid rgba(0,0,0,0.1);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 42, 133, 0.28);
             border-radius: var(--radius-md);
-            font-size: 1rem;
-            font-weight: 500;
-            background-color: rgba(255,255,255,0.7);
-            backdrop-filter: blur(10px);
+            font-size: 0.96rem;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.92);
             color: var(--text-main);
-            transition: all 0.3s var(--fluid-easing);
+            transition: all 0.25s var(--fluid-easing);
             box-sizing: border-box;
-            font-family: inherit;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-family: 'Montserrat', sans-serif;
         }
 
         body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
-            background-color: rgba(0,0,0,0.3);
-            border-color: rgba(255,255,255,0.1);
-            color: var(--text-main);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            background-color: rgba(10, 4, 22, 0.72);
+            border-color: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--accent-primary);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), inset 0 2px 4px rgba(0,0,0,0.01);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2), 0 0 18px rgba(0, 240, 255, 0.25);
             transform: translateY(-1px);
         }
-        body.dark-mode input:focus, body.dark-mode select:focus, body.dark-mode textarea:focus {
-            background-color: rgba(15, 23, 42, 0.9);
-            box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.2);
+
+        input[readonly] {
+            opacity: 0.8;
+            border-style: dashed;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        textarea { min-height: 160px; resize: vertical; line-height: 1.6; border-radius: var(--radius-lg); }
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.6;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
         
-        #routeGroup { flex-direction: row; flex-wrap: wrap; align-items: center; }
-        #routeGroup label { width: 100%; margin-bottom: 5px; }
-        .countrySel { width: auto !important; flex: 1; min-width: 80px; text-align: center; }
+        #routeGroup { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; }
+        #routeGroup label { width: 100%; margin-bottom: 2px; }
+        .countrySel { width: auto !important; flex: 1; min-width: 80px; text-align: center; font-family: 'JetBrains Mono', monospace; }
 
         /* ==========================================================================
-           5. BUTTONS
+           5. ROCKSTAR ACTION BUTTONS
            ========================================================================== */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 16px 32px;
-            margin: 10px 8px 10px 0;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: white;
-            background: var(--accent-gradient);
-            border: none;
-            border-radius: var(--radius-pill);
+            padding: 14px 28px;
+            margin: 8px 10px 8px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #ffffff;
+            background: var(--gta-sunset);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all 0.4s var(--spring-easing);
-            box-shadow: var(--accent-glow);
+            transition: all 0.3s var(--spring-easing);
+            box-shadow: var(--glow-pink);
             text-decoration: none;
             position: relative;
             overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.35);
         }
 
         .btn::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.5s;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.55s;
         }
-        .btn:hover::after { left: 100%; }
+        .btn:hover::after { left: 120%; }
 
         .btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 40px -8px rgba(99, 102, 241, 0.6);
-            background: var(--accent-hover);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 36px -4px rgba(255, 42, 133, 0.75), 0 0 15px rgba(255, 184, 0, 0.4);
+            border-color: #ffffff;
         }
         .btn:active { transform: translateY(1px) scale(0.98); }
 
         /* ==========================================================================
-           6. TABLES & BENTO OUTPUTS
+           6. TABLES & OUTPUTS
            ========================================================================== */
         #wynik, #output {
-            margin-top: 30px;
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow);
-            transition: all 0.3s;
+            margin-top: 26px;
+            background: var(--panel-card);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--panel-border);
+            box-shadow: inset 0 0 24px rgba(255, 42, 133, 0.06);
         }
-        body.dark-mode #wynik, body.dark-mode #output { background: rgba(0,0,0,0.2); }
 
-        #wynik table { width: 100%; border-collapse: collapse; margin: 0; }
-        #wynik th { width: 35%; color: var(--text-secondary); font-weight: 700; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 12px 0; }
-        #wynik td { color: var(--text-main); font-weight: 600; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 12px 0; text-align: right; }
-        body.dark-mode #wynik th, body.dark-mode #wynik td { border-bottom-color: rgba(255,255,255,0.05); }
+        #wynik table { width: 100%; border-collapse: collapse; margin: 0; box-shadow: none; border: none; background: transparent; }
+        #wynik th {
+            width: 36%;
+            color: var(--neon-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 8px;
+            background: transparent;
+        }
+        body:not(.dark-mode) #wynik th { color: var(--neon-pink); border-bottom-color: rgba(0,0,0,0.08); }
+        #wynik td {
+            color: var(--text-main);
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 8px;
+            text-align: right;
+        }
+        body:not(.dark-mode) #wynik td { border-bottom-color: rgba(0,0,0,0.08); }
 
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin-top: 24px;
-            border-radius: var(--radius-lg);
+            margin-top: 20px;
+            border-radius: var(--radius-md);
             overflow: hidden;
-            background: rgba(255,255,255,0.5);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.05);
+            background: var(--panel-card);
+            border: 1px solid var(--panel-border);
         }
-        body.dark-mode table { background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.05); }
 
-        th, td { padding: 18px 24px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        body.dark-mode th, body.dark-mode td { border-bottom-color: rgba(255,255,255,0.05); }
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 0.9rem;
+        }
+        body:not(.dark-mode) th, body:not(.dark-mode) td { border-bottom-color: rgba(0, 0, 0, 0.06); }
 
-        th { background-color: rgba(0,0,0,0.03); color: var(--text-secondary); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.1em; }
-        body.dark-mode th { background-color: rgba(255,255,255,0.03); }
+        th {
+            background: linear-gradient(90deg, rgba(255, 42, 133, 0.18), rgba(0, 240, 255, 0.12));
+            color: var(--text-main);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.1em;
+        }
 
         tr:last-child td { border-bottom: none; }
-        tr:hover td { background-color: rgba(0,0,0,0.02); }
-        body.dark-mode tr:hover td { background-color: rgba(255,255,255,0.02); }
+        tr:hover td { background-color: rgba(255, 42, 133, 0.08); }
 
         /* ==========================================================================
-           7. CALCULATOR (BENTO LAYOUT) & SEBASTIAN TAB
+           7. AXLE TELEMETRY CALCULATOR & KARLSRUHE GENERATOR
            ========================================================================== */
         .calc-grid {
             display: grid;
@@ -475,106 +702,281 @@
         }
 
         .axle-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
+            background: var(--panel-card);
             padding: 24px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--panel-border);
+            border-top: 3px solid var(--neon-cyan);
+            transition: transform 0.25s, box-shadow 0.25s;
         }
-        .axle-card:hover { transform: translateY(-4px); }
+        .axle-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-cyan);
+        }
 
         .truck-viz {
-            display: flex; justify-content: center; gap: 12px; margin: 32px 0; padding: 32px;
-            background: rgba(0,0,0,0.02); border-radius: var(--radius-xl); border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            margin: 28px 0;
+            padding: 28px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            position: relative;
         }
-        body.dark-mode .truck-viz { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05); }
+        body:not(.dark-mode) .truck-viz {
+            background: rgba(255, 42, 133, 0.06);
+        }
 
         .axle-dot {
-            width: 48px; height: 48px; background: var(--text-muted); border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 800; color: white;
-            transition: all 0.4s var(--spring-easing);
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 8px rgba(0,0,0,0.1);
+            width: 52px;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            transition: all 0.3s var(--spring-easing);
         }
-        .axle-dot.active-ok { background: #10b981; transform: scale(1.15); box-shadow: 0 0 20px rgba(16,185,129,0.4); }
-        .axle-dot.active-error { background: #ef4444 !important; transform: scale(1.15); box-shadow: 0 0 20px rgba(239,68,68,0.5); border: 2px solid #fff; z-index: 10; animation: pulse-red 1.5s infinite; }
+        body:not(.dark-mode) .axle-dot { background: rgba(20, 8, 36, 0.12); border-color: rgba(20, 8, 36, 0.25); }
+
+        .axle-dot.active-ok {
+            background: #00e676;
+            border-color: #ffffff;
+            color: #051b11;
+            transform: scale(1.12);
+            box-shadow: 0 0 22px rgba(0, 230, 118, 0.65);
+        }
+        .axle-dot.active-error {
+            background: #ff1744 !important;
+            border-color: #ffffff;
+            color: #ffffff;
+            transform: scale(1.15);
+            box-shadow: 0 0 26px rgba(255, 23, 68, 0.85);
+            animation: pulse-red 1.3s infinite;
+        }
 
         @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); transform: scale(1.1); }
-            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); transform: scale(1.1); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); transform: scale(1.1); }
+            0% { box-shadow: 0 0 0 0 rgba(255, 23, 68, 0.8); }
+            70% { box-shadow: 0 0 0 14px rgba(255, 23, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 23, 68, 0); }
         }
 
-        .progress-container { width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: var(--radius-pill); margin-top: 12px; overflow: hidden; }
-        body.dark-mode .progress-container { background: rgba(255,255,255,0.1); }
-        .progress-bar { height: 100%; width: 0%; border-radius: var(--radius-pill); transition: width 0.6s var(--spring-easing), background 0.3s; }
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        body:not(.dark-mode) .progress-container { background: rgba(0, 0, 0, 0.1); }
+        .progress-bar { height: 100%; width: 0%; transition: width 0.4s var(--spring-easing), background 0.3s; }
 
         .payload-box {
-            background: var(--accent-gradient); color: white; padding: 24px; border-radius: var(--radius-lg); margin-bottom: 24px;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--accent-glow); font-size: 1.2rem; font-weight: 600;
+            background: var(--gta-sunset);
+            color: #ffffff;
+            padding: 22px 26px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--glow-pink);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
         
-        .cog-container { height: 24px; background: rgba(0,0,0,0.05); border-radius: var(--radius-pill); box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); position: relative; margin-top: 10px;}
-        body.dark-mode .cog-container { background: rgba(255,255,255,0.1); }
-        #cog-marker { width: 8px; height: 36px; border-radius: 4px; top: -6px; background: var(--accent-primary); box-shadow: 0 0 16px var(--accent-primary); position: absolute; transition: left 0.4s var(--spring-easing); }
-        .cog-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-secondary); margin-top: 5px; font-weight: 600; }
+        .cog-container {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-sm);
+            position: relative;
+            margin-top: 10px;
+        }
+        body:not(.dark-mode) .cog-container { background: rgba(0, 0, 0, 0.08); }
+        #cog-marker {
+            width: 8px;
+            height: 32px;
+            border-radius: 2px;
+            top: -7px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 16px var(--neon-cyan);
+            position: absolute;
+            transition: left 0.35s var(--spring-easing);
+        }
+        .cog-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-weight: 700;
+        }
 
-        .calc-summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.15rem; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        body.dark-mode .calc-summary-row { border-bottom-color: rgba(255,255,255,0.08); }
-        .calc-summary-row:last-child { border: none; font-size: 1.4rem; padding-top: 16px; }
+        .calc-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        body:not(.dark-mode) .calc-summary-row { border-bottom-color: rgba(0, 0, 0, 0.1); }
+        .calc-summary-row:last-child { border: none; font-size: 1.3rem; padding-top: 10px; }
 
-        .ldm-optimizer { background: rgba(0,0,0,0.03); border-radius: var(--radius-lg); padding: 24px; margin-top: 24px; border: 1px solid rgba(0,0,0,0.05); }
-        body.dark-mode .ldm-optimizer { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); }
-        .ldm-track { height: 30px; background: rgba(0,0,0,0.1); border-radius: 6px; position: relative; margin: 20px 0 10px 0; }
-        .ldm-safe-zone { position: absolute; height: 100%; background: rgba(16, 185, 129, 0.3); border: 2px dashed #059669; }
-        .warning-box { background: rgba(245, 158, 11, 0.1); border-left: 6px solid #f59e0b; padding: 16px 24px; margin: 24px 0; color: #92400e; font-size: 1rem; border-radius: 0 var(--radius-md) var(--radius-md) 0; font-weight: 600; display: none; }
-        body.dark-mode .warning-box { color: #fcd34d; }
+        .ldm-optimizer {
+            background: var(--panel-card);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 24px;
+            border: 1px solid var(--panel-border);
+        }
+        .ldm-track {
+            height: 28px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: var(--radius-sm);
+            position: relative;
+            margin: 16px 0 8px 0;
+        }
+        body:not(.dark-mode) .ldm-track { background: rgba(0, 0, 0, 0.08); }
+        .ldm-safe-zone {
+            position: absolute;
+            height: 100%;
+            background: rgba(0, 230, 118, 0.25);
+            border: 2px dashed #00e676;
+        }
 
-        #tab4 #output { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; white-space: pre-wrap; cursor: pointer; border-left: 6px solid #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
-        #tab4 #output.success { border-left-color: #10b981; background-color: rgba(16, 185, 129, 0.05); }
-        #tab4 #output.error { border-left-color: #ef4444; background-color: rgba(239, 68, 68, 0.05); }
+        .warning-box {
+            background: rgba(255, 107, 0, 0.15);
+            border-left: 5px solid var(--neon-orange);
+            padding: 14px 20px;
+            margin: 20px 0;
+            color: var(--neon-gold);
+            font-size: 0.95rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-weight: 700;
+            display: none;
+        }
+        body:not(.dark-mode) .warning-box { color: #9a3412; }
+
+        #tab4 #output {
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre-wrap;
+            cursor: pointer;
+            border-left: 5px solid var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        #tab4 #output.success { border-left-color: #00e676; background-color: rgba(0, 230, 118, 0.08); }
+        #tab4 #output.error { border-left-color: #ff1744; background-color: rgba(255, 23, 68, 0.08); }
+
+        /* GTA "MISSION PASSED" Toast */
         #copyMessage {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(30px);
-            background: #10b981; color: white; padding: 16px 32px; border-radius: var(--radius-pill);
-            font-weight: 700; box-shadow: 0 16px 40px rgba(16, 185, 129, 0.4); opacity: 0; visibility: hidden;
-            transition: all 0.5s var(--spring-easing); z-index: 1000; font-size: 1.1rem;
+            position: fixed;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: #0b0518;
+            color: var(--neon-gold);
+            border: 2px solid var(--neon-pink);
+            padding: 14px 32px;
+            border-radius: var(--radius-md);
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 2px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(255, 42, 133, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s var(--spring-easing);
+            z-index: 10000;
+            font-size: 1.5rem;
         }
         #copyMessage.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
-        #aetrSummary { background: var(--text-main); color: var(--bg-base); padding: 32px; border-radius: var(--radius-xl); margin-top: 32px; font-family: 'SF Mono', 'Monaco', monospace; font-size: 1rem; line-height: 1.7; box-shadow: 0 16px 48px -12px rgba(0,0,0,0.2); }
-        body.dark-mode #aetrSummary { background: #1e293b; color: #f1f5f9; }
+        #aetrSummary {
+            background: rgba(8, 3, 18, 0.88);
+            color: #e2d1f9;
+            border: 1px solid var(--neon-cyan);
+            padding: 26px;
+            border-radius: var(--radius-md);
+            margin-top: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.92rem;
+            line-height: 1.75;
+            box-shadow: var(--glow-cyan);
+        }
 
-        #notifBlock { background: rgba(255,255,255,0.6) !important; border: 1px solid rgba(0,0,0,0.05) !important; padding: 32px; border-radius: var(--radius-xl); }
-        body.dark-mode #notifBlock { background: rgba(0,0,0,0.3) !important; border-color: rgba(255,255,255,0.1) !important; }
+        #notifBlock {
+            background: var(--panel-card) !important;
+            border: 1px solid var(--panel-border) !important;
+            padding: 24px;
+            border-radius: var(--radius-md);
+        }
 
         /* ==========================================================================
-           8. TOGGLES & MISC
+           8. THEME TOGGLE & RESPONSIVE
            ========================================================================== */
         .theme-toggle-btn {
-            background: var(--glass-bg) !important;
-            border: 1px solid var(--glass-border) !important;
+            background: rgba(0, 0, 0, 0.28) !important;
+            border: 1px solid rgba(255, 42, 133, 0.4) !important;
             color: var(--text-main);
-            font-size: 18px;
-            width: 44px !important;
-            height: 44px !important;
-            border-radius: 50% !important;
+            font-size: 16px;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: var(--radius-sm) !important;
             display: flex !important;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.4s var(--spring-easing);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-            backdrop-filter: blur(10px);
+            flex-shrink: 0;
+            transition: all 0.3s var(--spring-easing);
         }
-        .theme-toggle-btn:hover { transform: scale(1.15) rotate(15deg); box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important; }
+        body:not(.dark-mode) .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+        .theme-toggle-btn:hover {
+            transform: scale(1.1) rotate(12deg);
+            border-color: var(--neon-cyan) !important;
+            box-shadow: var(--glow-cyan);
+        }
 
-        @media (max-width: 1024px) {
-            .nav-header { flex-direction: column; gap: 16px; border-radius: var(--radius-lg); padding: 20px; }
-            .tabs { flex-wrap: wrap; width: 100%; border-radius: var(--radius-lg); }
-            .tabs li { flex: 1 1 45%; text-align: center; }
-            .container { padding: 30px; width: 95%; border-radius: var(--radius-lg); margin-top: 24px; }
+        @media (max-width: 1180px) {
+            .nav-header {
+                flex-wrap: wrap;
+                padding: 12px 16px;
+                gap: 10px;
+            }
+            .nav-brand-link {
+                order: 1;
+            }
+            .hud-right {
+                order: 2;
+                margin-left: auto;
+            }
+            .tabs {
+                order: 3;
+                flex: 1 1 100%;
+                width: 100%;
+            }
+            .tabs li {
+                flex: 1 1 auto;
+                text-align: center;
+            }
+            .container {
+                padding: 26px 20px;
+                width: 94%;
+                margin-top: 20px;
+            }
+            h1 { font-size: 2.3rem; }
         }
 </style>
 
@@ -588,6 +990,16 @@
 
         function hideMonkey() {
             document.getElementById('monkey-overlay').style.display = 'none';
+        }
+
+        function cycleWantedLevel() {
+            const stars = document.querySelectorAll('#wantedStars span');
+            let litCount = document.querySelectorAll('#wantedStars span.lit').length;
+            litCount = (litCount % 5) + 1;
+            stars.forEach((s, i) => {
+                if (i < litCount) s.classList.add('lit');
+                else s.classList.remove('lit');
+            });
         }
 
         function openTab(tabId) {
@@ -1144,7 +1556,7 @@ Obowiązkowo wymagany kwit wagowy.
                 navigator.clipboard.writeText(txt).then(showCopyMessage).catch(err=>alert('Błąd kopiowania: '+err));
             };
             window.clearAll = function() { input.value=''; output.textContent=''; output.classList.remove('success','error'); input.focus(); };
-            function showCopyMessage() { const m=document.getElementById('copyMessage'); m.classList.add('show'); setTimeout(()=>m.classList.remove('show'),2000); }
+            function showCopyMessage() { const m=document.getElementById('copyMessage'); m.classList.add('show'); setTimeout(()=>m.classList.remove('show'),2200); }
             window.saveEmail = function() { localStorage.setItem('savedEmail', emailInput.value); };
             window.sendReminderEmail = function() {
                 const mail = emailInput.value.trim();
@@ -1226,7 +1638,7 @@ Obowiązkowo wymagany kwit wagowy.
             tr.appendChild(td(String(idx+1))); tr.appendChild(td(r.startISO)); tr.appendChild(td(r.endISO));
             tr.appendChild(td(r.hours.toFixed(2))); tr.appendChild(td(r.type)); tr.appendChild(td((r.compHours||0).toFixed(2)));
             const act = document.createElement('td'); const del = document.createElement('button');
-            del.className = 'btn'; del.textContent = 'Usuń'; del.style.padding="5px 10px"; del.style.fontSize="0.8rem";
+            del.className = 'btn'; del.textContent = 'Usuń'; del.style.padding="6px 12px"; del.style.fontSize="0.75rem";
             del.onclick = ()=>aetrDelete(r.id); act.appendChild(del); tr.appendChild(act); tbody.appendChild(tr);
           });
           aetrComputeSummary(rows);
@@ -1396,15 +1808,42 @@ Obowiązkowo wymagany kwit wagowy.
         });
     </script>
 </head>
-<body>
+<body class="dark-mode">
+
+<!-- VICE CITY ATMOSPHERIC BACKDROP -->
+<div class="vice-backdrop" aria-hidden="true">
+    <div class="vice-sun"></div>
+    <svg class="vice-palms-left" viewBox="0 0 300 350">
+        <path d="M55,350 Q70,220 95,120 Q85,120 75,125 Q45,220 30,350 Z"/>
+        <path d="M95,120 C60,80 20,90 0,115 C30,105 65,105 90,125 Z"/>
+        <path d="M95,120 C75,65 35,50 10,60 C40,65 70,85 92,122 Z"/>
+        <path d="M95,120 C115,65 155,55 185,70 C155,70 120,85 98,122 Z"/>
+        <path d="M95,120 C135,90 175,105 195,130 C165,115 130,110 98,125 Z"/>
+        <path d="M95,120 C95,55 115,30 135,20 C115,45 105,80 97,120 Z"/>
+    </svg>
+    <svg class="vice-palms-right" viewBox="0 0 300 350">
+        <path d="M55,350 Q70,220 95,120 Q85,120 75,125 Q45,220 30,350 Z"/>
+        <path d="M95,120 C60,80 20,90 0,115 C30,105 65,105 90,125 Z"/>
+        <path d="M95,120 C75,65 35,50 10,60 C40,65 70,85 92,122 Z"/>
+        <path d="M95,120 C115,65 155,55 185,70 C155,70 120,85 98,122 Z"/>
+        <path d="M95,120 C135,90 175,105 195,130 C165,115 130,110 98,125 Z"/>
+    </svg>
+</div>
+<div class="vice-scanlines" aria-hidden="true"></div>
+
+<!-- GTA VI HUD NAVBAR -->
 <nav class="nav-header">
-<a href="https://www.crazygames.com/pl/game/truck-simulator-european-roads" 
-   target="_blank" 
-   style="text-decoration: none;">
-    <div class="logo-item">
-        <h2 style="margin: 0; font-size: 1.5rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ChomarIQ</h2>
-    </div>
-</a>
+    <a class="nav-brand-link" href="https://www.crazygames.com/pl/game/truck-simulator-european-roads" target="_blank">
+        <div class="logo-item">
+            <div class="gta-logo-lockup">
+                <span class="gta-logo-vi">VI</span>
+                <div class="gta-logo-text">
+                    <span class="gta-logo-main">CHOMAR<span style="color: var(--neon-pink);">IQ</span></span>
+                    <span class="gta-logo-sub">VICE DISPATCH // 26</span>
+                </div>
+            </div>
+        </div>
+    </a>
 
     <ul class="tabs">
         <li class="active" data-tab="tab1" onclick="openTab('tab1')">Awizacja ELX</li>
@@ -1416,20 +1855,30 @@ Obowiązkowo wymagany kwit wagowy.
         <li data-tab="tab8" onclick="openTab('tab8')">Kalkulator Nacisków</li>
     </ul>
 
-<div id="weather-widget" class="weather-item" onclick="showMonkey()">
-    <span id="weather-temp">...°C</span>
-    <span id="weather-icon"></span>
-</div>
+    <div class="hud-right">
+        <div id="wantedStars" class="wanted-stars" onclick="cycleWantedLevel()" title="Wanted Level">
+            <span class="lit">★</span>
+            <span class="lit">★</span>
+            <span class="lit">★</span>
+            <span>★</span>
+            <span>★</span>
+        </div>
 
-    <div style="display: flex; align-items: center; margin-left: 8px;">
-        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()" title="Przełącz motyw">
-            🌙
+        <div id="weather-widget" class="weather-item" onclick="showMonkey()">
+            <span class="weather-live-dot"></span>
+            <span id="weather-temp">...°C</span>
+            <span id="weather-icon"></span>
+        </div>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()" title="Przełącz motyw (Vice Night / Leonida Day)">
+            ☀️
         </button>
     </div>
 </nav>
 
     <div class="container tab-content active" id="tab1">
         <h1>Generowanie awizacji dla Electrolux</h1>
+        <div class="author">PROTOCOL // ELECTROLUX DISPATCH TERMINAL</div>
         
         <div class="form-group">
             <label for="tourNo">Tour no.:</label>
@@ -1452,45 +1901,59 @@ Obowiązkowo wymagany kwit wagowy.
             </select>
         </div>
         
-        <div class="form-group">
-          <label for="actualArrivalDate">Actual arrival — Date:</label>
-          <input type="date" id="actualArrivalDate" />
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+            <div class="form-group">
+              <label for="actualArrivalDate">Actual arrival — Date:</label>
+              <input type="date" id="actualArrivalDate" />
+            </div>
+            
+            <div class="form-group">
+              <label for="actualArrivalTime">Actual arrival — Time:</label>
+              <input type="time" id="actualArrivalTime" />
+            </div>
         </div>
         
-        <div class="form-group">
-          <label for="actualArrivalTime">Actual arrival — Time:</label>
-          <input type="time" id="actualArrivalTime" />
-        </div>
-        
-        <p class="white-text" style="font-size:0.9rem; margin-top:-10px; margin-bottom:20px;">
+        <p class="white-text" style="font-size:0.85rem; margin-top:-8px; margin-bottom:20px;">
            Tutaj wpisujemy aktualne ETA na miejsce załadunku.
         </p>
 
-        <div class="form-group">
-          <label for="driverName">Driver's name:</label>
-          <select id="driverName"></select>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
+            <div class="form-group">
+              <label for="driverName">Driver's name:</label>
+              <select id="driverName"></select>
+            </div>
+            
+            <div class="form-group">
+                <label for="passport">Driver's ID:</label>
+                <input type="text" id="passport" readonly placeholder="Wybierz kierowcę..." />
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label for="passport">Driver's ID:</label>
-            <input type="text" id="passport" readonly placeholder="Wybierz kierowcę..." />
-        </div>
-        <p class="white-text" style="font-size:0.9rem; margin-top:-10px; margin-bottom:20px;">
+        <p class="white-text" style="font-size:0.85rem; margin-top:-8px; margin-bottom:20px;">
            W przypadku błędu w danych paszportowych bardzo proszę o niezwłoczną informację!
         </p>
         
-        <div class="form-group">
-            <label for="truckPlate">Truck plate no.:</label>
-            <input type="text" id="truckPlate" />
-        </div>
-        
-        <div class="form-group">
-            <label for="trailerType">Trailer type:</label>
-            <select id="trailerType">
-                <option value="A11 - Mega">A11 - Mega</option>
-                <option value="A15 - Tandem">A15 - Tandem</option>
-                <option value="B11 - Mega BDE">B11 - Mega BDE</option>
-            </select>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+            <div class="form-group">
+                <label for="truckPlate">Truck plate no.:</label>
+                <input type="text" id="truckPlate" placeholder="np. DW 12345" />
+            </div>
+            
+            <div class="form-group">
+                <label for="trailerType">Trailer type:</label>
+                <select id="trailerType">
+                    <option value="A11 - Mega">A11 - Mega</option>
+                    <option value="A15 - Tandem">A15 - Tandem</option>
+                    <option value="B11 - Mega BDE">B11 - Mega BDE</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+              <label for="przewoznik">Carrier:</label>
+              <select id="przewoznik">
+                <option value="Chomar">Chomar</option>
+                <option value="Henze">Henze</option>
+              </select>
+            </div>
         </div>
         
         <div class="form-group">
@@ -1511,14 +1974,6 @@ Obowiązkowo wymagany kwit wagowy.
                 </option>
             </select>
         </div>
-        
-        <div class="form-group">
-          <label for="przewoznik">Carrier:</label>
-          <select id="przewoznik">
-            <option value="Chomar">Chomar</option>
-            <option value="Henze">Henze</option>
-          </select>
-        </div>
 
         <div class="form-group" id="routeGroup">
           <label>Route (opcjonalnie):</label>
@@ -1529,7 +1984,7 @@ Obowiązkowo wymagany kwit wagowy.
           <select id="routeCountry5" class="countrySel"><option value="">—</option><option>PL</option><option>DE</option><option>AT</option><option>CZ</option><option>IT</option><option>SK</option><option>FR</option><option>DK</option><option>HU</option><option>SI</option><option>CH</option></select>
         </div>
 
-        <div style="margin-top:20px;">
+        <div style="margin-top:24px;">
             <button class="btn" onclick="generujAwizacje()">Generuj awizację</button>
             <button class="btn" onclick="kopiujAwizacje()">Kopiuj awizację</button>
             <button class="btn" onclick="sendEmail()">Wyślij e-mail</button>
@@ -1540,7 +1995,7 @@ Obowiązkowo wymagany kwit wagowy.
 
     <div class="container tab-content" id="tab2">
         <h1>Generacja zlecenia (Neutralizacja)</h1>
-        <div class="author">Strona generuje gotowe zadanie dla kierowcy, gdy w zleceniu jest neutralizacja</div>
+        <div class="author">COVERT CARGO PROTOCOL // NEUTRAL LOADING & UNLOADING</div>
         
         <div class="form-group">
             <label for="langSelect">Język:</label>
@@ -1549,29 +2004,35 @@ Obowiązkowo wymagany kwit wagowy.
                 <option value="PL" selected>Polski</option>
             </select>
         </div>
-        <div class="form-group">
-            <label for="adresZaladunku">Adres załadunku:</label>
-            <input type="text" id="adresZaladunku" />
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+            <div class="form-group">
+                <label for="adresZaladunku">Adres załadunku:</label>
+                <input type="text" id="adresZaladunku" />
+            </div>
+            <div class="form-group">
+                <label for="dataZaladunku">Data załadunku:</label>
+                <input type="datetime-local" id="dataZaladunku" />
+            </div>
         </div>
-        <div class="form-group">
-            <label for="dataZaladunku">Data załadunku:</label>
-            <input type="datetime-local" id="dataZaladunku" />
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+            <div class="form-group">
+                <label for="referencja">Referencja:</label>
+                <input type="text" id="referencja" />
+            </div>
+            <div class="form-group">
+                <label for="wagaAdres">Waga (adres):</label>
+                <input type="text" id="wagaAdres" />
+            </div>
         </div>
-        <div class="form-group">
-            <label for="referencja">Referencja:</label>
-            <input type="text" id="referencja" />
-        </div>
-        <div class="form-group">
-            <label for="wagaAdres">Waga (adres):</label>
-            <input type="text" id="wagaAdres" />
-        </div>
-        <div class="form-group">
-            <label for="adresRozladunku">Adres rozładunku:</label>
-            <input type="text" id="adresRozladunku" />
-        </div>
-        <div class="form-group">
-            <label for="dataRozladunku">Data rozładunku:</label>
-            <input type="datetime-local" id="dataRozladunku" />
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+            <div class="form-group">
+                <label for="adresRozladunku">Adres rozładunku:</label>
+                <input type="text" id="adresRozladunku" />
+            </div>
+            <div class="form-group">
+                <label for="dataRozladunku">Data rozładunku:</label>
+                <input type="datetime-local" id="dataRozladunku" />
+            </div>
         </div>
         <div class="form-group">
             <label for="adresNeutralizacji">Adres neutralizacji:</label>
@@ -1589,7 +2050,7 @@ Obowiązkowo wymagany kwit wagowy.
     </div>
 
     <div class="container tab-content" id="tab4">
-        <div class="author">© 2026 Sebastian Szymański</div>
+        <div class="author">© 2026 SEBASTIAN SZYMAŃSKI // TRAILER SWAP TERMINAL</div>
         <h1>Generator Karlsruhe</h1>
         
         <div class="form-group">
@@ -1601,7 +2062,7 @@ Obowiązkowo wymagany kwit wagowy.
         
         <div style="margin-top:20px;">
             <button class="btn" onclick="copyToClipboard()">Kopiuj (Ctrl+Enter)</button>
-            <button class="btn" onclick="clearAll()">Wyczyść</button>
+            <button class="btn" style="background: linear-gradient(135deg, #334155, #1e293b);" onclick="clearAll()">Wyczyść</button>
         </div>
 
         <h3 style="margin-top:40px;">Twój e-mail (do przypomnień):</h3>
@@ -1610,30 +2071,33 @@ Obowiązkowo wymagany kwit wagowy.
         </div>
         <button class="btn" onclick="sendReminderEmail()">Wyślij przypomnienie</button>
         
-        <div id="copyMessage">Skopiowano ✅</div>
+        <div id="copyMessage">MISSION PASSED // SKOPIOWANO ✅</div>
     </div>
 
     <div class="container tab-content" id="tab5">
         <h1>Portiernia</h1>
+        <div class="author">CHOMAR YARD GATE // FLEET DISPATCH</div>
         
         <div class="form-group">
             <label for="kierowca">Kierowca:</label>
             <select id="kierowca"></select>
         </div>
 
-        <div class="form-group">
-            <label for="ciagnik">Ciągnik:</label>
-            <input type="text" id="ciagnik" placeholder="np. DSR39922 (opcjonalnie)">
-        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+            <div class="form-group">
+                <label for="ciagnik">Ciągnik:</label>
+                <input type="text" id="ciagnik" placeholder="np. DSR39922 (opcjonalnie)">
+            </div>
 
-        <div class="form-group">
-            <label for="naczepa">Naczepa:</label>
-            <input type="text" id="naczepa" placeholder="np. DPL7T34 (opcjonalnie)">
-        </div>
+            <div class="form-group">
+                <label for="naczepa">Naczepa:</label>
+                <input type="text" id="naczepa" placeholder="np. DPL7T34 (opcjonalnie)">
+            </div>
 
-        <div class="form-group">
-            <label for="kiedy">Kiedy?</label>
-            <input type="text" id="kiedy" placeholder="np. 12.08 lub jutro">
+            <div class="form-group">
+                <label for="kiedy">Kiedy?</label>
+                <input type="text" id="kiedy" placeholder="np. 12.08 lub jutro">
+            </div>
         </div>
 
         <button class="btn" onclick="sendEquipmentEmail()">Generuj mail</button>
@@ -1641,9 +2105,9 @@ Obowiązkowo wymagany kwit wagowy.
 
     <div class="container tab-content" id="tab6">
         <h1>Pauzy & Kompensacje</h1>
-        <div class="author">Kalkulacje AETR i rekompensaty skróconych odpoczynków tygodniowych</div>
+        <div class="author">AETR TACHOGRAPH COMPLIANCE & WEEKLY REST TRACKER</div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
             <div class="form-group">
                 <label>Start pauzy — Data:</label>
                 <input type="date" id="restStartDate">
@@ -1669,7 +2133,7 @@ Obowiązkowo wymagany kwit wagowy.
 
         <div style="margin-top:20px;">
             <button class="btn" onclick="aetrAddPause()">Zapisz pauzę</button>
-            <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="aetrClearAll()">Wyczyść wszystko</button>
+            <button class="btn" style="background: linear-gradient(135deg, #dc2626, #7f1d1d);" onclick="aetrClearAll()">Wyczyść wszystko</button>
         </div>
 
         <h2>Twoje pauzy</h2>
@@ -1721,20 +2185,21 @@ Obowiązkowo wymagany kwit wagowy.
 
     <div class="container tab-content" id="tab8">
         <h1>Kalkulator Nacisków na Osie (UE i CH)</h1>
+        <div class="author">HEAVY HAULER TELEMETRY // AXLE LOAD & COG DIAGNOSTICS</div>
         
-        <div class="country-selector" style="display:flex; gap:24px; margin-bottom:32px;">
-            <div class="form-group" style="flex:1;">
+        <div class="country-selector" style="display:flex; flex-wrap:wrap; gap:20px; margin-bottom:28px;">
+            <div class="form-group" style="flex:1; min-width: 240px;">
                 <label>Kraj (Limity):</label>
-                <select id="country-select" onchange="calculateAxles()" style="width:100%; padding:14px; border-radius:12px;">
+                <select id="country-select" onchange="calculateAxles()">
                     <option value="EU">UE Standard (40t)</option>
                     <option value="CH">Szwajcaria (40t - Strict)</option>
                     <option value="PL_INT">Polska (Intermodal - 44t)</option>
                     <option value="DE">Niemcy (40t)</option>
                 </select>
             </div>
-            <div class="form-group" style="flex:1;">
+            <div class="form-group" style="flex:1; min-width: 240px;">
                 <label>Typ naczepy:</label>
-                <select id="trailer-type" onchange="calculateAxles()" style="width:100%; padding:14px; border-radius:12px;">
+                <select id="trailer-type" onchange="calculateAxles()">
                     <option value="standard">MEGA (13.6m)</option>
                 </select>
             </div>
@@ -1743,7 +2208,7 @@ Obowiązkowo wymagany kwit wagowy.
         <div class="truck-viz">
             <div id="dot-tr1" class="axle-dot">T1</div>
             <div id="dot-tr2" class="axle-dot">T2</div>
-            <div style="width: 40px;"></div>
+            <div style="width: 36px; height: 2px; background: var(--neon-pink); opacity: 0.5;"></div>
             <div id="dot-trl1" class="axle-dot">N1</div>
             <div id="dot-trl2" class="axle-dot">N2</div>
             <div id="dot-trl3" class="axle-dot">N3</div>
@@ -1764,12 +2229,12 @@ Obowiązkowo wymagany kwit wagowy.
         
         <div class="payload-box" style="margin-top:24px;">
             <div>
-                <label style="color:rgba(255,255,255,0.8); margin:0; display:block; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Tara (kg):</label>
-                <input type="number" id="tara" value="14500" oninput="calculateAxles()" style="width:140px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:white; border-radius:12px; box-shadow:none;">
+                <label style="color:rgba(255,255,255,0.9); margin:0; display:block; font-size:0.8rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Tara (kg):</label>
+                <input type="number" id="tara" value="14500" oninput="calculateAxles()" style="width:150px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.5); color:white; border-radius:8px; font-family:'JetBrains Mono', monospace;">
             </div>
             <div style="text-align:right;">
-                <span style="font-size:0.9rem; color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:4px;">Ładunek (Netto)</span>
-                <b id="payload-val" style="font-size: 2rem;">0 kg</b>
+                <span style="font-size:0.8rem; color:rgba(255,255,255,0.9); font-weight:800; text-transform:uppercase; letter-spacing:1.5px; display:block; margin-bottom:4px;">Ładunek (Netto)</span>
+                <b id="payload-val" style="font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; letter-spacing: 1.5px;">0 kg</b>
             </div>
         </div>
         
@@ -1799,41 +2264,41 @@ Obowiązkowo wymagany kwit wagowy.
         </div>
         
         <div class="ldm-optimizer">
-            <label><b>Optymalny środek ciężkości (LDM):</b></label>
+            <label style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--neon-cyan);"><b>Optymalny środek ciężkości (LDM):</b></label>
             <div class="ldm-track">
                 <div id="safe-zone" class="ldm-safe-zone" style="left: 30%; width: 25%;"></div>
             </div>
             <small style="color:var(--text-muted)">Zielona strefa pokazuje, gdzie umieścić środek ciężkości ładunku.</small>
         </div>
         
-        <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(0,0,0,0.1);">
+        <div style="margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--panel-border);">
             <div class="calc-summary-row">
                 <span><b>SUMA WÓZKA NACZEPY:</b></span>
                 <div class="calc-summary-val" style="text-align: right;">
-                    <div id="trl-total-val" style="font-weight: 800; font-size: 1.4rem;">0 kg</div>
-                    <div id="trl-total-status" style="font-size:0.9rem; color:#64748b; font-weight:600; text-transform:uppercase; margin-top:4px;">Brak danych</div>
+                    <div id="trl-total-val" style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.35rem;">0 kg</div>
+                    <div id="trl-total-status" style="font-size:0.85rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; margin-top:4px;">Brak danych</div>
                 </div>
             </div>
             <div class="calc-summary-row">
                 <span><b>MASA CAŁKOWITA:</b></span>
                 <div class="calc-summary-val" style="text-align: right;">
-                    <div id="total-val" style="font-weight: 800; font-size: 1.8rem; color: var(--accent-primary);">0 kg</div>
-                    <div id="total-status" style="font-size:0.9rem; color:#64748b; font-weight:600; text-transform:uppercase; margin-top:4px;">Brak danych</div>
+                    <div id="total-val" style="font-family: 'Bebas Neue', sans-serif; font-size: 2.3rem; letter-spacing: 1px; color: var(--neon-cyan);">0 kg</div>
+                    <div id="total-status" style="font-size:0.85rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; margin-top:4px;">Brak danych</div>
                 </div>
             </div>
             <div id="fine-box" class="warning-box" style="margin-top:16px;"></div>
         </div>
         
-        <button class="btn" style="width:100%; margin-top: 32px;" onclick="generateReport()">Kopiuj Raport dla Kierowcy (WhatsApp)</button>
+        <button class="btn" style="width:100%; margin-top: 24px;" onclick="generateReport()">Kopiuj Raport dla Kierowcy (WhatsApp)</button>
     </div>
 
-<div id="monkey-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; cursor: pointer;" onclick="hideMonkey()">
-    <img src="1.gif" alt="1.gif" style="max-width: 80%; max-height: 80%; border-radius: 15px;">
+<div id="monkey-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(9,4,20,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: pointer;" onclick="hideMonkey()">
+    <img src="1.gif" alt="1.gif" style="max-width: 80%; max-height: 80%; border-radius: 12px; border: 2px solid var(--neon-pink); box-shadow: 0 0 40px var(--neon-pink);">
 </div>
 
-<footer style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 40px; padding-bottom: 30px;">
-    Author: Leonid Podmakov<br>
-    Ostatnia aktualizacja danych - 02.11.2026
+<footer style="text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); margin-top: 32px; padding-bottom: 36px; position: relative; z-index: 1;">
+    AUTHOR: LEONID PODMAKOV // CHOMARIQ VICE EDITION<br>
+    OSTATNIA AKTUALIZACJA DANYCH — 02.11.2026
 </footer>
 
 <script>
@@ -1860,7 +2325,7 @@ Obowiązkowo wymagany kwit wagowy.
                 let prog = document.getElementById('prog-' + id);
                 if(prog) {
                     prog.style.width = Math.min((currentVal/limit)*100, 100) + '%';
-                    prog.style.background = currentVal > limit ? '#ef4444' : '#10b981';
+                    prog.style.background = currentVal > limit ? '#ff1744' : '#00e676';
                 }
                 let dot = document.getElementById('dot-' + id);
                 if(dot) {
@@ -1885,12 +2350,12 @@ Obowiązkowo wymagany kwit wagowy.
             document.getElementById('trl-total-val').innerText = trlSum + " kg";
             const trlStatus = document.getElementById('trl-total-status');
             trlStatus.innerText = trlSum > L.trl_sum ? "❌ PRZEKROCZENIE" : "✅ OK";
-            trlStatus.style.color = trlSum > L.trl_sum ? "#ef4444" : "#10b981";
+            trlStatus.style.color = trlSum > L.trl_sum ? "#ff1744" : "#00e676";
             
             document.getElementById('total-val').innerText = total + " kg";
             const totStatus = document.getElementById('total-status');
             totStatus.innerText = total > L.total ? "❌ PRZEKROCZENIE" : "✅ OK";
-            totStatus.style.color = total > L.total ? "#ef4444" : "#10b981";
+            totStatus.style.color = total > L.total ? "#ff1744" : "#00e676";
             
             document.getElementById('payload-val').innerText = Math.max(0, total - tara) + " kg";
             
@@ -1899,7 +2364,7 @@ Obowiązkowo wymagany kwit wagowy.
                 let cogPosition = (trlSum / total) * 100;
                 cogPosition = Math.max(15, Math.min(85, cogPosition));
                 cogMarker.style.left = cogPosition + "%";
-                cogMarker.style.background = (cogPosition > 70 || cogPosition < 30) ? "#f59e0b" : "var(--accent-primary)";
+                cogMarker.style.background = (cogPosition > 70 || cogPosition < 30) ? "#ff6b00" : "var(--neon-cyan)";
                 if(document.getElementById('cog-percent')) {
                     document.getElementById('cog-percent').innerText = "Rozkład: " + Math.round(cogPosition) + "%";
                 }
@@ -1965,12 +2430,12 @@ Obowiązkowo wymagany kwit wagowy.
             
             const savedTheme = localStorage.getItem('chomar_theme');
             const btn = document.getElementById('themeToggleBtn');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                if (btn) btn.innerHTML = '☀️';
-            } else {
+            if (savedTheme === 'light') {
                 document.body.classList.remove('dark-mode');
                 if (btn) btn.innerHTML = '🌙';
+            } else {
+                document.body.classList.add('dark-mode');
+                if (btn) btn.innerHTML = '☀️';
             }
         });
 
