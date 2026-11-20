@@ -14,8 +14,8 @@
            ========================================================================== */
         :root {
             /* Default Winter Frost Palette (Light) */
-            --sky-top: #cfe0f0;
-            --sky-mid: #e3ebf2;
+            --sky-top: #b8d2ea;
+            --sky-mid: #dbe8f4;
             --sky-bottom: #f1f5f9;
 
             --glass-bg: rgba(250, 252, 255, 0.78);
@@ -50,47 +50,47 @@
             --page-max: 1220px;
         }
 
-        /* Weather-specific Sky Gradients (Light Mode) */
+        /* Weather-specific Atmospheric Sky Gradients (Light Mode) */
         body[data-weather="clear"] {
-            --sky-top: #7dd3fc;
+            --sky-top: #38bdf8;
             --sky-mid: #bae6fd;
             --sky-bottom: #fef3c7;
         }
         body[data-weather="cloudy"] {
-            --sky-top: #94a3b8;
-            --sky-mid: #cbd5e1;
+            --sky-top: #7c90a6;
+            --sky-mid: #b8c7d6;
             --sky-bottom: #e2e8f0;
         }
         body[data-weather="fog"] {
-            --sky-top: #b8c4d0;
-            --sky-mid: #d3dce4;
-            --sky-bottom: #e5ebf0;
+            --sky-top: #a7b6c4;
+            --sky-mid: #cbd5df;
+            --sky-bottom: #e6ecf0;
         }
         body[data-weather="rain"] {
-            --sky-top: #64748b;
-            --sky-mid: #94a3b8;
-            --sky-bottom: #cbd5e1;
+            --sky-top: #4b5d73;
+            --sky-mid: #7c8fa3;
+            --sky-bottom: #b9c6d4;
         }
         body[data-weather="downpour"] {
-            --sky-top: #334155;
-            --sky-mid: #475569;
-            --sky-bottom: #64748b;
+            --sky-top: #1e293b;
+            --sky-mid: #334155;
+            --sky-bottom: #52637a;
         }
         body[data-weather="snow"] {
-            --sky-top: #bfd5ea;
-            --sky-mid: #dce8f4;
+            --sky-top: #b3cce4;
+            --sky-mid: #d7e5f2;
             --sky-bottom: #f1f5f9;
         }
         body[data-weather="blizzard"] {
-            --sky-top: #9fb6cc;
-            --sky-mid: #c6d6e6;
-            --sky-bottom: #e2eaf2;
+            --sky-top: #8da6bf;
+            --sky-mid: #bccde0;
+            --sky-bottom: #dfe8f2;
         }
 
         /* Dark Mode Base & Weather Skies */
         body.dark-mode {
-            --sky-top: #050a14;
-            --sky-mid: #0b1526;
+            --sky-top: #040914;
+            --sky-mid: #0a1426;
             --sky-bottom: #132238;
 
             --glass-bg: rgba(13, 21, 34, 0.74);
@@ -114,35 +114,35 @@
         }
 
         body.dark-mode[data-weather="clear"] {
-            --sky-top: #030712;
-            --sky-mid: #0c192c;
-            --sky-bottom: #172a45;
+            --sky-top: #02050d;
+            --sky-mid: #091529;
+            --sky-bottom: #142847;
         }
         body.dark-mode[data-weather="cloudy"] {
-            --sky-top: #0b111a;
-            --sky-mid: #16202e;
-            --sky-bottom: #1e293b;
+            --sky-top: #080e17;
+            --sky-mid: #131e2e;
+            --sky-bottom: #1e2d42;
         }
         body.dark-mode[data-weather="fog"] {
-            --sky-top: #111822;
-            --sky-mid: #1c2633;
-            --sky-bottom: #273342;
+            --sky-top: #0e1621;
+            --sky-mid: #1a2533;
+            --sky-bottom: #263445;
         }
         body.dark-mode[data-weather="rain"] {
-            --sky-top: #060b13;
-            --sky-mid: #0f1926;
-            --sky-bottom: #182638;
+            --sky-top: #050a12;
+            --sky-mid: #0d1726;
+            --sky-bottom: #16253b;
         }
         body.dark-mode[data-weather="downpour"] {
-            --sky-top: #02050a;
-            --sky-mid: #090f1a;
-            --sky-bottom: #111a29;
+            --sky-top: #020408;
+            --sky-mid: #070d17;
+            --sky-bottom: #0f1929;
         }
         body.dark-mode[data-weather="snow"],
         body.dark-mode[data-weather="blizzard"] {
-            --sky-top: #070e1a;
-            --sky-mid: #101e33;
-            --sky-bottom: #1a2d47;
+            --sky-top: #060d1a;
+            --sky-mid: #0f1d33;
+            --sky-bottom: #192d4a;
         }
 
         /* --------------------------------------------------------------------------
@@ -163,12 +163,12 @@
             padding: 0;
             min-height: 100vh;
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-bottom) 100%);
+            background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 56%, var(--sky-bottom) 100%);
             background-attachment: fixed;
             color: var(--text-main);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            transition: background 1.2s ease, color 0.5s var(--fluid-easing);
+            transition: background 1.4s ease, color 0.5s var(--fluid-easing);
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -1275,6 +1275,7 @@ Obowiązkowo wymagany kwit wagowy.
             let subjParts = [driver];
             if (ciagnik) subjParts.push(ciagnik);
             if (naczepa) subjParts.push(naczepa);
+if (kiedy) subjParts.push(kiedy);
             const subject = encodeURIComponent(subjParts.join(' '));
 
             let parts = [];
@@ -1986,8 +1987,10 @@ Obowiązkowo wymagany kwit wagowy.
 
 <script>
         /* ==========================================================================
-           PROCEDURAL LIVE WEATHER CANVAS ENGINE
-           (Clear/Sun, Stars, Clouds, Fog, Rain, Downpour+Lightning, Snow, Blizzard)
+           VOLUMETRIC MULTI-LAYER LIVE WEATHER ENGINE
+           (3D Parallax, Sculpted Lit Clouds, God Rays, Lens Flare, Starfield & Meteors,
+            Volumetric Fog Banks, 3-Depth Rain + Splashes, Forked Lightning + Sheet Glow,
+            3-Depth Bokeh Snowflakes, Turbulent Blizzard Drifts)
            ========================================================================== */
         let currentScene = 'snow';
         let detectedApiScene = 'snow';
@@ -2026,275 +2029,803 @@ Obowiązkowo wymagany kwit wagowy.
             const canvas = document.getElementById('weather-canvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let W = canvas.width = window.innerWidth;
-            let H = canvas.height = window.innerHeight;
 
-            window.addEventListener('resize', () => {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-                rebuildParticles(currentScene);
-            });
+            let dpr = Math.min(window.devicePixelRatio || 1, 2);
+            let W = window.innerWidth;
+            let H = window.innerHeight;
+
+            function resizeCanvas() {
+                dpr = Math.min(window.devicePixelRatio || 1, 2);
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = Math.floor(W * dpr);
+                canvas.height = Math.floor(H * dpr);
+                canvas.style.width = W + 'px';
+                canvas.style.height = H + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            resizeCanvas();
+
+            // Smooth mouse parallax tracking
+            let targetMouseX = 0, targetMouseY = 0;
+            let mouseX = 0, mouseY = 0;
+            window.addEventListener('mousemove', (e) => {
+                targetMouseX = (e.clientX / Math.max(1, W) - 0.5) * 2;
+                targetMouseY = (e.clientY / Math.max(1, H) - 0.5) * 2;
+            }, { passive: true });
+
+            // Pre-rendered offscreen volumetric sprites for 60fps smoothness
+            let cloudSprites = [];
+            let snowSprites = [];
+            let lastSpriteSignature = '';
+
+            function buildSnowSprites(isDark) {
+                const sizes = [16, 32, 64]; // Far, Mid, Foreground Bokeh
+                snowSprites = sizes.map((size, idx) => {
+                    const c = document.createElement('canvas');
+                    c.width = size;
+                    c.height = size;
+                    const g = c.getContext('2d');
+                    const cx = size / 2, cy = size / 2, r = size * 0.46;
+
+                    const grad = g.createRadialGradient(cx - r * 0.15, cy - r * 0.15, r * 0.05, cx, cy, r);
+                    if (idx === 2) {
+                        // Foreground out-of-focus volumetric bokeh disc
+                        grad.addColorStop(0, isDark ? 'rgba(224, 242, 254, 0.32)' : 'rgba(255, 255, 255, 0.48)');
+                        grad.addColorStop(0.65, isDark ? 'rgba(186, 230, 253, 0.18)' : 'rgba(255, 255, 255, 0.28)');
+                        grad.addColorStop(0.88, isDark ? 'rgba(224, 242, 254, 0.24)' : 'rgba(255, 255, 255, 0.36)');
+                        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    } else {
+                        // Crisp bright core + soft atmospheric scatter halo
+                        grad.addColorStop(0, isDark ? 'rgba(248, 250, 252, 0.98)' : 'rgba(255, 255, 255, 1)');
+                        grad.addColorStop(0.35, isDark ? 'rgba(224, 242, 254, 0.72)' : 'rgba(255, 255, 255, 0.85)');
+                        grad.addColorStop(0.7, isDark ? 'rgba(186, 230, 253, 0.22)' : 'rgba(255, 255, 255, 0.32)');
+                        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    }
+                    g.fillStyle = grad;
+                    g.beginPath();
+                    g.arc(cx, cy, r, 0, Math.PI * 2);
+                    g.fill();
+                    return c;
+                });
+            }
+
+            function buildCloudSprites(scene, isDark) {
+                const sig = `${scene}_${isDark}`;
+                if (sig === lastSpriteSignature && cloudSprites.length > 0) return;
+                lastSpriteSignature = sig;
+                buildSnowSprites(isDark);
+
+                // Palette for sculpted top-lit & bottom-shadowed volumetric puffs
+                let topCol, midCol, shadowCol;
+                if (scene === 'downpour') {
+                    topCol = isDark ? [51, 65, 85] : [100, 116, 139];
+                    midCol = isDark ? [30, 41, 59] : [71, 85, 105];
+                    shadowCol = isDark ? [15, 23, 42] : [45, 55, 72];
+                } else if (scene === 'rain') {
+                    topCol = isDark ? [71, 85, 105] : [186, 198, 212];
+                    midCol = isDark ? [45, 58, 77] : [140, 156, 173];
+                    shadowCol = isDark ? [24, 34, 48] : [96, 112, 130];
+                } else if (scene === 'clear') {
+                    topCol = isDark ? [148, 163, 184] : [255, 253, 245];
+                    midCol = isDark ? [71, 85, 105] : [241, 245, 249];
+                    shadowCol = isDark ? [30, 41, 59] : [203, 213, 225];
+                } else {
+                    // cloudy / snow / fog
+                    topCol = isDark ? [120, 138, 163] : [255, 255, 255];
+                    midCol = isDark ? [68, 84, 107] : [232, 239, 247];
+                    shadowCol = isDark ? [30, 42, 61] : [182, 196, 212];
+                }
+
+                const rgba = (rgb, a) => `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a})`;
+
+                cloudSprites = Array.from({ length: 5 }, (_, variant) => {
+                    const cw = 560, ch = 260;
+                    const c = document.createElement('canvas');
+                    c.width = cw;
+                    c.height = ch;
+                    const g = c.getContext('2d');
+
+                    // Deterministic puff layout per variant for rich cumulus sculpting
+                    const puffs = [];
+                    const puffCount = 15 + variant * 2;
+                    for (let i = 0; i < puffCount; i++) {
+                        const t = i / (puffCount - 1);
+                        const angle = (t - 0.5) * Math.PI * 0.92;
+                        const px = cw * 0.5 + Math.sin(angle) * (cw * 0.31) + Math.sin(i * 2.7 + variant) * 24;
+                        const dome = Math.cos(angle * 0.95);
+                        const py = ch * 0.62 - dome * (ch * 0.24) + Math.cos(i * 1.9 + variant) * 14;
+                        const pr = (48 + dome * 46) * (0.82 + ((i * 37 + variant * 13) % 10) * 0.032);
+                        puffs.push({ px, py, pr, dome });
+                    }
+
+                    // 1. Flat-ish shadowed cloud base / belly
+                    puffs.sort((a, b) => a.py - b.py);
+                    for (const p of puffs) {
+                        const baseGrad = g.createRadialGradient(p.px, p.py + p.pr * 0.22, p.pr * 0.1, p.px, p.py + p.pr * 0.18, p.pr * 1.15);
+                        baseGrad.addColorStop(0, rgba(shadowCol, 0.42));
+                        baseGrad.addColorStop(0.65, rgba(shadowCol, 0.18));
+                        baseGrad.addColorStop(1, rgba(shadowCol, 0));
+                        g.fillStyle = baseGrad;
+                        g.beginPath();
+                        g.arc(p.px, p.py + p.pr * 0.18, p.pr * 1.15, 0, Math.PI * 2);
+                        g.fill();
+                    }
+
+                    // 2. Main volumetric body puffs
+                    for (const p of puffs) {
+                        const bodyGrad = g.createRadialGradient(p.px - p.pr * 0.12, p.py - p.pr * 0.2, p.pr * 0.08, p.px, p.py, p.pr);
+                        bodyGrad.addColorStop(0, rgba(midCol, 0.62));
+                        bodyGrad.addColorStop(0.6, rgba(midCol, 0.28));
+                        bodyGrad.addColorStop(1, rgba(midCol, 0));
+                        g.fillStyle = bodyGrad;
+                        g.beginPath();
+                        g.arc(p.px, p.py, p.pr, 0, Math.PI * 2);
+                        g.fill();
+                    }
+
+                    // 3. Sunlit / Moonlit upper rim highlights for 3D volume
+                    for (const p of puffs) {
+                        if (p.dome < 0.25) continue;
+                        const rimGrad = g.createRadialGradient(p.px - p.pr * 0.18, p.py - p.pr * 0.34, p.pr * 0.04, p.px - p.pr * 0.1, p.py - p.pr * 0.22, p.pr * 0.85);
+                        rimGrad.addColorStop(0, rgba(topCol, 0.68));
+                        rimGrad.addColorStop(0.55, rgba(topCol, 0.24));
+                        rimGrad.addColorStop(1, rgba(topCol, 0));
+                        g.fillStyle = rimGrad;
+                        g.beginPath();
+                        g.arc(p.px - p.pr * 0.1, p.py - p.pr * 0.22, p.pr * 0.85, 0, Math.PI * 2);
+                        g.fill();
+                    }
+
+                    return c;
+                });
+            }
 
             let particles = [];
             let clouds = [];
             let stars = [];
+            let meteors = [];
             let splashes = [];
+            let snowDrifts = [];
             let lightningAlpha = 0;
-            let lightningBolt = null;
-            let sunAngle = 0;
-            let fogPhase = 0;
+            let lightningBolts = [];
+            let sheetLightning = null;
+            let time = 0;
 
-            function createClouds(count, opacityBase) {
-                return Array.from({ length: count }, (_, i) => ({
-                    x: Math.random() * W * 1.4 - W * 0.2,
-                    y: (H * 0.06) + (i % 3) * (H * 0.14) + Math.random() * 40,
-                    radiusX: 160 + Math.random() * 220,
-                    radiusY: 45 + Math.random() * 55,
-                    speed: 0.12 + Math.random() * 0.22,
-                    alpha: opacityBase + Math.random() * 0.12
-                }));
+            function createVolumetricClouds(count, layerConfigs) {
+                const list = [];
+                for (let i = 0; i < count; i++) {
+                    const layer = layerConfigs[i % layerConfigs.length];
+                    list.push({
+                        x: Math.random() * (W + 700) - 350,
+                        y: H * layer.yMin + Math.random() * (H * (layer.yMax - layer.yMin)),
+                        scale: layer.scaleMin + Math.random() * (layer.scaleMax - layer.scaleMin),
+                        speed: (layer.speedMin + Math.random() * (layer.speedMax - layer.speedMin)),
+                        alpha: layer.alphaMin + Math.random() * (layer.alphaMax - layer.alphaMin),
+                        depth: layer.depth,
+                        spriteIdx: i % 5,
+                        bobPhase: Math.random() * Math.PI * 2
+                    });
+                }
+                return list.sort((a, b) => a.depth - b.depth);
             }
 
             function createStars(count) {
-                return Array.from({ length: count }, () => ({
-                    x: Math.random() * W,
-                    y: Math.random() * (H * 0.65),
-                    r: Math.random() * 1.6 + 0.4,
-                    phase: Math.random() * Math.PI * 2,
-                    speed: 0.015 + Math.random() * 0.025
-                }));
+                return Array.from({ length: count }, (_, i) => {
+                    const tier = i < count * 0.12 ? 2 : (i < count * 0.45 ? 1 : 0);
+                    return {
+                        x: Math.random() * W,
+                        y: Math.random() * (H * 0.72),
+                        r: tier === 2 ? (1.6 + Math.random() * 0.8) : (tier === 1 ? (1.0 + Math.random() * 0.6) : (0.45 + Math.random() * 0.55)),
+                        tier,
+                        phase: Math.random() * Math.PI * 2,
+                        speed: 0.012 + Math.random() * 0.028,
+                        tint: i % 7 === 0 ? 'rgba(186, 230, 253,' : (i % 11 === 0 ? 'rgba(254, 243, 199,' : 'rgba(248, 250, 252,')
+                    };
+                });
             }
 
             function rebuildParticles(scene) {
+                const isDark = document.body.classList.contains('dark-mode');
+                buildCloudSprites(scene, isDark);
+
                 particles = [];
                 splashes = [];
                 clouds = [];
                 stars = [];
+                meteors = [];
+                snowDrifts = [];
+                lightningBolts = [];
+                lightningAlpha = 0;
+                sheetLightning = null;
 
                 if (scene === 'clear') {
-                    stars = createStars(90);
-                    particles = Array.from({ length: 35 }, () => ({
-                        x: Math.random() * W,
-                        y: Math.random() * H,
-                        r: Math.random() * 2.2 + 0.8,
-                        vx: (Math.random() - 0.5) * 0.25,
-                        vy: -0.15 - Math.random() * 0.2,
-                        alpha: 0.25 + Math.random() * 0.4
-                    }));
+                    stars = createStars(140);
+                    clouds = createVolumetricClouds(4, [
+                        { depth: 0.3, yMin: 0.06, yMax: 0.22, scaleMin: 0.65, scaleMax: 0.95, speedMin: 0.06, speedMax: 0.12, alphaMin: 0.22, alphaMax: 0.35 }
+                    ]);
+                    // 3 depth layers of sunlit floating pollen / atmospheric dust bokeh
+                    particles = Array.from({ length: 55 }, (_, i) => {
+                        const depth = i < 25 ? 0.4 : (i < 45 ? 0.85 : 1.45);
+                        return {
+                            x: Math.random() * W,
+                            y: Math.random() * H,
+                            r: (1.2 + Math.random() * 2.2) * depth,
+                            vx: (Math.random() - 0.5) * 0.22 * depth,
+                            vy: (-0.12 - Math.random() * 0.22) * depth,
+                            alpha: depth > 1.2 ? (0.18 + Math.random() * 0.2) : (0.28 + Math.random() * 0.42),
+                            phase: Math.random() * Math.PI * 2,
+                            depth
+                        };
+                    });
                 } else if (scene === 'cloudy') {
-                    clouds = createClouds(9, 0.28);
+                    clouds = createVolumetricClouds(14, [
+                        { depth: 0.35, yMin: 0.02, yMax: 0.18, scaleMin: 0.75, scaleMax: 1.05, speedMin: 0.08, speedMax: 0.14, alphaMin: 0.45, alphaMax: 0.65 },
+                        { depth: 0.75, yMin: 0.10, yMax: 0.32, scaleMin: 1.05, scaleMax: 1.45, speedMin: 0.16, speedMax: 0.26, alphaMin: 0.65, alphaMax: 0.88 },
+                        { depth: 1.25, yMin: 0.18, yMax: 0.42, scaleMin: 1.35, scaleMax: 1.85, speedMin: 0.28, speedMax: 0.42, alphaMin: 0.35, alphaMax: 0.55 }
+                    ]);
                 } else if (scene === 'fog') {
-                    clouds = createClouds(6, 0.18);
+                    clouds = createVolumetricClouds(7, [
+                        { depth: 0.3, yMin: 0.04, yMax: 0.25, scaleMin: 1.1, scaleMax: 1.6, speedMin: 0.05, speedMax: 0.1, alphaMin: 0.28, alphaMax: 0.45 }
+                    ]);
+                    // Suspended moisture micro-droplets hovering in the mist
+                    particles = Array.from({ length: 90 }, (_, i) => {
+                        const depth = 0.4 + (i % 3) * 0.45;
+                        return {
+                            x: Math.random() * W,
+                            y: Math.random() * H,
+                            r: (1.5 + Math.random() * 3.2) * depth,
+                            vx: (0.15 + Math.random() * 0.3) * depth,
+                            vy: (Math.random() - 0.5) * 0.15,
+                            phase: Math.random() * Math.PI * 2,
+                            alpha: 0.12 + Math.random() * 0.22,
+                            depth
+                        };
+                    });
                 } else if (scene === 'rain') {
-                    clouds = createClouds(5, 0.15);
-                    particles = Array.from({ length: 130 }, () => ({
-                        x: Math.random() * W,
-                        y: Math.random() * H,
-                        len: 14 + Math.random() * 14,
-                        vy: 11 + Math.random() * 6,
-                        vx: -1.8,
-                        alpha: 0.25 + Math.random() * 0.3
-                    }));
+                    clouds = createVolumetricClouds(10, [
+                        { depth: 0.4, yMin: -0.04, yMax: 0.14, scaleMin: 1.1, scaleMax: 1.5, speedMin: 0.14, speedMax: 0.24, alphaMin: 0.6, alphaMax: 0.85 },
+                        { depth: 0.9, yMin: 0.02, yMax: 0.22, scaleMin: 1.3, scaleMax: 1.75, speedMin: 0.25, speedMax: 0.38, alphaMin: 0.5, alphaMax: 0.75 }
+                    ]);
+                    // 3 depth layers: Far fine curtain, Mid sharp streaks, Near blurred bokeh drops
+                    particles = Array.from({ length: 210 }, (_, i) => {
+                        const layer = i < 100 ? 0 : (i < 192 ? 1 : 2);
+                        const depth = layer === 0 ? 0.55 : (layer === 1 ? 1.0 : 1.75);
+                        return {
+                            x: Math.random() * (W + 300) - 100,
+                            y: Math.random() * H,
+                            len: (layer === 0 ? 11 : (layer === 1 ? 20 : 34)) + Math.random() * 12,
+                            vy: (layer === 0 ? 10 : (layer === 1 ? 16 : 24)) + Math.random() * 5,
+                            vx: -2.1 * depth,
+                            width: layer === 0 ? 0.75 : (layer === 1 ? 1.25 : 2.8),
+                            alpha: layer === 0 ? (0.16 + Math.random() * 0.15) : (layer === 1 ? (0.32 + Math.random() * 0.28) : (0.14 + Math.random() * 0.14)),
+                            layer,
+                            depth
+                        };
+                    });
                 } else if (scene === 'downpour') {
-                    clouds = createClouds(7, 0.25);
-                    particles = Array.from({ length: 280 }, () => ({
-                        x: Math.random() * (W + 200),
-                        y: Math.random() * H,
-                        len: 22 + Math.random() * 22,
-                        vy: 18 + Math.random() * 9,
-                        vx: -4.8,
-                        alpha: 0.35 + Math.random() * 0.35
-                    }));
+                    clouds = createVolumetricClouds(13, [
+                        { depth: 0.4, yMin: -0.06, yMax: 0.14, scaleMin: 1.25, scaleMax: 1.7, speedMin: 0.25, speedMax: 0.4, alphaMin: 0.75, alphaMax: 0.95 },
+                        { depth: 0.95, yMin: 0.0, yMax: 0.24, scaleMin: 1.45, scaleMax: 2.0, speedMin: 0.42, speedMax: 0.65, alphaMin: 0.65, alphaMax: 0.9 }
+                    ]);
+                    particles = Array.from({ length: 380 }, (_, i) => {
+                        const layer = i < 180 ? 0 : (i < 350 ? 1 : 2);
+                        const depth = layer === 0 ? 0.6 : (layer === 1 ? 1.05 : 1.85);
+                        return {
+                            x: Math.random() * (W + 450) - 100,
+                            y: Math.random() * H,
+                            len: (layer === 0 ? 16 : (layer === 1 ? 28 : 44)) + Math.random() * 16,
+                            vy: (layer === 0 ? 15 : (layer === 1 ? 23 : 32)) + Math.random() * 7,
+                            vx: -5.4 * depth,
+                            width: layer === 0 ? 0.9 : (layer === 1 ? 1.55 : 3.2),
+                            alpha: layer === 0 ? (0.2 + Math.random() * 0.18) : (layer === 1 ? (0.38 + Math.random() * 0.32) : (0.16 + Math.random() * 0.16)),
+                            layer,
+                            depth
+                        };
+                    });
                 } else if (scene === 'snow') {
-                    particles = Array.from({ length: 85 }, () => ({
-                        x: Math.random() * W,
-                        y: Math.random() * H,
-                        r: 1.2 + Math.random() * 2.8,
-                        vy: 0.45 + Math.random() * 0.85,
-                        vx: (Math.random() - 0.5) * 0.3,
-                        drift: Math.random() * Math.PI * 2,
-                        alpha: 0.35 + Math.random() * 0.55
-                    }));
+                    clouds = createVolumetricClouds(6, [
+                        { depth: 0.35, yMin: -0.02, yMax: 0.18, scaleMin: 1.1, scaleMax: 1.5, speedMin: 0.06, speedMax: 0.12, alphaMin: 0.3, alphaMax: 0.5 }
+                    ]);
+                    // 3 depth layers: Far dust, Mid volumetric flakes, Near soft bokeh flakes
+                    particles = Array.from({ length: 135 }, (_, i) => {
+                        const layer = i < 65 ? 0 : (i < 120 ? 1 : 2);
+                        const depth = layer === 0 ? 0.45 : (layer === 1 ? 1.0 : 1.65);
+                        return {
+                            x: Math.random() * W,
+                            y: Math.random() * H,
+                            size: layer === 0 ? (4 + Math.random() * 4) : (layer === 1 ? (9 + Math.random() * 8) : (22 + Math.random() * 18)),
+                            vy: (layer === 0 ? 0.38 : (layer === 1 ? 0.85 : 1.55)) + Math.random() * 0.45,
+                            vx: (Math.random() - 0.5) * 0.25,
+                            driftPhase: Math.random() * Math.PI * 2,
+                            driftSpeed: 0.01 + Math.random() * 0.015,
+                            driftAmp: (layer === 0 ? 0.25 : (layer === 1 ? 0.65 : 1.1)),
+                            tumblePhase: Math.random() * Math.PI * 2,
+                            alpha: layer === 0 ? (0.35 + Math.random() * 0.3) : (layer === 1 ? (0.65 + Math.random() * 0.3) : (0.45 + Math.random() * 0.35)),
+                            layer,
+                            depth
+                        };
+                    });
                 } else if (scene === 'blizzard') {
-                    particles = Array.from({ length: 240 }, () => ({
-                        x: Math.random() * (W + 300),
-                        y: Math.random() * H,
-                        r: 1.0 + Math.random() * 3.0,
-                        vy: 2.2 + Math.random() * 2.8,
-                        vx: -4.5 - Math.random() * 3.5,
-                        drift: Math.random() * Math.PI * 2,
-                        alpha: 0.4 + Math.random() * 0.55
+                    clouds = createVolumetricClouds(8, [
+                        { depth: 0.45, yMin: -0.04, yMax: 0.22, scaleMin: 1.25, scaleMax: 1.75, speedMin: 0.35, speedMax: 0.6, alphaMin: 0.4, alphaMax: 0.65 }
+                    ]);
+                    particles = Array.from({ length: 320 }, (_, i) => {
+                        const layer = i < 150 ? 0 : (i < 292 ? 1 : 2);
+                        const depth = layer === 0 ? 0.5 : (layer === 1 ? 1.05 : 1.75);
+                        return {
+                            x: Math.random() * (W + 400),
+                            y: Math.random() * H,
+                            size: layer === 0 ? (4 + Math.random() * 4) : (layer === 1 ? (8 + Math.random() * 8) : (24 + Math.random() * 20)),
+                            vy: (layer === 0 ? 1.6 : (layer === 1 ? 3.1 : 4.8)) + Math.random() * 1.8,
+                            vx: (-5.5 - Math.random() * 4.2) * depth,
+                            driftPhase: Math.random() * Math.PI * 2,
+                            driftSpeed: 0.03 + Math.random() * 0.03,
+                            driftAmp: 1.2 * depth,
+                            tumblePhase: Math.random() * Math.PI * 2,
+                            alpha: layer === 0 ? (0.4 + Math.random() * 0.3) : (layer === 1 ? (0.7 + Math.random() * 0.28) : (0.45 + Math.random() * 0.35)),
+                            layer,
+                            depth
+                        };
+                    });
+                    // Sweeping snow squall / ground drift ribbons
+                    snowDrifts = Array.from({ length: 5 }, (_, i) => ({
+                        x: Math.random() * W,
+                        y: H * (0.48 + i * 0.12),
+                        speed: 4.5 + i * 1.4,
+                        amp: 28 + i * 8,
+                        freq: 0.0022 + i * 0.0004,
+                        alpha: 0.12 + i * 0.035
                     }));
                 }
             }
 
             window.rebuildWeatherParticles = rebuildParticles;
+            window.onWeatherThemeChange = () => {
+                lastSpriteSignature = '';
+                rebuildParticles(currentScene);
+            };
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                rebuildParticles(currentScene);
+            });
 
             const savedMode = document.getElementById('weatherModeSelect');
             if (savedMode) savedMode.value = weatherModeSetting;
             rebuildParticles(currentScene);
 
             function spawnLightning() {
-                let x = W * (0.15 + Math.random() * 0.7);
-                let y = 0;
-                const points = [{ x, y }];
-                while (y < H * 0.65) {
-                    x += (Math.random() - 0.5) * 55;
-                    y += 22 + Math.random() * 32;
-                    points.push({ x, y });
+                const startX = W * (0.14 + Math.random() * 0.72);
+                const startY = H * (0.04 + Math.random() * 0.08);
+
+                // Intra-cloud sheet glow at bolt origin
+                sheetLightning = {
+                    x: startX,
+                    y: startY + 30,
+                    radius: Math.max(W, H) * 0.42
+                };
+
+                function buildBranch(x0, y0, maxY, spread, stepY, depth) {
+                    const pts = [{ x: x0, y: y0 }];
+                    let x = x0, y = y0;
+                    const forks = [];
+                    while (y < maxY) {
+                        x += (Math.random() - 0.5) * spread;
+                        y += stepY * (0.7 + Math.random() * 0.7);
+                        pts.push({ x, y });
+                        if (depth === 0 && pts.length > 3 && Math.random() < 0.22 && y < maxY * 0.8) {
+                            forks.push(buildBranch(x, y, y + (maxY - y) * (0.4 + Math.random() * 0.4), spread * 0.75, stepY * 0.85, 1));
+                        }
+                    }
+                    return { pts, forks, depth };
                 }
-                lightningBolt = points;
-                lightningAlpha = 0.65;
+
+                lightningBolts = [buildBranch(startX, startY, H * (0.58 + Math.random() * 0.25), 54, 24, 0)];
+                lightningAlpha = 1.0;
             }
 
-            function drawClouds(isDark) {
-                for (let c of clouds) {
+            function drawClouds() {
+                if (!clouds.length || !cloudSprites.length) return;
+                for (const c of clouds) {
                     c.x += c.speed;
-                    if (c.x - c.radiusX > W + 100) c.x = -c.radiusX - 100;
+                    c.bobPhase += 0.004;
+                    const sprite = cloudSprites[c.spriteIdx % cloudSprites.length];
+                    const drawW = sprite.width * c.scale;
+                    const drawH = sprite.height * c.scale;
 
-                    const grad = ctx.createRadialGradient(c.x, c.y, c.radiusY * 0.2, c.x, c.y, c.radiusX);
-                    if (isDark) {
-                        grad.addColorStop(0, `rgba(148, 163, 184, ${c.alpha * 0.45})`);
-                        grad.addColorStop(1, 'rgba(30, 41, 59, 0)');
-                    } else {
-                        grad.addColorStop(0, `rgba(255, 255, 255, ${c.alpha * 1.4})`);
-                        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    if (c.x - drawW * 0.5 > W + 160) {
+                        c.x = -drawW * 0.5 - 120;
                     }
-                    ctx.fillStyle = grad;
-                    ctx.beginPath();
-                    ctx.ellipse(c.x, c.y, c.radiusX, c.radiusY, 0, 0, Math.PI * 2);
-                    ctx.fill();
+
+                    const px = c.x - drawW * 0.5 + mouseX * 18 * c.depth;
+                    const py = c.y - drawH * 0.5 + Math.sin(c.bobPhase) * 4 * c.depth + mouseY * 10 * c.depth;
+
+                    ctx.save();
+                    ctx.globalAlpha = c.alpha;
+                    ctx.drawImage(sprite, px, py, drawW, drawH);
+                    ctx.restore();
                 }
             }
 
             function drawClearSky(isDark) {
                 if (isDark) {
-                    // Twinkling Stars + Soft Moon Glow
-                    const moonX = W * 0.84, moonY = H * 0.16;
-                    const moonGrad = ctx.createRadialGradient(moonX, moonY, 8, moonX, moonY, 180);
-                    moonGrad.addColorStop(0, 'rgba(224, 242, 254, 0.42)');
-                    moonGrad.addColorStop(0.3, 'rgba(56, 189, 248, 0.12)');
-                    moonGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
-                    ctx.fillStyle = moonGrad;
+                    // Subtle Milky Way / Cosmic Dust Diagonal Band
+                    ctx.save();
+                    ctx.translate(W * 0.5, H * 0.35);
+                    ctx.rotate(-0.38);
+                    const mwGrad = ctx.createLinearGradient(0, -140, 0, 140);
+                    mwGrad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+                    mwGrad.addColorStop(0.5, 'rgba(148, 163, 184, 0.045)');
+                    mwGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                    ctx.fillStyle = mwGrad;
+                    ctx.fillRect(-W, -140, W * 2, 280);
+                    ctx.restore();
+
+                    // Realistic Moon with Atmospheric Corona & Subtle Surface Shading
+                    const moonX = W * 0.84 + mouseX * 8;
+                    const moonY = H * 0.16 + mouseY * 6;
+                    const moonR = 26;
+
+                    const corona = ctx.createRadialGradient(moonX, moonY, moonR * 0.8, moonX, moonY, 240);
+                    corona.addColorStop(0, 'rgba(224, 242, 254, 0.36)');
+                    corona.addColorStop(0.22, 'rgba(125, 211, 252, 0.13)');
+                    corona.addColorStop(0.55, 'rgba(56, 189, 248, 0.04)');
+                    corona.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                    ctx.fillStyle = corona;
                     ctx.beginPath();
-                    ctx.arc(moonX, moonY, 180, 0, Math.PI * 2);
+                    ctx.arc(moonX, moonY, 240, 0, Math.PI * 2);
                     ctx.fill();
 
-                    for (let s of stars) {
+                    // Moon disc
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
+                    ctx.clip();
+
+                    const discGrad = ctx.createRadialGradient(moonX - 7, moonY - 7, 3, moonX, moonY, moonR);
+                    discGrad.addColorStop(0, '#f8fafc');
+                    discGrad.addColorStop(0.7, '#e2e8f0');
+                    discGrad.addColorStop(1, '#94a3b8');
+                    ctx.fillStyle = discGrad;
+                    ctx.fillRect(moonX - moonR, moonY - moonR, moonR * 2, moonR * 2);
+
+                    // Subtle lunar maria
+                    ctx.fillStyle = 'rgba(100, 116, 139, 0.16)';
+                    ctx.beginPath();
+                    ctx.arc(moonX - 6, moonY - 4, 8, 0, Math.PI * 2);
+                    ctx.arc(moonX + 7, moonY + 5, 6, 0, Math.PI * 2);
+                    ctx.arc(moonX + 2, moonY - 9, 4.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+
+                    // Multi-tier Twinkling Stars
+                    for (const s of stars) {
                         s.phase += s.speed;
-                        const a = 0.25 + (Math.sin(s.phase) + 1) * 0.35;
-                        ctx.fillStyle = `rgba(241, 245, 249, ${a})`;
+                        const twinkle = 0.35 + (Math.sin(s.phase) + 1) * 0.325;
+                        const sx = s.x + mouseX * (3 + s.tier * 3);
+                        const sy = s.y + mouseY * (2 + s.tier * 2);
+
+                        ctx.fillStyle = `${s.tint} ${twinkle})`;
                         ctx.beginPath();
-                        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                        ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
                         ctx.fill();
+
+                        // Diffraction spikes on brightest stars
+                        if (s.tier === 2 && twinkle > 0.72) {
+                            const spikeLen = s.r * 5.5 * twinkle;
+                            ctx.strokeStyle = `${s.tint} ${twinkle * 0.45})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.beginPath();
+                            ctx.moveTo(sx - spikeLen, sy);
+                            ctx.lineTo(sx + spikeLen, sy);
+                            ctx.moveTo(sx, sy - spikeLen);
+                            ctx.lineTo(sx, sy + spikeLen);
+                            ctx.stroke();
+                        }
                     }
+
+                    // Occasional Shooting Star (Meteor)
+                    if (meteors.length === 0 && Math.random() < 0.0025) {
+                        meteors.push({
+                            x: W * (0.2 + Math.random() * 0.65),
+                            y: H * (0.04 + Math.random() * 0.25),
+                            vx: -7 - Math.random() * 4,
+                            vy: 3.5 + Math.random() * 2.5,
+                            life: 1.0
+                        });
+                    }
+                    for (let i = meteors.length - 1; i >= 0; i--) {
+                        const m = meteors[i];
+                        m.x += m.vx;
+                        m.y += m.vy;
+                        m.life -= 0.024;
+                        if (m.life <= 0) {
+                            meteors.splice(i, 1);
+                            continue;
+                        }
+                        const tailGrad = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * 14, m.y - m.vy * 14);
+                        tailGrad.addColorStop(0, `rgba(255, 255, 255, ${m.life})`);
+                        tailGrad.addColorStop(1, 'rgba(186, 230, 253, 0)');
+                        ctx.strokeStyle = tailGrad;
+                        ctx.lineWidth = 1.6;
+                        ctx.beginPath();
+                        ctx.moveTo(m.x, m.y);
+                        ctx.lineTo(m.x - m.vx * 14, m.y - m.vy * 14);
+                        ctx.stroke();
+                    }
+
+                    drawClouds();
                 } else {
-                    // Warm Sun Halo & Rotating God Rays
-                    sunAngle += 0.0015;
-                    const sunX = W * 0.86, sunY = H * 0.14;
-                    const sunGrad = ctx.createRadialGradient(sunX, sunY, 15, sunX, sunY, 340);
-                    sunGrad.addColorStop(0, 'rgba(254, 243, 199, 0.92)');
-                    sunGrad.addColorStop(0.25, 'rgba(253, 224, 71, 0.38)');
-                    sunGrad.addColorStop(0.6, 'rgba(251, 191, 36, 0.12)');
+                    // Daylight Sun Corona + Volumetric Crepuscular God Rays + Optical Lens Flare
+                    const sunX = W * 0.85 + mouseX * 10;
+                    const sunY = H * 0.14 + mouseY * 8;
+
+                    // Multi-layered Mie scattering glow
+                    const sunGrad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 440);
+                    sunGrad.addColorStop(0, 'rgba(255, 251, 235, 0.96)');
+                    sunGrad.addColorStop(0.12, 'rgba(254, 240, 138, 0.58)');
+                    sunGrad.addColorStop(0.32, 'rgba(253, 224, 71, 0.22)');
+                    sunGrad.addColorStop(0.65, 'rgba(251, 191, 36, 0.07)');
                     sunGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
                     ctx.fillStyle = sunGrad;
                     ctx.beginPath();
-                    ctx.arc(sunX, sunY, 340, 0, Math.PI * 2);
+                    ctx.arc(sunX, sunY, 440, 0, Math.PI * 2);
                     ctx.fill();
 
+                    // Rotating Volumetric God Rays
                     ctx.save();
                     ctx.translate(sunX, sunY);
-                    ctx.rotate(sunAngle);
-                    for (let i = 0; i < 8; i++) {
-                        ctx.rotate(Math.PI / 4);
-                        const rayGrad = ctx.createLinearGradient(0, 0, 480, 0);
-                        rayGrad.addColorStop(0, 'rgba(254, 249, 195, 0.24)');
+                    ctx.rotate(time * 0.06);
+                    const rayCount = 12;
+                    for (let i = 0; i < rayCount; i++) {
+                        ctx.rotate((Math.PI * 2) / rayCount);
+                        const pulse = 0.65 + 0.35 * Math.sin(time * 0.8 + i * 1.7);
+                        const len = 520 + (i % 3) * 110;
+                        const rayGrad = ctx.createLinearGradient(0, 0, len, 0);
+                        rayGrad.addColorStop(0, `rgba(254, 249, 195, ${0.22 * pulse})`);
+                        rayGrad.addColorStop(0.5, `rgba(254, 240, 138, ${0.08 * pulse})`);
                         rayGrad.addColorStop(1, 'rgba(254, 249, 195, 0)');
                         ctx.fillStyle = rayGrad;
                         ctx.beginPath();
-                        ctx.moveTo(0, -14);
-                        ctx.lineTo(480, -65);
-                        ctx.lineTo(480, 65);
-                        ctx.lineTo(0, 14);
+                        ctx.moveTo(0, -10);
+                        ctx.lineTo(len, -58);
+                        ctx.lineTo(len, 58);
+                        ctx.lineTo(0, 10);
                         ctx.closePath();
                         ctx.fill();
                     }
                     ctx.restore();
 
-                    // Floating sunlit motes
-                    for (let p of particles) {
-                        p.x += p.vx;
-                        p.y += p.vy;
-                        if (p.y < -10) p.y = H + 10;
-                        if (p.x < -10) p.x = W + 10;
-                        if (p.x > W + 10) p.x = -10;
-                        ctx.fillStyle = `rgba(255, 251, 235, ${p.alpha})`;
+                    // Optical Lens Flare Bokeh along sun-to-center axis
+                    const cx = W * 0.5, cy = H * 0.5;
+                    const dx = cx - sunX, dy = cy - sunY;
+                    const flares = [
+                        { t: 0.28, r: 18, col: 'rgba(254, 240, 138, 0.14)' },
+                        { t: 0.52, r: 34, col: 'rgba(186, 230, 253, 0.11)' },
+                        { t: 0.78, r: 12, col: 'rgba(253, 186, 116, 0.16)' },
+                        { t: 1.15, r: 46, col: 'rgba(254, 249, 195, 0.08)' }
+                    ];
+                    for (const f of flares) {
+                        const fx = sunX + dx * f.t;
+                        const fy = sunY + dy * f.t;
+                        ctx.fillStyle = f.col;
                         ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.arc(fx, fy, f.r, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+
+                    drawClouds();
+
+                    // Floating Golden Sunlit Dust / Pollen Bokeh
+                    for (const p of particles) {
+                        p.phase += 0.015;
+                        p.x += p.vx + Math.sin(p.phase) * 0.12;
+                        p.y += p.vy;
+                        if (p.y < -15) p.y = H + 15;
+                        if (p.x < -15) p.x = W + 15;
+                        if (p.x > W + 15) p.x = -15;
+
+                        const px = p.x + mouseX * 14 * p.depth;
+                        const py = p.y + mouseY * 10 * p.depth;
+                        const grad = ctx.createRadialGradient(px, py, 0, px, py, p.r * 2);
+                        grad.addColorStop(0, `rgba(255, 251, 235, ${p.alpha})`);
+                        grad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+                        ctx.fillStyle = grad;
+                        ctx.beginPath();
+                        ctx.arc(px, py, p.r * 2, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
             }
 
+            function drawCloudySky(isDark) {
+                // Soft crepuscular light shafts breaking between cloud decks
+                const shaftX = W * 0.72 + mouseX * 12;
+                ctx.save();
+                for (let i = 0; i < 3; i++) {
+                    const pulse = 0.6 + 0.4 * Math.sin(time * 0.45 + i * 2.1);
+                    const xTop = shaftX - i * 190;
+                    const xBot = xTop - 220;
+                    const grad = ctx.createLinearGradient(xTop, H * 0.12, xBot, H * 0.85);
+                    if (isDark) {
+                        grad.addColorStop(0, `rgba(148, 163, 184, ${0.06 * pulse})`);
+                        grad.addColorStop(1, 'rgba(148, 163, 184, 0)');
+                    } else {
+                        grad.addColorStop(0, `rgba(255, 251, 235, ${0.22 * pulse})`);
+                        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    }
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.moveTo(xTop - 35, H * 0.12);
+                    ctx.lineTo(xTop + 35, H * 0.12);
+                    ctx.lineTo(xBot + 110, H * 0.85);
+                    ctx.lineTo(xBot - 110, H * 0.85);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                ctx.restore();
+
+                drawClouds();
+            }
+
             function drawFog(isDark) {
-                fogPhase += 0.004;
-                const layers = 3;
+                // Diffused light bleeding softly through upper mist
+                const glowX = W * 0.68 + mouseX * 8;
+                const glowY = H * 0.18;
+                const hazeGlow = ctx.createRadialGradient(glowX, glowY, 20, glowX, glowY, 380);
+                hazeGlow.addColorStop(0, isDark ? 'rgba(148, 163, 184, 0.14)' : 'rgba(255, 255, 255, 0.45)');
+                hazeGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = hazeGlow;
+                ctx.fillRect(0, 0, W, H);
+
+                drawClouds();
+
+                // 4 Volumetric Rolling Fog Banks with multi-harmonic wave crests
+                const layers = 4;
                 for (let l = 0; l < layers; l++) {
-                    const yBase = H * (0.35 + l * 0.22);
-                    const grad = ctx.createLinearGradient(0, yBase - 140, 0, H);
+                    const depth = 0.4 + l * 0.35;
+                    const yBase = H * (0.26 + l * 0.19) + mouseY * 12 * depth;
+                    const speedDir = l % 2 === 0 ? 1 : -0.75;
+                    const phase = time * (0.22 + l * 0.08) * speedDir + l * 1.9;
+
+                    const grad = ctx.createLinearGradient(0, yBase - 160, 0, H);
                     if (isDark) {
                         grad.addColorStop(0, 'rgba(148, 163, 184, 0)');
-                        grad.addColorStop(0.5, `rgba(148, 163, 184, ${0.08 + l * 0.04})`);
-                        grad.addColorStop(1, `rgba(15, 23, 42, ${0.25 + l * 0.1})`);
+                        grad.addColorStop(0.4, `rgba(148, 163, 184, ${0.07 + l * 0.035})`);
+                        grad.addColorStop(1, `rgba(15, 23, 42, ${0.26 + l * 0.09})`);
                     } else {
                         grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-                        grad.addColorStop(0.45, `rgba(255, 255, 255, ${0.28 + l * 0.12})`);
-                        grad.addColorStop(1, `rgba(241, 245, 249, ${0.55 + l * 0.12})`);
+                        grad.addColorStop(0.4, `rgba(255, 255, 255, ${0.24 + l * 0.1})`);
+                        grad.addColorStop(1, `rgba(241, 245, 249, ${0.52 + l * 0.11})`);
                     }
 
                     ctx.fillStyle = grad;
                     ctx.beginPath();
                     ctx.moveTo(0, H);
-                    for (let x = 0; x <= W; x += 60) {
-                        const wave = Math.sin(x * 0.003 + fogPhase * (l + 1) + l) * 38;
+                    for (let x = 0; x <= W + 40; x += 40) {
+                        const nx = x * 0.0025;
+                        const wave = Math.sin(nx + phase) * 34 + Math.cos(nx * 2.1 - phase * 0.6) * 18;
                         ctx.lineTo(x, yBase + wave);
                     }
                     ctx.lineTo(W, H);
                     ctx.closePath();
                     ctx.fill();
                 }
+
+                // Suspended micro-droplet bokeh hovering in the mist
+                for (const p of particles) {
+                    p.phase += 0.012;
+                    p.x += p.vx;
+                    p.y += p.vy + Math.sin(p.phase) * 0.15;
+                    if (p.x > W + 20) p.x = -20;
+                    const px = p.x + mouseX * 14 * p.depth;
+                    const py = p.y + mouseY * 10 * p.depth;
+                    ctx.fillStyle = isDark ? `rgba(203, 213, 225, ${p.alpha * 0.65})` : `rgba(255, 255, 255, ${p.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(px, py, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function drawLightningBolt(bolt, alpha) {
+                if (!bolt || !bolt.pts.length) return;
+                ctx.save();
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                // Outer electric blue plasma glow
+                ctx.strokeStyle = `rgba(56, 189, 248, ${alpha * 0.55})`;
+                ctx.lineWidth = bolt.depth === 0 ? 7 : 3;
+                ctx.shadowColor = '#38bdf8';
+                ctx.shadowBlur = 24;
+                ctx.beginPath();
+                ctx.moveTo(bolt.pts[0].x, bolt.pts[0].y);
+                for (let i = 1; i < bolt.pts.length; i++) ctx.lineTo(bolt.pts[i].x, bolt.pts[i].y);
+                ctx.stroke();
+
+                // Hot white core
+                ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.lineWidth = bolt.depth === 0 ? 2.4 : 1.1;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.moveTo(bolt.pts[0].x, bolt.pts[0].y);
+                for (let i = 1; i < bolt.pts.length; i++) ctx.lineTo(bolt.pts[i].x, bolt.pts[i].y);
+                ctx.stroke();
+                ctx.restore();
+
+                if (bolt.forks) {
+                    for (const f of bolt.forks) drawLightningBolt(f, alpha * 0.85);
+                }
             }
 
             function drawRain(isDark, isDownpour) {
+                // Sheet lightning intra-cloud illumination before/behind clouds
+                if (isDownpour && lightningAlpha > 0 && sheetLightning) {
+                    const flicker = lightningAlpha > 0.75 || (lightningAlpha > 0.35 && lightningAlpha < 0.55) ? 1 : 0.45;
+                    const sGrad = ctx.createRadialGradient(
+                        sheetLightning.x, sheetLightning.y, 10,
+                        sheetLightning.x, sheetLightning.y, sheetLightning.radius
+                    );
+                    sGrad.addColorStop(0, `rgba(224, 242, 254, ${0.55 * lightningAlpha * flicker})`);
+                    sGrad.addColorStop(0.45, `rgba(125, 211, 252, ${0.22 * lightningAlpha * flicker})`);
+                    sGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                    ctx.fillStyle = sGrad;
+                    ctx.fillRect(0, 0, W, H);
+                }
+
+                drawClouds();
+
+                // Dynamic wind gust wave modulation
+                const gust = 1 + Math.sin(time * 0.9) * 0.18 + Math.sin(time * 2.3) * 0.08;
+
+                // Horizon / ground rain-spray mist
+                const mistGrad = ctx.createLinearGradient(0, H - (isDownpour ? 140 : 80), 0, H);
+                mistGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+                mistGrad.addColorStop(1, isDark
+                    ? `rgba(148, 163, 184, ${isDownpour ? 0.14 : 0.06})`
+                    : `rgba(255, 255, 255, ${isDownpour ? 0.36 : 0.18})`);
+                ctx.fillStyle = mistGrad;
+                ctx.fillRect(0, H - 140, W, 140);
+
                 ctx.lineCap = 'round';
-                for (let p of particles) {
-                    p.x += p.vx;
+                for (const p of particles) {
+                    const curVx = p.vx * gust;
+                    p.x += curVx;
                     p.y += p.vy;
 
                     if (p.y > H) {
-                        if (Math.random() < (isDownpour ? 0.35 : 0.18)) {
-                            splashes.push({ x: p.x, y: H - 3, r: 1, alpha: 0.45 });
+                        if (p.layer === 1 && Math.random() < (isDownpour ? 0.42 : 0.22)) {
+                            splashes.push({
+                                x: p.x,
+                                y: H - 2,
+                                r: 1.2,
+                                alpha: isDownpour ? 0.55 : 0.4
+                            });
                         }
-                        p.y = -20;
-                        p.x = Math.random() * (W + 250);
+                        p.y = -30 - Math.random() * 40;
+                        p.x = Math.random() * (W + 450) - 100;
                     }
-                    if (p.x < -50) p.x = W + 50;
+                    if (p.x < -120) p.x = W + 220;
+
+                    const px = p.x + mouseX * 16 * p.depth;
+                    const py = p.y + mouseY * 8 * p.depth;
 
                     ctx.strokeStyle = isDark
                         ? `rgba(186, 230, 253, ${p.alpha})`
-                        : `rgba(255, 255, 255, ${Math.min(0.85, p.alpha + 0.25)})`;
-                    ctx.lineWidth = isDownpour ? 1.5 : 1.1;
+                        : `rgba(255, 255, 255, ${Math.min(0.88, p.alpha + 0.22)})`;
+                    ctx.lineWidth = p.width;
                     ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p.x + p.vx * 1.4, p.y + p.len);
+                    ctx.moveTo(px, py);
+                    ctx.lineTo(px + curVx * 1.45, py + p.len);
                     ctx.stroke();
                 }
 
-                // Ground Splash Ripples
+                // Ground Splash Crowns + Concentric Ripples
                 for (let i = splashes.length - 1; i >= 0; i--) {
                     const s = splashes[i];
-                    s.r += 0.65;
-                    s.alpha -= 0.03;
+                    s.r += 0.75;
+                    s.alpha -= 0.032;
                     if (s.alpha <= 0) {
                         splashes.splice(i, 1);
                         continue;
@@ -2303,67 +2834,127 @@ Obowiązkowo wymagany kwit wagowy.
                         ? `rgba(186, 230, 253, ${s.alpha})`
                         : `rgba(255, 255, 255, ${s.alpha})`;
                     ctx.lineWidth = 1;
+                    // Elliptical surface ripple
                     ctx.beginPath();
-                    ctx.ellipse(s.x, s.y, s.r * 2.2, s.r * 0.5, 0, 0, Math.PI * 2);
+                    ctx.ellipse(s.x, s.y, s.r * 2.5, s.r * 0.48, 0, 0, Math.PI * 2);
                     ctx.stroke();
+
+                    // Tiny upward V-crown droplets on initial impact
+                    if (s.r < 4.5) {
+                        ctx.beginPath();
+                        ctx.moveTo(s.x - s.r * 0.8, s.y);
+                        ctx.lineTo(s.x - s.r * 1.6, s.y - s.r * 1.8);
+                        ctx.moveTo(s.x + s.r * 0.8, s.y);
+                        ctx.lineTo(s.x + s.r * 1.6, s.y - s.r * 1.8);
+                        ctx.stroke();
+                    }
                 }
 
-                // Occasional Lightning in Downpour
+                // Forked Lightning Bolts in Downpour
                 if (isDownpour) {
-                    if (lightningAlpha <= 0 && Math.random() < 0.0025) {
+                    if (lightningAlpha <= 0 && Math.random() < 0.003) {
                         spawnLightning();
                     }
                     if (lightningAlpha > 0) {
-                        ctx.fillStyle = `rgba(224, 242, 254, ${lightningAlpha * 0.32})`;
-                        ctx.fillRect(0, 0, W, H);
-
-                        if (lightningBolt && lightningAlpha > 0.25) {
-                            ctx.strokeStyle = `rgba(255, 255, 255, ${lightningAlpha})`;
-                            ctx.lineWidth = 2.5;
-                            ctx.shadowColor = '#38bdf8';
-                            ctx.shadowBlur = 18;
-                            ctx.beginPath();
-                            ctx.moveTo(lightningBolt[0].x, lightningBolt[0].y);
-                            for (let pt of lightningBolt) ctx.lineTo(pt.x, pt.y);
-                            ctx.stroke();
-                            ctx.shadowBlur = 0;
+                        const isVisiblePulse = lightningAlpha > 0.72 || (lightningAlpha > 0.34 && lightningAlpha < 0.56);
+                        if (isVisiblePulse) {
+                            ctx.fillStyle = `rgba(224, 242, 254, ${lightningAlpha * 0.22})`;
+                            ctx.fillRect(0, 0, W, H);
+                            for (const bolt of lightningBolts) {
+                                drawLightningBolt(bolt, lightningAlpha);
+                            }
                         }
-                        lightningAlpha -= 0.035;
+                        lightningAlpha -= 0.032;
                     }
                 }
             }
 
             function drawSnow(isDark, isBlizzard) {
-                for (let p of particles) {
-                    p.drift += isBlizzard ? 0.04 : 0.015;
+                drawClouds();
+
+                // Turbulent wind gusts for blizzard
+                const windSurge = isBlizzard
+                    ? (1 + Math.sin(time * 1.3) * 0.28 + Math.cos(time * 2.7) * 0.14)
+                    : 1;
+
+                for (const p of particles) {
+                    p.driftPhase += p.driftSpeed;
+                    p.tumblePhase += 0.025;
+
+                    const sway = Math.sin(p.driftPhase) * p.driftAmp;
                     p.y += p.vy;
-                    p.x += p.vx + Math.sin(p.drift) * (isBlizzard ? 0.9 : 0.35);
+                    p.x += p.vx * windSurge + sway;
 
-                    if (p.y > H + 8) {
-                        p.y = -8;
-                        p.x = Math.random() * (W + 250);
+                    if (p.y > H + 30) {
+                        p.y = -25;
+                        p.x = Math.random() * (W + 400);
                     }
-                    if (p.x < -20) p.x = W + 20;
-                    if (p.x > W + 250) p.x = -10;
+                    if (p.x < -60) p.x = W + 280;
+                    if (p.x > W + 320) p.x = -30;
 
-                    ctx.fillStyle = isDark
-                        ? `rgba(224, 242, 254, ${p.alpha})`
-                        : `rgba(255, 255, 255, ${Math.min(0.96, p.alpha + 0.3)})`;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fill();
+                    const px = p.x + mouseX * 18 * p.depth;
+                    const py = p.y + mouseY * 12 * p.depth;
+
+                    // Subtle 3D tumble scale modulation
+                    const tumbleScale = 0.82 + 0.18 * Math.sin(p.tumblePhase);
+                    const drawSize = p.size * tumbleScale;
+
+                    const sprite = snowSprites[p.layer] || snowSprites[1];
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    if (isBlizzard && p.layer === 1) {
+                        // Slight aerodynamic wind-streak elongation in blizzard gusts
+                        ctx.translate(px, py);
+                        ctx.rotate(-0.32);
+                        ctx.drawImage(sprite, -drawSize * 0.7, -drawSize * 0.42, drawSize * 1.4, drawSize * 0.84);
+                    } else {
+                        ctx.drawImage(sprite, px - drawSize * 0.5, py - drawSize * 0.5, drawSize, drawSize);
+                    }
+                    ctx.restore();
+                }
+
+                // Sweeping Blizzard Whiteout / Ground Drift Waves
+                if (isBlizzard && snowDrifts.length > 0) {
+                    for (const d of snowDrifts) {
+                        d.x -= d.speed * windSurge;
+                        const grad = ctx.createLinearGradient(0, d.y - 70, 0, H);
+                        if (isDark) {
+                            grad.addColorStop(0, 'rgba(186, 230, 253, 0)');
+                            grad.addColorStop(0.5, `rgba(186, 230, 253, ${d.alpha * 0.55})`);
+                            grad.addColorStop(1, `rgba(224, 242, 254, ${d.alpha * 0.8})`);
+                        } else {
+                            grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+                            grad.addColorStop(0.5, `rgba(255, 255, 255, ${d.alpha})`);
+                            grad.addColorStop(1, `rgba(248, 250, 252, ${d.alpha * 1.4})`);
+                        }
+                        ctx.fillStyle = grad;
+                        ctx.beginPath();
+                        ctx.moveTo(0, H);
+                        for (let x = 0; x <= W + 40; x += 40) {
+                            const wave = Math.sin((x - d.x) * d.freq) * d.amp + Math.cos((x - d.x) * d.freq * 1.8) * (d.amp * 0.45);
+                            ctx.lineTo(x, d.y + wave);
+                        }
+                        ctx.lineTo(W, H);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
                 }
             }
 
             function animate() {
+                time += 0.016;
+                mouseX += (targetMouseX - mouseX) * 0.045;
+                mouseY += (targetMouseY - mouseY) * 0.045;
+
                 ctx.clearRect(0, 0, W, H);
                 const isDark = document.body.classList.contains('dark-mode');
-
-                if (clouds.length > 0) drawClouds(isDark);
 
                 switch (currentScene) {
                     case 'clear':
                         drawClearSky(isDark);
+                        break;
+                    case 'cloudy':
+                        drawCloudySky(isDark);
                         break;
                     case 'fog':
                         drawFog(isDark);
@@ -2488,8 +3079,8 @@ Obowiązkowo wymagany kwit wagowy.
         }
 
         async function updateWeather() {
-const lat = 51.11;
-const lon = 17.03;
+            const lat = 51.11;
+            const lon = 17.03;
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
             try {
                 const response = await fetch(url);
@@ -2566,6 +3157,9 @@ const lon = 17.03;
             const isDark = body.classList.contains('dark-mode');
             if (btn) btn.innerHTML = isDark ? '☀️' : '🌙';
             localStorage.setItem('chomar_theme', isDark ? 'dark' : 'light');
+            if (window.onWeatherThemeChange) {
+                window.onWeatherThemeChange();
+            }
         }
 </script>
 </body>
